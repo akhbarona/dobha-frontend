@@ -1,0 +1,153 @@
+.checkout-screen {
+  margin: 2rem auto;
+}
+.title-checkout h2 {
+  margin-bottom: 1rem;
+  color: #fff;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+}
+.title-method h4 {
+  color: #fff;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+}
+.payment-method .form-check {
+  display: flex !important;
+  align-items: center !important;
+  padding-left: 2.5rem !important;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+  background: #fff;
+  border-radius: 0.5rem !important;
+}
+.payment-method .form-check:last-child {
+  margin-bottom: 0 !important;
+}
+.form-check .form-check-input {
+  border: 2px solid #000 !important;
+}
+.form-check .form-check-label {
+  padding-left: 1.5rem;
+}
+.payment-info {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.table-payment-info {
+  font-size: 1rem;
+  font-family: 'Quicksand', sans-serif;
+  height: 100%;
+  width: 100%;
+}
+.address-info {
+  padding-left: 0rem;
+  font-size: 1rem;
+  font-family: 'Quicksand', sans-serif;
+}
+.address-info li {
+  font-weight: 500;
+}
+.address-info li:first-child {
+  font-weight: bold;
+}
+/* .flex-column {
+  gap: 3.5rem;
+} */
+.btn-buy {
+  background-color: #ff9c06;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+}
+.button-beli {
+  padding: 1rem 0;
+}
+
+.btn-buy:hover {
+  box-shadow: 0px 5px 10px -5px #ff9c06;
+  transform: scale(1.03);
+}
+span.name-method {
+  color: #000;
+  font-weight: bold;
+  padding-left: 2rem;
+  font-family: 'Quicksand', sans-serif;
+  text-transform: capitalize;
+}
+@media (min-width: 576px) {
+  .checkout-container {
+    max-width: none !important;
+  }
+}
+
+/* Popup Konfirmasi Pembayaran */
+.payment-gateway-wrapper {
+  font-weight: 500;
+  font-size: 1.3rem;
+}
+
+.payment-gateway-info {
+  margin: auto;
+  align-items: center;
+  text-align: center;
+}
+.payment-gateway-info p {
+  margin-bottom: 0;
+}
+.payment-gateway-image {
+  display: flex;
+  justify-content: center;
+}
+.payment-gateway-info .payment-gateway-image img {
+  width: 100%;
+  max-width: 220px;
+  height: 95px;
+}
+.payment-gateway-info h3 {
+  font-weight: bold;
+}
+.payment-gateway-price {
+  text-align: center;
+  padding: 12px 0;
+  font-weight: bold;
+}
+p.pg-price {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+.note-payment {
+  padding: 2px 0px;
+  font-size: 16px;
+}
+.note-payment .note-payment-sub {
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+.note-payment .note-payment-sub::before {
+  content: '\f06a';
+  font-family: 'Font Awesome 5 Free';
+  padding-right: 5px;
+}
+.upload-confirm-container h6 {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Upload  */
+.upload-confirm-wrapper {
+  font-size: 15px;
+  text-align: center;
+}
+.confirm-wrapper {
+  display: flex;
+  justify-content: center;
+}

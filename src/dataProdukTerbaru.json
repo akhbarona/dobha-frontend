@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Dobha Dalal",
+    "price": "Rp 100.000",
+    "slug": "dobhadalal1",
+    "rate": 4.3
+  },
+  {
+    "id": 2,
+    "title": "Dobha Dalal",
+    "price": "Rp 100.000",
+    "slug": "dobhadalal2",
+    "rate": 3.4
+  },
+  {
+    "id": 3,
+    "title": "Dobha Dalal",
+    "price": "Rp 100.000",
+    "slug": "dobhadalal3",
+    "rate": 2.3
+  },
+  {
+    "id": 4,
+    "title": "Dobha Dalal",
+    "price": "Rp 100.000",
+    "slug": "dobhadalal4",
+    "rate": 3.6
+  },
+  {
+    "id": 5,
+    "title": "Dobha Dalal",
+    "price": "Rp 100.000",
+    "slug": "dobhadalal5",
+    "rate": 5
+  },
+  {
+    "id": 6,
+    "title": "Dobha Dalal",
+    "price": "Rp 100.000",
+    "slug": "dobhadalal6",
+    "rate": 5
+  }
+]

@@ -1,0 +1,60 @@
+/* Section Products : Show All Produk */
+.products-container {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  width: 100%;
+  background-color: #202744;
+}
+/* field selection option */
+.combo-box-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+/* .combo-box-center {
+  width: 18.7%;
+} */
+
+/* Products */
+.products-wrapper {
+  padding-top: 2rem;
+}
+.products-wrapper .loading {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+/* cards */
+/* .card-center {
+  width: 17rem;
+  margin: auto;
+} */
+
+/* Ratings Produk */
+.stars-outer {
+  position: relative;
+  display: inline-block;
+}
+.stars-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+}
+.stars-outer::before {
+  content: '\f005 \f005 \f005 \f005 \f005';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #ccc;
+}
+.stars-inner::before {
+  content: '\f005 \f005 \f005 \f005 \f005';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  color: #f8ce0b;
+}
+.link-title {
+  text-decoration: none;
+  color: #000;
+}

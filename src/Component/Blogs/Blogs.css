@@ -1,0 +1,134 @@
+/* Section Blogs : Show All Produk */
+.blogs-container {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  width: 100%;
+}
+.blogs-container .loading {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+.title-blogs-section {
+  text-align: center;
+}
+.title-blogs-section span {
+  border-bottom: 2px solid #ff9c06;
+  color: #fff;
+  font-weight: 600;
+
+  padding-bottom: 10px;
+  display: inline-block;
+  width: 80%;
+}
+.meta-info a {
+  text-decoration: none;
+}
+
+/* Blog Cards  */
+.blog-card {
+  display: flex;
+  margin: auto;
+  overflow: hidden;
+  z-index: 0;
+  margin-bottom: 30px;
+  height: 100%;
+}
+.blog-card a {
+  color: inherit;
+}
+.blog-card a:hover {
+  color: #ffc400;
+}
+
+.blog-card .meta {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.blog-card .photo {
+  position: absolute;
+  top: 0;
+  /* right: 0; */
+  bottom: 0;
+  /* left: 0; */
+  background-size: cover;
+  background-position: center;
+  border-radius: 5%;
+  width: 100%;
+}
+.blog-card .description {
+  padding: 1rem;
+  /* position: relative; */
+  color: #fff;
+  margin: auto;
+}
+.blog-card .description h3 {
+  line-height: 1.35;
+  margin: 0;
+  font-weight: 500;
+
+  text-transform: capitalize;
+}
+.blog-card .description p {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-top: 5px;
+  text-transform: capitalize;
+  text-align: justify;
+  word-break: break-all;
+}
+.blog-card .description .read-more {
+  left: 0;
+  color: #fff;
+}
+.blog-card .description .read-more a {
+  font-size: 16px;
+  display: inline-block;
+  position: relative;
+  border-radius: 4px;
+  text-transform: capitalize;
+  text-decoration: none;
+  font-weight: 600;
+}
+.blog-card .description .meta-tag a.read-more-size {
+  font-size: 0.9rem;
+  margin-right: 15px;
+  text-decoration: none;
+}
+.fa-calendar:before {
+  margin-right: 10px;
+}
+.fa-tag:before {
+  margin-right: 10px;
+}
+.fa-eye:before {
+  margin-right: 5px;
+}
+.fa-user:before {
+  margin-right: 5px;
+}
+.blog-card .description .meta-tag a.read-more-size.x-eyes:after {
+  content: 'x views';
+}
+.blog-card p {
+  position: relative;
+  margin: 10px 0 0;
+}
+.text-article p {
+  padding-left: 15px;
+}
+
+@media (min-width: 640px) {
+  .blog-card {
+    flex-direction: row;
+    min-height: 180px;
+  }
+  .blog-card .meta {
+    flex-basis: 25%;
+    height: auto;
+  }
+  .blog-card .description {
+    flex-basis: 75%;
+  }
+}

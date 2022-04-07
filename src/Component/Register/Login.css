@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Fredoka+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Fredoka+One&family=Quicksand:wght@700&display=swap');
+
+.left-col {
+  height: 100% !important;
+  display: flex;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0.109);
+  border-right: 1px solid rgba(255, 255, 255, 0.411);
+  border-radius: 0px 0px 1000px 0px;
+}
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+}
+/* .right-col {
+  display: flex;
+  justify-content: center;
+} */
+@media only screen and (min-width: 769px) {
+  .body-register {
+    height: 1000px;
+    margin-right: 100px !important;
+  }
+}
+/* .main-register {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-left: 10px;
+} */
+.login-wrapper a.back-wrapper {
+  text-decoration: none;
+}
+.teks-Register {
+  margin-top: 50px;
+  display: flex;
+}
+.teks-Register a h1 {
+  border-bottom: 3px solid rgb(182, 112, 0);
+  font-family: 'Quicksand', sans-serif;
+  color: #fff;
+}
+.h-4 {
+  color: rgb(182, 112, 0);
+  float: left;
+  display: flex;
+  align-items: center;
+  margin-left: 35px;
+}
+.back-to {
+  color: rgb(182, 112, 0);
+}
+.pembungkus-image-left {
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0);
+}
+.image-left {
+  height: 50%;
+  width: 50%;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.input-text p {
+  color: white;
+  text-align: left;
+}
+.input-text {
+  margin-top: 30px;
+}
+.Button-Login {
+  margin-top: 20px;
+  float: left;
+  background-color: rgb(182, 112, 0) !important;
+  width: 120px;
+  border-radius: 10px !important;
+}
+.Button-show-password {
+  background-color: transparent;
+  outline: none;
+  margin-left: -3rem;
+  border: none;
+}
+.btn-p {
+  margin-top: 30px;
+  display: flex;
+  color: white;
+}
+.btn-p p {
+  margin-left: 10px;
+  margin-top: 30px;
+}
+
+.input-res {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font: 15px/1 'Open Sans', sans-serif;
+  color: #333;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  max-width: 500px;
+  background-color: rgb(190, 191, 255);
+  border: none;
+  padding: 10px 11px 11px 11px;
+  border-radius: 3px;
+  box-shadow: none;
+  outline: none;
+  margin: 0;
+  box-sizing: border-box;
+  height: 50px;
+  border-radius: 10px;
+}
+.fa-chevron-left {
+  font-size: 25px;
+}
+
+.fa-solid {
+  color: rgb(182, 112, 0);
+}
+
+.Button-Login-Register {
+  margin-top: 30px;
+  width: 120px;
+  border-radius: 10px;
+  height: 54px;
+  background-color: rgb(182, 112, 0);
+}

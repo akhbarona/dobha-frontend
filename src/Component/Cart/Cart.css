@@ -1,0 +1,95 @@
+.cart-screen {
+  display: flex;
+  max-width: 1300px;
+  margin: 2rem auto;
+}
+
+.cart-screen h2 {
+  margin-bottom: 1rem;
+  color: #fff;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+}
+
+.cart-screen-left {
+  flex: 0.7;
+  margin-right: 1rem;
+  background-color: transparent;
+  padding: 1rem;
+}
+
+.cart-screen-right {
+  flex: 0.3;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  height: fit-content;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+}
+
+.cart-screen-right div {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+}
+
+.cart-screen-right div:last-child {
+  border: none;
+}
+
+.cart-screen-info p {
+  padding: 8px;
+  font-size: 1.2rem;
+  margin-bottom: 0px;
+}
+
+.cart-screen-right div button {
+  padding: 10px 17px;
+  width: 100%;
+  background: #ff9c06;
+  color: #f4f4f4;
+  border: 1px solid #ff9c06;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.cart-screen-right div button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 1320px) {
+  .cart-screen {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 960px) {
+  .cart-screen {
+    max-width: 800px;
+    flex-direction: column;
+  }
+
+  .cart-screen-left {
+    margin: 0;
+  }
+  .cart-screen-right {
+    margin: 1rem;
+  }
+}
+.cart-flex-one {
+  flex: 1;
+  background-color: transparent;
+  padding: 1rem;
+}
+.keranjang-kosong {
+  text-align: center;
+}
+.please-buy {
+  text-decoration: none;
+  font-family: 'Quicksand', sans-serif;
+  color: #ff9c06;
+  font-weight: 600;
+}
+.title-cart-empty {
+  font-family: 'Quicksand', sans-serif;
+}
