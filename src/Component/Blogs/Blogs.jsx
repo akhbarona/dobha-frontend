@@ -29,6 +29,7 @@ export const Blogs = () => {
   //   });
   // };
 
+
   return (
     <main>
       <section>
