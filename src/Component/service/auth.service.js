@@ -31,8 +31,7 @@ const login = (email, password) => {
     email: email,
     password: password,
   };
-  return axios
-    .post('/api/auth/user/login', data, {
+  return axios.post('/api/auth/user/login', data, {
       headers: {
         'Content-Type': 'application/json',
       },

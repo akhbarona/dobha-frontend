@@ -50,6 +50,7 @@ const Products = () => {
 
   return (
     <main>
+      {loading || loading === undefined?<p>loading</p>:
       <section>
         <div className="products-container">
           <Container>
@@ -80,7 +81,7 @@ const Products = () => {
                 { error }
               ) : (
                 <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
-                  {products.map((item, index) => {
+                  {products.data.map((item, index) => {
                     return (
                       <Col key={index}>
                         <Card className="card-center">
@@ -108,6 +109,7 @@ const Products = () => {
           </div>
         </div>
       </section>
+      }
     </main>
   );
 };
