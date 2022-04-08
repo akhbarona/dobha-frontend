@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Card, Col, Container, Nav, Row, Tab, Table, Tabs } from 'react-bootstrap';
 import './Profile.css';
+import Alamat from './Alamat';
 
 const Profile = () => {
   const Biodata = () => {
@@ -40,9 +41,9 @@ const Profile = () => {
     );
   };
 
-  const Alamat = () => {
-    return <div>Hello</div>;
-  };
+
+
+ 
 
   const [pilih, setPilih] = useState(1);
   const handleSelect = (value) => {
@@ -58,7 +59,7 @@ const Profile = () => {
                 <Tab eventKey={1} title="Biodata Diri">
                   <Biodata />
                 </Tab>
-                <Tab eventKey={2} title="Alamat" disabled>
+                <Tab eventKey={2} title="Alamat">
                   <Alamat />
                 </Tab>
               </Tabs>
