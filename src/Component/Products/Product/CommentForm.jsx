@@ -1,7 +1,7 @@
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { useState, memo } from 'react';
 import { toast } from 'react-toastify';
-const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handleCancel, initialText = '', currentValue, currentUserId, currentUsername }) => {
+const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handleCancel, initialText = '', currentValue, currentUserId, currentUsername, currentName }) => {
   const [text, setText] = useState(initialText);
   const [bintang, setbintang] = useState(currentValue);
   // console.log(typeof currentUsername);
@@ -17,7 +17,7 @@ const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handl
     if (bintang !== 0) {
       // setLoading(true);
       if (submitLabel === 'Write') {
-        handleSubmit(text, bintang, null, currentUsername);
+        handleSubmit(text, bintang, null, currentName, currentUsername);
       } else if (submitLabel === 'Update') {
         handleSubmit(text, bintang);
       } else if (submitLabel === 'Reply') {
@@ -54,22 +54,9 @@ const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handl
   const handleMouseLeave = () => {
     setHoverValue(undefined);
   };
-  // const handleTextReviews = (e) => {
-  //   setTextReviews(e.target.value);
-  // };
-  // const handleSubmits = (e) => {
-  //   e.preventDefault();
 
-  // };
   return (
     <>
-      {/* {loading ? (
-        <>
-          <Spinner animation="border" variant="primary" />
-          <h2>Terima Kasih</h2>
-        </>
-      ) : (
-        <> */}
       {currentUserId === 1 ? undefined : (
         <div className="stars">
           {stars.map((_, index) => {
@@ -104,8 +91,6 @@ const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handl
           </Button>
         )}
       </Form>
-      {/* </>
-      )} */}
     </>
   );
 };

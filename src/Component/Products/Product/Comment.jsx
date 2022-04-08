@@ -1,5 +1,6 @@
 import CommentForm from './CommentForm';
 import { memo, useState } from 'react';
+import { Link } from 'react-router-dom';
 const Comment = ({ comment, replies, setActiveComment, activeComment, updateComment, deleteComment, addComment, parentId = null, currentUserId }) => {
   //proses awal menerima dari componen comments.js
   //comment -> isinya -> {id,body,username,userId,parentId,createdAt}
@@ -11,6 +12,7 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
   //deletComment -> untuk menghapus comment
   //   console.log(replies, 'punyanya commentid', comment.id);
   //   console.log(currentUserId, '', comment.userId);
+  console.log(comment);
   const isEditing = activeComment && activeComment.id === comment.id && activeComment.type === 'editing'; //ketika activeComment ada dan idnya,typenya sama maka bernilai true
   const isReplying = activeComment && activeComment.id === comment.id && activeComment.type === 'replying'; //ketika activeComment ada dan idnya,typenya sama maka bernilai true
   //   console.log(isReplying, ' ', comment.id, ' ', activeComment);
@@ -42,15 +44,17 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
       </div>
       <div className="comment-right-part">
         <div className="comment-content">
-          <div className="comment-author">{comment.username}</div>
+          <Link to="#" data-toggle="tooltip" data-placement="top" title={comment.username}>
+            <div className="comment-author">{comment.name}</div>
+          </Link>
           <div>{createdAt}</div>
         </div>
-        {comment.username !== 'Admin' ? (
+        {comment.username !== 'admin' ? (
           <div className="stars-comment">
             <div className="stars-outer">
               <div className="stars-inner" style={{ width: countRate(comment.rate) }}></div>
             </div>
-            <span className="number-rating" dangerouslySetInnerHTML={{ __html: comment.rate }}></span>
+            <span className="number-rating">{comment.rate}</span>
           </div>
         ) : undefined}
 
@@ -62,7 +66,7 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
             submitLabel="Update"
             hasCancelButton
             initialText={comment.body}
-            handleSubmit={(text, bintang) => updateComment(text, bintang, comment.id, comment.username, comment.parentId, comment.userId)}
+            handleSubmit={(text, bintang) => updateComment(text, bintang, comment.id, comment.username, comment.parentId, comment.userId, comment.name)}
             handleCancel={() => {
               setActiveComment(null);
             }}

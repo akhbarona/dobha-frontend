@@ -2,25 +2,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Fredoka+One&family=Quicksand:wght@700&display=swap');
 
 .left-col {
-  height: 100% !important;
+  /* height: 100% !important;
   display: flex;
-  margin: auto;
+  margin: auto; */
   background-color: rgba(255, 255, 255, 0.109);
-  border-right: 1px solid rgba(255, 255, 255, 0.411);
-  border-radius: 0px 0px 1000px 0px;
+  /* border-right: 1px solid rgba(255, 255, 255, 0.411);
+  border-radius: 0px 0px 1000px 0px; */
 }
 .login-wrapper {
   display: flex;
   justify-content: center;
+  height: 100%;
 }
 /* .right-col {
   display: flex;
   justify-content: center;
 } */
 @media only screen and (min-width: 769px) {
-  .body-register {
-    height: 1000px;
-    margin-right: 100px !important;
+  .body-login {
+    height: 100vh;
+  }
+}
+@media (max-width: 768px) {
+  .body-login {
+    height: 100vh;
+    overflow: scroll;
   }
 }
 /* .main-register {
@@ -30,9 +36,10 @@
 } */
 .login-wrapper a.back-wrapper {
   text-decoration: none;
+  /* margin: auto; */
+  display: contents;
 }
 .teks-Register {
-  margin-top: 50px;
   display: flex;
 }
 .teks-Register a h1 {
@@ -49,17 +56,22 @@
 }
 .back-to {
   color: rgb(182, 112, 0);
+  margin-bottom: 0px;
+  display: contents;
 }
 .pembungkus-image-left {
   display: flex;
-  margin: auto;
+  height: 100%;
+  /* margin: auto; */
+  align-items: center;
   justify-content: center;
   width: 100%;
   background-color: rgba(255, 255, 255, 0);
 }
 .image-left {
   height: 50%;
-  width: 50%;
+  max-height: 350px;
+  /* width: 50%; */
   background-color: rgba(255, 255, 255, 0);
 }
 
@@ -69,10 +81,9 @@
 }
 .input-text {
   margin-top: 30px;
+  font-weight: 600;
 }
 .Button-Login {
-  margin-top: 20px;
-  float: left;
   background-color: rgb(182, 112, 0) !important;
   width: 120px;
   border-radius: 10px !important;
@@ -87,12 +98,15 @@
   margin-top: 30px;
   display: flex;
   color: white;
+  align-items: center;
 }
-.btn-p p {
-  margin-left: 10px;
-  margin-top: 30px;
+.text-password {
+  margin-left: 20px;
 }
-
+.fa-solid,
+.fas {
+  font-family: 'Font Awesome 6 Free' !important;
+}
 .input-res {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -112,6 +126,7 @@
   margin: 0;
   box-sizing: border-box;
   height: 50px;
+  font-weight: 600;
   border-radius: 10px;
 }
 .fa-chevron-left {
@@ -128,4 +143,7 @@
   border-radius: 10px;
   height: 54px;
   background-color: rgb(182, 112, 0);
+}
+input.from-control.input-res {
+  font-weight: 600;
 }
