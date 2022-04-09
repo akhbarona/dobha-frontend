@@ -66,7 +66,14 @@ const Checkout = () => {
         title: "Oops...",
         text: "Silahkan pilih Metode Pembayaran!",
       });
-    } else if (GetPayment === "gopay") {
+    }else if (hargaOngkir === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: "Silahkan pilih Metode Pengiriman!",
+      });
+    } 
+    else if (GetPayment === "gopay") {
       dispatch(resetCart());
       setModalShow(true);
     } else if (GetPayment === "dana") {
