@@ -32,7 +32,7 @@ const Detail = () => {
     if (product && id !== product.id) {
       dispatch(getProductDetails(id));
     }
-    dispatch(getMoreProducts());
+    // dispatch(getMoreProducts());
   }, [dispatch, id]);
 
   const handleDecrement = () => {
@@ -41,7 +41,7 @@ const Detail = () => {
     }
   };
   const handleIncrement = () => {
-    if (Quantity < product.qty) {
+    if (Quantity < product.data.stock_produk) {
       setQuantity((nextCount) => nextCount + 1);
     } else {
       setQuantity(1);
@@ -97,7 +97,7 @@ const Detail = () => {
     // const Auth = true;
 
     if (currentUser) {
-      dispatch(addToCart(product.id, Quantity));
+      dispatch(addToCart(product.data.slug_produk, Quantity));
       Swal.fire({
         title: 'Success',
         text: 'Berhasil menambahkan',
@@ -144,7 +144,7 @@ const Detail = () => {
       setQuantity(0);
     } else {
       if (newValue === '' || re.test(newValue)) {
-        if (newValue > product.qty) {
+        if (newValue > product.data.stock_produk) {
           setQuantity(1);
         } else {
           setQuantity(Number(newValue));
@@ -157,12 +157,13 @@ const Detail = () => {
       setQuantity(Number(1));
     }
   };
+
   return (
     <main>
       <section>
         <div className="product-detail-container mt-1">
-          <Container>
-            {loading ? (
+        <Container>
+            {loading || loading === undefined? (
               <div className="loading">
                 <Spinner animation="border" variant="warning" role="status" className="m-auto">
                   <span className="visually-hidden">Loading...</span>
@@ -172,6 +173,7 @@ const Detail = () => {
               <h2>{error}</h2>
             ) : (
               <Row className="show-grid details" key={product.id}>
+                {console.log(product.data)}
                 <Col md={4}>
                   <div className="big-image">{product.image && <img src={'/' + product.image[Index]} alt="" />}</div>
 
@@ -182,27 +184,27 @@ const Detail = () => {
 
                 <Col md={6}>
                   <div className="box">
-                    <h2>{product.title}</h2>
+                    <h2>{product.data.nama_produk}</h2>
 
                     <div className={`${product.slug}`}>
                       <div className="stars-outer">
-                        <div className="stars-inner" style={{ width: countRate(product.rate) }}></div>
+                        <div className="stars-inner" style={{ width: countRate(product.data.rating_produk) }}></div>
                       </div>
                       <span className="number-rating" dangerouslySetInnerHTML={{ __html: product.rate }}></span>
                     </div>
 
-                    <p className="price">{formatRupiah(product.price)}</p>
-                    <p>{product.content}</p>
+                    <p className="price">{formatRupiah(product.data.harga_satuan)}</p>
+                    <p>{product.data.deskripsi_produk}</p>
                   </div>
                 </Col>
                 <Col md={2}>
                   <div className="box-cart">
                     <p>
                       Stock
-                      <span>{product.qty}</span>
+                      <span>{product.data.stock_produk}</span>
                     </p>
 
-                    {product.qty > 0 ? (
+                    {product.data.stock_produk > 0 ? (
                       <InputGroup className="w-100 mt-2 mb-3">
                         <InputGroup.Text onClick={handleDecrement} type="button">
                           -
@@ -267,7 +269,7 @@ const Detail = () => {
                 </Row>
               )}
             </div>
-          </Container>
+          </Container> 
         </div>
       </section>
     </main>
