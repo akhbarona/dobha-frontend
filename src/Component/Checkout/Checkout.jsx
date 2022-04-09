@@ -189,7 +189,9 @@ const Checkout = () => {
     console.log(e.target.value);
     setHargaOngkir(e.target.value);
   };
-
+  const formatRupiah = (money) => {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(money);
+  };
   return (
     <section>
       <div className="checkout-screen">
@@ -254,7 +256,7 @@ const Checkout = () => {
                         >
                           <Form.Check
                             inline
-                            name="method"
+                            name="method-jne"
                             type="radio"
                             value={d?.cost[0].value}
                             onChange={(e) => getMetodePengriman(e)}
@@ -280,7 +282,7 @@ const Checkout = () => {
                                           textAlign: "end",
                                         }}
                                       >
-                                       Rp. {d?.cost[0].value}
+                                       {formatRupiah(d?.cost[0].value)}
                                       </td>
                                     </tr>
                                     <tr
@@ -346,7 +348,7 @@ const Checkout = () => {
                               textAlign: "end",
                             }}
                           >
-                            Rp{location.state.totalHarga}
+                            {formatRupiah(location.state.totalHarga)}
                           </td>
                         </tr>
                         <tr style={{ height: "30px", fontWeight: "500" }}>
@@ -360,7 +362,7 @@ const Checkout = () => {
                               textAlign: "end",
                             }}
                           >
-                            {hargaOngkir}
+                            {formatRupiah(hargaOngkir)}
                           </td>
                         </tr>
                         <tr
@@ -379,7 +381,7 @@ const Checkout = () => {
                               textAlign: "end",
                             }}
                           >
-                            Rp{location.state.totalHarga + Number(hargaOngkir)}
+                            {formatRupiah((location.state.totalHarga + Number(hargaOngkir)))}
                           </td>
                         </tr>
                       </tbody>
