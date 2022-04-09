@@ -22,6 +22,7 @@ import AuthService from '../service/auth.service';
 
 import axios from 'axios';
 import Profile from '../Profile/Profile';
+import Pesanansaya from '../Profile/Pesanansaya';
 /* Bagian Kepala */
 function compare(prevProps, nextProps) {
   // console.log(prevProps, nextProps);
@@ -98,7 +99,7 @@ const Header = memo(() => {
                   <Dropdown.Item className="btn-profile-pemilik" as={Link} to="/profile">
                     PROFILE
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/pesanan">
+                  <Dropdown.Item as={Link} to="/pesanansaya">
                     PESANAN SAYA
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="#" onClick={logOut}>
@@ -351,6 +352,7 @@ function Home() {
       {location.pathname !== '/login' &&
         location.pathname !== '/register' &&
         location.pathname !== '/checkout' &&
+        location.pathname !== '/pesanansaya' &&
         location.pathname !== '/cart' &&
         location.pathname !== '/profile' &&
         location.pathname !== '/blogs' &&
@@ -364,6 +366,7 @@ function Home() {
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/pesanansaya" element={<Pesanansaya />} />
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/products/:id" element={<ProductDetail />} />
           <Route exact path="/checkout" element={<Checkout />} />
