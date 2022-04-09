@@ -113,7 +113,7 @@ const Checkout = () => {
                 </Col>
                 <Col>
                   <p className="pg-price">
-                    Rp. {location.state.totalHarga + Number(hargaOngkir)}
+                  {formatRupiah((location.state.totalHarga + Number(hargaOngkir)))}
                   </p>
                 </Col>
               </Row>
