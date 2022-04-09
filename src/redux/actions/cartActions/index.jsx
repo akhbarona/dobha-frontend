@@ -7,15 +7,17 @@ export const CART_RESET = 'CART_RESET';
 // file ini berhubungan dengan backend
 
 export const addToCart = (id, qty) => async (dispatch, getState) => {
-  const { data } = await axios.get(`http://localhost:3001/products/${id}`);
+  const { data } = await axios.get(`https://dobha.000webhostapp.com/api/read-product-by-slug/${id}`);
+  console.log(data)
   dispatch({
     type: ADD_TO_CART,
     payload: {
-      product: data.id,
-      name: data.title,
-      imageUrl: data.image,
-      price: data.price,
-      countInStock: data.qty,
+      product: data.data.id,
+      name: data.data.nama_produk,
+      imageUrl: data.data.gambar_produk,
+      slug_produk: data.data.slug_produk,
+      price: data.data.harga_satuan,
+      countInStock: data.data.stock_produk,
       qty,
     },
   });

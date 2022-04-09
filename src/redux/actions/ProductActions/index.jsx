@@ -31,7 +31,7 @@ export const getProducts = () => async (dispatch) => {
 export const getProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: GET_PRODUCT_DETAILS_REQUEST });
-    const { data } = await axios.get(`http://localhost:3001/products/${id}`);
+    const { data } = await axios.get(`https://dobha.000webhostapp.com/api/read-product-by-slug/${id}`);
     dispatch({
       type: GET_PRODUCT_DETAILS_SUCCESS,
       payload: data,

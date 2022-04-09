@@ -31,8 +31,15 @@ const Cart = () => {
   };
 
   const checkOutHandler = () => {
-    navigate(`/checkout`);
+    // console.log(totalHarga)
+    navigate(`/checkout`,{
+      state:{
+        totalHarga:totalHarga
+      }
+    });
   };
+
+  console.log(cartItems)
   return (
     <section>
       <div className="cart-screen">

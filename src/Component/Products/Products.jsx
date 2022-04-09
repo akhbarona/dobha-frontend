@@ -48,6 +48,7 @@ const Products = () => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(money);
   };
 
+
   return (
     <main>
       {loading || loading === undefined?<p>loading</p>:
@@ -82,21 +83,22 @@ const Products = () => {
               ) : (
                 <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
                   {products.data.map((item, index) => {
+                    console.log(item)
                     return (
                       <Col key={index}>
                         <Card className="card-center">
-                          {/* {Products && <img src={'/' + Products.image[0]} alt="" />} */}
-                          <Card.Img variant="top" src={'/' + item.image[0]} />
+                          {/* {Products && <img src={'/' + Products.[0]} alt="" />} */}
+                          <Card.Img variant="top" src={'https://pasaminang.com/wp-content/uploads/2021/01/Screenshot_2020-12-30-12-53-35-12.jpg'} />
                           <Card.Body>
-                            <Link className="link-title" to={`/products/${item.id}`}>
-                              <Card.Title>{item.title}</Card.Title>
+                            <Link className="link-title" to={`/products/${item.slug_produk}`}>
+                              <Card.Title>{item.nama_produk}</Card.Title>
                             </Link>
-                            <Card.Text className="price">{formatRupiah(item.price)}</Card.Text>
+                            <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
                             <div className={item.slug}>
                               <div className="stars-outer">
-                                <div className="stars-inner" style={{ width: countRate(item.rate) }}></div>
+                                <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
                               </div>
-                              <span className="number-rating" dangerouslySetInnerHTML={{ __html: item.rate }}></span>
+                              <span className="number-rating" dangerouslySetInnerHTML={{ __html: item.rating_produk }}></span>
                             </div>
                           </Card.Body>
                         </Card>

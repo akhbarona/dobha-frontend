@@ -8,9 +8,11 @@ const CartItem = ({ index, item, qtyChangeHandler, removeHandler }) => {
   const formatRupiah = (money) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(money);
   };
+
+  console.log(item)
   useEffect(() => {
     if (kuantitas) {
-      qtyChangeHandler(item.product, kuantitas);
+      qtyChangeHandler(item.slug_produk, kuantitas);
     }
   }, [kuantitas]);
   const onlyNumber = (e) => {
@@ -27,7 +29,7 @@ const CartItem = ({ index, item, qtyChangeHandler, removeHandler }) => {
         }
       }
     }
-    qtyChangeHandler(item.product, e.target.value);
+    qtyChangeHandler(item.slug_produk, e.target.value);
   };
   const handleDecrement = () => {
     if (kuantitas > 1) {
@@ -45,7 +47,7 @@ const CartItem = ({ index, item, qtyChangeHandler, removeHandler }) => {
   const onlyNol = (e) => {
     if (e.target.value <= 0) {
       setKuantitas(Number(1));
-      qtyChangeHandler(item.product, 1);
+      qtyChangeHandler(item.slug_produk, 1);
     }
   };
 
