@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import AuthService from '../service/auth.service';
+import Swal from 'sweetalert2';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,10 +23,17 @@ const Login = () => {
           console.log(res);
         },
         (error) => {
+          Swal.fire(
+            'Oops...',
+            error.response.statusText,
+            'error'
+          )
           console.log(error.response);
         }
       );
     } catch (err) {
+
+     
       console.log(err);
     }
   };

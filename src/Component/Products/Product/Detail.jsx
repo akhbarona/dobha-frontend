@@ -26,7 +26,8 @@ const Detail = () => {
   const navigate = useNavigate();
   const myRef = useRef(null);
 
-  const { user: currentUser } = AuthService.getCurrentUser();
+ 
+  const {user:currentUser} = AuthService.getCurrentUser()? AuthService.getCurrentUser():{user:null};
 
   useEffect(() => {
     if (product && id !== product.id) {
@@ -231,7 +232,7 @@ const Detail = () => {
               <h3>Review</h3>
               <Row className="g-2">
                 <Col xl={12}>
-                  <Comments currentUserId={11} currentUsername={`${currentUser.name}`} />
+                  <Comments currentUserId={11} currentUsername={`${currentUser?.name}`} />
                 </Col>
                 <Col xl={12}></Col>
               </Row>

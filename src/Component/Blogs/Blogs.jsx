@@ -38,7 +38,7 @@ export const Blogs = () => {
             <h1 className="title-blogs-section">
               <span>Artikel</span>
             </h1>
-            {loading ? (
+            {loading || loading === undefined? (
               <div className="loading">
                 <Spinner animation="border" variant="warning" role="status" className="m-auto">
                   <span className="visually-hidden">Loading...</span>
@@ -48,13 +48,13 @@ export const Blogs = () => {
               <h2>{error}</h2>
             ) : (
               blogs &&
-              blogs.map((item, index) => {
+              blogs.data.map((item, index) => {
                 return (
                   <Row className="p-5" key={index}>
                     <Col md={12}>
                       <div className="blog-card w-100">
                         <div className="meta">
-                          <div className="photo" style={{ backgroundImage: 'url(' + '/' + item.image_file_data + ')' }}></div>
+                          <div className="photo" style={{ backgroundImage: 'url(' + '/' + item.image + ')' }}></div>
                         </div>
                         <div className="description">
                           <h3>{item.title}</h3>
@@ -75,11 +75,11 @@ export const Blogs = () => {
                             //   __html: `${handleLength(item.content, 120)}`,
                             // }}
                           >
-                            {item.intro}
+                            {item.body}
                           </p>
 
                           <p className="read-more">
-                            <Link className="read-more-right" to={`/blogs/${item.id}`}>
+                            <Link className="read-more-right" to={`/blogs/${item.slug}`}>
                               Baca Selengkapnya
                             </Link>
                           </p>
