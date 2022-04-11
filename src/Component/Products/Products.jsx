@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts as listProducts } from '../../redux/actions/ProductActions';
 import { Link } from 'react-router-dom';
+
 const Products = () => {
   const dispatch = useDispatch();
   const getProducts = useSelector((state) => state.getProducts);
