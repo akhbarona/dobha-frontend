@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { Col, Container, Form, Card, Button, Row } from "react-bootstrap";
+import authHeader from "../service/auth.header";
+import axios from "axios";
+
 
 const provinsi = {
   provinsi: [
@@ -142,12 +145,12 @@ const provinsi = {
   ],
 };
 
-const Alamat = () => {
+const Alamat = (props) => {
   const [prov, setProv] = useState("");
   const [idKota, setIdKota] = useState("");
   const [dataKota, setDataKota] = useState([]);
   const [kabkota, setKabKota] = useState("");
-  const [alamat , setAlamat] = useState("");
+  const [alamat, setAlamat] = useState("");
 
   const handleChange = (e) => {
     setProv(e.target.value);
@@ -160,8 +163,6 @@ const Alamat = () => {
     setIdKota(id);
     setKabKota(kota);
   };
-
-
 
   const getDataKota = async () => {
     const hasil = provinsi.provinsi.filter((item) => item["province"] === prov);
@@ -189,13 +190,33 @@ const Alamat = () => {
 
   const handleSubmit = () => {
     const data = {
-        prov,
-        idKota,
-        kabkota,
-        alamat
-      };
-      console.log(data);
-  }
+      name: props.dataUser.name,
+      username: props.dataUser.username,
+      email: props.dataUser.email,
+      password: "12345678",
+      phone_number: props.dataUser.phone_number,
+      alamat: alamat?alamat:props.dataUser.alamat,
+      provinsi: prov?prov:props.dataUser.provinsi,
+      kabupaten: kabkota?kabkota:props.dataUser.kabupaten,
+      id_kabupaten: idKota ? idKota : props.dataUser.id_kabupaten    
+    };
+    console.log(data);
+    axios
+      .post("/api/auth/user/update/admin", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader().Authorization,
+        },
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // console.log(data);
+  };
 
   return (
     <>
@@ -203,7 +224,10 @@ const Alamat = () => {
         <Col lg={6}>
           <Form.Group className="mb-1">
             <Form.Label>Provinsi</Form.Label>
-            <Form.Select onChange={(e) => handleChange(e)}>
+            <Form.Select
+              defaultValue={props.dataUser.provinsi}
+              onChange={(e) => handleChange(e)}
+            >
               <option value="">Pilih Provinsi</option>
               {provinsi.provinsi.map((prov, index) => {
                 return (
@@ -220,7 +244,10 @@ const Alamat = () => {
           {dataKota.length > 0 ? (
             <Form.Group className="mb-1">
               <Form.Label>Kota</Form.Label>
-              <Form.Select onChange={(e) => handleChangeKota(e)}>
+              <Form.Select
+                defaultValue={props.dataUser.kabupaten}
+                onChange={(e) => handleChangeKota(e)}
+              >
                 <option value="">Pilih Kota</option>
                 {dataKota.map((kab, index) => {
                   return (
@@ -241,12 +268,24 @@ const Alamat = () => {
       </Row>
       <Form.Group className="mb-1" controlId="exampleForm.ControlTextarea1">
         <Form.Label>Example textarea</Form.Label>
-        <Form.Control onChange={(e) => setAlamat(e.target.value)} as="textarea" placeholder="Alamat detail" rows={3} />
+        {console.log(props.dataUser)}
+        <Form.Control
+          defaultValue={props.dataUser.alamat}
+          onChange={(e) => setAlamat(e.target.value)}
+          as="textarea"
+          placeholder="Alamat detail"
+          rows={3}
+        />
       </Form.Group>
-      <Form.Group  controlId="exampleForm.ControlTextarea1">
-        <button type="button" onClick={handleSubmit} className="btn btn-primary mt-2">SIMPAN</button>
+      <Form.Group controlId="exampleForm.ControlTextarea1">
+        <button
+          type="button"
+          onClick={handleSubmit}
+          className="btn btn-primary mt-2"
+        >
+          SIMPAN
+        </button>
       </Form.Group>
-
     </>
   );
 };

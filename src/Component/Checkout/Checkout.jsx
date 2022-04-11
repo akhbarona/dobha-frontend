@@ -157,8 +157,7 @@ const Checkout = () => {
 
   const getOngkir = async () => {
     const dataSend = {
-      destination: `114`,
-      // weight: parseInt(localStorage.getItem('berat')),
+      destination: dataUser?.user?.id_kabupaten,
       weight: 1000,
     };
     const getDataKota1 = await fetch(

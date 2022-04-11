@@ -1,9 +1,37 @@
-import { useState } from 'react';
-import { Button, Card, Col, Container, Nav, Row, Tab, Table, Tabs } from 'react-bootstrap';
-import './Profile.css';
-import Alamat from './Alamat';
+import { useState,useEffect } from "react";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Nav,
+  Row,
+  Tab,
+  Table,
+  Tabs,
+} from "react-bootstrap";
+import "./Profile.css";
+import Alamat from "./Alamat";
+import axios from 'axios';
+import authHeader from "../service/auth.header";
+import  AuthService from '../service/auth.service';
+import { useNavigate, useLocation, Link } from "react-router-dom";
+
 
 const Profile = () => {
+  const [dataUser , setUser] = useState([]);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    if (!user) {
+      navigate("/login");
+    }
+    setUser(user.user)
+
+  }, []);
+
+
   const Biodata = () => {
     return (
       <Card>
@@ -21,16 +49,16 @@ const Profile = () => {
                 <table className="h-50 w-50 isi-content">
                   <tr>
                     <td>Nama</td>
-                    <td>Dhany</td>
+                    <td>{dataUser.username}</td>
                   </tr>
                   <tr>
                     <td>Email</td>
 
-                    <td>dani@gmail.com</td>
+                    <td>{dataUser.email}</td>
                   </tr>
                   <tr>
                     <td>Nomor Telpon</td>
-                    <td>081234567890</td>
+                    <td>{dataUser.phone_number}</td>
                   </tr>
                 </table>
               </Col>
@@ -41,9 +69,34 @@ const Profile = () => {
     );
   };
 
+  const handleUpdateProfile = () => {
+   
+    const dataSend = {
+      name: "admin_2022",
+      username: "admin_2022",
+      email: "admin2@gmail.com",
+      password: "12345678",
+      phone_number: "085816790359",
+      alamat: "Jl in ajadululah",
+      provinsi: "lampung",
+      kabupaten: "tanggamus",
+      id_kabupaten: "343",
+    };
 
+    axios.post('/api/auth/user/update/admin', dataSend, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": authHeader().Authorization,
+      },
+    })
+    .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err)
+      })
 
- 
+  };
 
   const [pilih, setPilih] = useState(1);
   const handleSelect = (value) => {
@@ -52,15 +105,21 @@ const Profile = () => {
   return (
     <section>
       <div className="profile-wrapper">
+        <button type="button" className="btn-update" onClick={handleUpdateProfile}>CEK</button>
         <Container className="profile-container">
           <Row className="profile-content">
             <div className="background-content">
-              <Tabs defaultActiveKey={pilih} id="uncontrolled-tab-example" className="mb-3" onSelect={handleSelect}>
+              <Tabs
+                defaultActiveKey={pilih}
+                id="uncontrolled-tab-example"
+                className="mb-3"
+                onSelect={handleSelect}
+              >
                 <Tab eventKey={1} title="Biodata Diri">
                   <Biodata />
                 </Tab>
                 <Tab eventKey={2} title="Alamat">
-                  <Alamat />
+                  <Alamat dataUser={dataUser}/>
                 </Tab>
               </Tabs>
             </div>
