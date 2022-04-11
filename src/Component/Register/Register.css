@@ -1,0 +1,48 @@
+@media only screen and (min-width: 769px) {
+  .body-register {
+    height: 100vh;
+  }
+}
+
+.left-col {
+  background-color: rgba(255, 255, 255, 0.109);
+}
+.pembungkus-image-left {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0);
+}
+.image-left {
+  height: 50%;
+  max-height: 350px;
+
+  background-color: rgba(255, 255, 255, 0);
+}
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+.register-wrapper a.back-wrapper {
+  text-decoration: none;
+  display: contents;
+}
+.back-to {
+  color: rgb(182, 112, 0);
+  margin-bottom: 0px;
+  display: contents;
+}
+.teks-Register {
+  display: flex;
+}
+.teks-Register a h1 {
+  border-bottom: 3px solid rgb(182, 112, 0);
+  font-family: 'Quicksand', sans-serif;
+  color: #fff;
+}
+.fa-chevron-left {
+  font-size: 25px;
+}

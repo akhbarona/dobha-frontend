@@ -1,27 +1,25 @@
 .profile-wrapper {
-  height: 65vh;
+  padding: 2rem;
 }
 .profile-content {
   height: 100%;
-  /* align-items: center; */
   flex-direction: column;
   justify-content: center;
 }
-.profile-container.container {
-  height: 100%;
-}
+
 .background-content {
   background: #fff;
-  height: 350px;
+  height: 100%;
   padding: 1rem;
   border-radius: 20px;
 }
-.card-body.card-profile {
-  /* height: 40vh; */
-  padding: 0;
+.background-content ul li button {
+  font-weight: bold;
 }
-.isi-content {
-  font-size: 1.5rem;
-  font-weight: 600;
-  font-family: 'Quicksand', sans-serif;
+.background-content ul li button:hover {
+  color: #ff9c06;
+}
+
+.icon-profile.fa-user:before {
+  margin-right: 0px;
 }

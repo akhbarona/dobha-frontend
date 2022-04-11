@@ -1,6 +1,6 @@
 /* Custom Font default */
 * {
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Quicksand', sans-serif !important;
 }
 
 /* Style wrapper all components */

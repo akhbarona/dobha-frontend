@@ -2,145 +2,144 @@ import { useState, useEffect } from "react";
 import { Col, Container, Form, Card, Button, Row } from "react-bootstrap";
 import authHeader from "../service/auth.header";
 import axios from "axios";
-
-
+import './Alamat.css';
 const provinsi = {
   provinsi: [
     {
-      province_id: "1",
-      province: "Bali",
+      province_id: '1',
+      province: 'Bali',
     },
     {
-      province_id: "2",
-      province: "Bangka Belitung",
+      province_id: '2',
+      province: 'Bangka Belitung',
     },
     {
-      province_id: "3",
-      province: "Banten",
+      province_id: '3',
+      province: 'Banten',
     },
     {
-      province_id: "4",
-      province: "Bengkulu",
+      province_id: '4',
+      province: 'Bengkulu',
     },
     {
-      province_id: "5",
-      province: "DI Yogyakarta",
+      province_id: '5',
+      province: 'DI Yogyakarta',
     },
     {
-      province_id: "6",
-      province: "DKI Jakarta",
+      province_id: '6',
+      province: 'DKI Jakarta',
     },
     {
-      province_id: "7",
-      province: "Gorontalo",
+      province_id: '7',
+      province: 'Gorontalo',
     },
     {
-      province_id: "8",
-      province: "Jambi",
+      province_id: '8',
+      province: 'Jambi',
     },
     {
-      province_id: "9",
-      province: "Jawa Barat",
+      province_id: '9',
+      province: 'Jawa Barat',
     },
     {
-      province_id: "10",
-      province: "Jawa Tengah",
+      province_id: '10',
+      province: 'Jawa Tengah',
     },
     {
-      province_id: "11",
-      province: "Jawa Timur",
+      province_id: '11',
+      province: 'Jawa Timur',
     },
     {
-      province_id: "12",
-      province: "Kalimantan Barat",
+      province_id: '12',
+      province: 'Kalimantan Barat',
     },
     {
-      province_id: "13",
-      province: "Kalimantan Selatan",
+      province_id: '13',
+      province: 'Kalimantan Selatan',
     },
     {
-      province_id: "14",
-      province: "Kalimantan Tengah",
+      province_id: '14',
+      province: 'Kalimantan Tengah',
     },
     {
-      province_id: "15",
-      province: "Kalimantan Timur",
+      province_id: '15',
+      province: 'Kalimantan Timur',
     },
     {
-      province_id: "16",
-      province: "Kalimantan Utara",
+      province_id: '16',
+      province: 'Kalimantan Utara',
     },
     {
-      province_id: "17",
-      province: "Kepulauan Riau",
+      province_id: '17',
+      province: 'Kepulauan Riau',
     },
     {
-      province_id: "18",
-      province: "Lampung",
+      province_id: '18',
+      province: 'Lampung',
     },
     {
-      province_id: "19",
-      province: "Maluku",
+      province_id: '19',
+      province: 'Maluku',
     },
     {
-      province_id: "20",
-      province: "Maluku Utara",
+      province_id: '20',
+      province: 'Maluku Utara',
     },
     {
-      province_id: "21",
-      province: "Nanggroe Aceh Darussalam (NAD)",
+      province_id: '21',
+      province: 'Nanggroe Aceh Darussalam (NAD)',
     },
     {
-      province_id: "22",
-      province: "Nusa Tenggara Barat (NTB)",
+      province_id: '22',
+      province: 'Nusa Tenggara Barat (NTB)',
     },
     {
-      province_id: "23",
-      province: "Nusa Tenggara Timur (NTT)",
+      province_id: '23',
+      province: 'Nusa Tenggara Timur (NTT)',
     },
     {
-      province_id: "24",
-      province: "Papua",
+      province_id: '24',
+      province: 'Papua',
     },
     {
-      province_id: "25",
-      province: "Papua Barat",
+      province_id: '25',
+      province: 'Papua Barat',
     },
     {
-      province_id: "26",
-      province: "Riau",
+      province_id: '26',
+      province: 'Riau',
     },
     {
-      province_id: "27",
-      province: "Sulawesi Barat",
+      province_id: '27',
+      province: 'Sulawesi Barat',
     },
     {
-      province_id: "28",
-      province: "Sulawesi Selatan",
+      province_id: '28',
+      province: 'Sulawesi Selatan',
     },
     {
-      province_id: "29",
-      province: "Sulawesi Tengah",
+      province_id: '29',
+      province: 'Sulawesi Tengah',
     },
     {
-      province_id: "30",
-      province: "Sulawesi Tenggara",
+      province_id: '30',
+      province: 'Sulawesi Tenggara',
     },
     {
-      province_id: "31",
-      province: "Sulawesi Utara",
+      province_id: '31',
+      province: 'Sulawesi Utara',
     },
     {
-      province_id: "32",
-      province: "Sumatera Barat",
+      province_id: '32',
+      province: 'Sumatera Barat',
     },
     {
-      province_id: "33",
-      province: "Sumatera Selatan",
+      province_id: '33',
+      province: 'Sumatera Selatan',
     },
     {
-      province_id: "34",
-      province: "Sumatera Utara",
+      province_id: '34',
+      province: 'Sumatera Utara',
     },
   ],
 };
@@ -152,12 +151,13 @@ const Alamat = (props) => {
   const [kabkota, setKabKota] = useState("");
   const [alamat, setAlamat] = useState("");
 
+
   const handleChange = (e) => {
     setProv(e.target.value);
   };
 
   const handleChangeKota = (e) => {
-    const data = e.target.value.split("-");
+    const data = e.target.value.split('-');
     const kota = data[0];
     const id = data[1];
     setIdKota(id);
@@ -165,19 +165,16 @@ const Alamat = (props) => {
   };
 
   const getDataKota = async () => {
-    const hasil = provinsi.provinsi.filter((item) => item["province"] === prov);
+    const hasil = provinsi.provinsi.filter((item) => item['province'] === prov);
     if (hasil[0]?.province_id) {
       const dataSend = { id_prov: hasil[0]?.province_id };
-      const getDataKota1 = await fetch(
-        `https://apiongkir.herokuapp.com/api/kota`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataSend),
-        }
-      );
+      const getDataKota1 = await fetch(`https://apiongkir.herokuapp.com/api/kota`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataSend),
+      });
 
       const hasilDataKota1 = await getDataKota1.json();
       setDataKota(hasilDataKota1);
@@ -252,10 +249,7 @@ const Alamat = (props) => {
                 <option value="">Pilih Kota</option>
                 {dataKota.map((kab, index) => {
                   return (
-                    <option
-                      key={index}
-                      value={`${kab.city_name}-${kab.city_id}`}
-                    >
+                    <option key={index} value={`${kab.city_name}-${kab.city_id}`}>
                       {kab.city_name}
                     </option>
                   );
@@ -263,7 +257,7 @@ const Alamat = (props) => {
               </Form.Select>
             </Form.Group>
           ) : (
-            ""
+            ''
           )}
         </Col>
       </Row>
@@ -279,13 +273,10 @@ const Alamat = (props) => {
         />
       </Form.Group>
       <Form.Group controlId="exampleForm.ControlTextarea1">
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="btn btn-primary mt-2"
-        >
+
+        <Button onClick={handleSubmit} className="btn btn-primary mt-2 w-25 btn-simpan-alamat">
           SIMPAN
-        </button>
+        </Button>
       </Form.Group>
     </>
   );

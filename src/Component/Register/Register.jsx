@@ -1,9 +1,9 @@
 import { Row, Col, Form } from 'react-bootstrap';
-// import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import FormInput from './FormInput';
 import AuthService from '../service/auth.service';
+import './Register.css';
 const Register = () => {
   const [showPassword, SetshowPassword] = useState(false);
   const [values, setValues] = useState({
@@ -109,47 +109,45 @@ const Register = () => {
   // console.log(values);
 
   return (
-    <div className="body">
+    <>
       <Row className="body-register">
         <Col md={5} className="left-col">
           <div className="pembungkus-image-left">
-            <img src="./letters-paperplanes-messages-by-oblik-studio.png" className="image-left" />
+            <Row>
+              <img src="./letters-paperplanes-messages-by-oblik-studio.png" className="image-left" />
+            </Row>
           </div>
         </Col>
         <Col md={7}>
-          <Row>
-            <Link to="/login">
-              <h4 className="h-4 p-2">
-                <i className="fa-solid fa-chevron-left"></i>
-                &ensp; Kembali
-              </h4>
-            </Link>
-
-            <div className="register-wrapper">
-              <div className="pembungkus-input">
-                {/* <div className="teks-Register">
-                  <Link to="/login">
-                    <h1>Login</h1>
-                  </Link>
-                  &ensp; &ensp; &ensp;
-                  <Link to="/">
-                    <h1>Register</h1>
-                  </Link>
-                </div> */}
-                <Form onSubmit={handleSubmit}>
-                  {inputs.map((input) => (
-                    <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChange} />
-                  ))}
-                  <div>
-                    <button className="Button-Login-Register">Submit</button>
+          <div className="register-wrapper pt-5">
+            <Row className="g-3 row-cols-1">
+              <Col className="m-auto px-4">
+                <Link className="back-wrapper " to="/login">
+                  <h4 className="back-to p-2">
+                    <i className="fa-solid fa-chevron-left"></i>
+                    &ensp; Kembali
+                  </h4>
+                </Link>
+              </Col>
+              <Col className="mt-0">
+                <div className="input-wrapper">
+                  <div className="container-form w-100 p-3">
+                    <Form onSubmit={handleSubmit}>
+                      {inputs.map((input) => (
+                        <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChange} />
+                      ))}
+                      <div>
+                        <button className="Button-Login-Register">Submit</button>
+                      </div>
+                    </Form>
                   </div>
-                </Form>
-              </div>
-            </div>
-          </Row>
+                </div>
+              </Col>
+            </Row>
+          </div>
         </Col>
       </Row>
-    </div>
+    </>
   );
 };
 

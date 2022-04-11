@@ -2,7 +2,7 @@
   margin-top: 30px;
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 100%;
 }
 
 input.from-control {
@@ -46,7 +46,7 @@ input:invalid[focused='true'] {
 input:invalid[focused='true'] ~ span {
   display: block;
 }
-.pembungkus-input {
+/* .pembungkus-input {
   display: flex;
   justify-content: center;
-}
+} */
