@@ -35,10 +35,12 @@ export const getBlogsReducers = (state = initialState, action) => {
   }
 };
 export const getBlogsDetailsReducers = (state = { blog: {} }, action) => {
+  console.log(action.payload);
   switch (action.type) {
     case GET_BLOGS_DETAILS_REQUEST:
       return {
         loading: true,
+        blogs: []
       };
     case GET_BLOGS_DETAILS_SUCCESS:
       return {

@@ -2,7 +2,7 @@ import { useEffect, useState, memo } from "react";
 import "./Checkout.css";
 // import Confirm from './Confirm';
 import axios from "axios";
-import { Col, Row, Form, Container, Button, Modal } from "react-bootstrap";
+import { Col, Row, Form, Container, Button, Modal ,Spinner} from "react-bootstrap";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { resetCart } from "../../redux/actions/cartActions";
@@ -14,6 +14,10 @@ const Checkout = () => {
   const location = useLocation();
   const [ongkir, setOngkir] = useState([]);
   const [hargaOngkir, setHargaOngkir] = useState(0);
+  const[estimasiOngkir, setEstimasiOngkir] = useState(0);
+  const [serviceOngkir, setServiceOngkir] = useState(0);
+  const [dataUser , setUser] = useState([]);
+  const [buktiBayar, setBuktiBayar] = useState('');
   const methodPayment = [
     { method: "gopay", image: "logo-gopay.png" },
     { method: "dana", image: "logo-dana.png" },
@@ -55,7 +59,7 @@ const Checkout = () => {
 
   const getMethodHandler = (e) => {
     const value = e.target.value;
-    console.log(value);
+    // console.log(value);
     setGetPayment(value);
   };
   const handleMethod = (e) => {
@@ -125,8 +129,8 @@ const Checkout = () => {
                 <h6>Silahkan Upload Bukti Pembayaran Anda</h6>
                 <div className="confirm-wrapper">
                   <Form controlId="formFileLg" className="mt-3 mb-3">
-                    <Form.Control type="file" size="md" />
-                    <button className="mt-3 w-50 btn-buy">Submit</button>
+                    <Form.Control onChange={(e) => setBuktiBayar(e)} type="file" size="md" name="image" />
+                    <button onClick={() => handleSubmit()} type="button" className="mt-3 w-50 btn-buy">Submit</button>
                   </Form>
                 </div>
               </div>
@@ -153,8 +157,7 @@ const Checkout = () => {
 
   const getOngkir = async () => {
     const dataSend = {
-      destination: `114`,
-      // weight: parseInt(localStorage.getItem('berat')),
+      destination: dataUser?.user?.id_kabupaten,
       weight: 1000,
     };
     const getDataKota1 = await fetch(
@@ -176,26 +179,97 @@ const Checkout = () => {
     getOngkir();
   }, []);
 
-  console.log("ongkir", ongkir);
+  // console.log("ongkir", ongkir);
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     if (!user) {
       navigate("/login");
     }
+    setUser(user)
+
   }, []);
 
   const getMetodePengriman = (e) => {
-    console.log(e.target.value);
-    setHargaOngkir(e.target.value);
+    const data = e.target.value.split(",");
+    setHargaOngkir(data[0]);
+    setEstimasiOngkir(data[1]);
+    setServiceOngkir(data[2]);
   };
   const formatRupiah = (money) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(money);
   };
+
+
+  const handleSubmit =  async() => {
+    console.log(dataUser)
+    return
+  if(buktiBayar !== ' '){
+    const formData = new FormData();
+            if (buktiBayar.target.files[0].size > 1000000) {
+                // setLoading(false);
+                // swal("Failed", "Ukuran file terlalu besar", "error");
+                return;
+    
+            }
+            // handle image extension
+            const extName = buktiBayar.target.files[0].name.split('.').pop().toLowerCase();
+            if (extName !== 'jpg' && extName !== 'jpeg' && extName !== 'png') {
+                // setLoading(false);
+                // swal("Failed", "Extension file tidak di izinkan", "error");
+                return;
+    
+            }
+    
+            formData.append('bukti_bayar', buktiBayar.target.files[0]);
+            formData.set('username', dataUser.user.username);
+            formData.set('email', dataUser.user.email);
+            formData.set('provinsi', '');
+            formData.set('kabupaten', '');
+            formData.set('alamat', dataUser.user.alamat);
+            formData.set('ongkir', hargaOngkir);
+            formData.set('tagihan_total', (location.state.totalHarga + Number(hargaOngkir)));
+            formData.set('user_id',  dataUser.user.id);
+            formData.set('estimasi',  estimasiOngkir);
+            formData.set('service',  serviceOngkir);
+            // dataUser.user.id,
+
+        try{
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data', 
+    
+                },
+                onUploadProgress: (event) => {
+                },
+            };
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/transaksi`, formData, config);
+          }catch(err){
+
+          }
+  }
+     
+
+
+  
+
+  }
+
+
+
   return (
     <section>
       <div className="checkout-screen">
-        <Container className="checkout-container">
+        {
+          ongkir.length <= 0?
+          (
+            <div className="loading">
+              <Spinner animation="border" variant="warning" role="status" className="m-auto">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          ):
+          <Container className="checkout-container">
           <Row>
             <div className="title-checkout">
               <h2>Checkout</h2>
@@ -258,7 +332,7 @@ const Checkout = () => {
                             inline
                             name="method-jne"
                             type="radio"
-                            value={d?.cost[0].value}
+                            value={`${d?.cost[0].value},${d?.cost[0].etd},${d?.service}`}
                             onChange={(e) => getMetodePengriman(e)}
                             label={
                               <div style={{ color: "black" }}>
@@ -396,13 +470,13 @@ const Checkout = () => {
                   <div className="payment-info">
                     <ul className="address-info">
                       <li>
-                        <span>{Address.name}</span>
+                        <span>{dataUser?.user?.username}</span>
                       </li>
                       <li>
-                        <span>{Address.no}</span>
+                        <span>{dataUser?.user?.phone_number}</span>
                       </li>
                       <li>
-                        <span>{Address.address}</span>
+                        <span>{dataUser?.user?.alamat?dataUser?.user?.alamat:'alamat belum di seting'}</span>
                       </li>
                     </ul>
                   </div>
@@ -419,6 +493,8 @@ const Checkout = () => {
             </Col>
           </Row>
         </Container>
+        }
+        
       </div>
     </section>
   );
