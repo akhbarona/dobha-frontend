@@ -312,7 +312,7 @@ const Checkout = () => {
           onUploadProgress: (event) => {},
         };
         const response = await axios.post(
-          `http://localhost:3002/api/transaksi`,
+          `https://apiongkir.herokuapp.com/api/transaksi`,
           formData,
           config
         );

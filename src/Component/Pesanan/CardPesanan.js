@@ -19,7 +19,7 @@ const CardPesanan = (props) => {
         loading: true
     }));
 
-    fetch(`http://localhost:3002/api/pesanan/${props.dataUser.email}`,{
+    fetch(`https://apiongkir.herokuapp.com/api/pesanan/${props.dataUser.email}`,{
         method: "GET",
         headers: {
             "Content-Type": "application/json",
