@@ -230,7 +230,7 @@ const Detail = () => {
                   <h3>Review</h3>
                   <Row className="g-2">
                     <Col xl={12}>
-                      <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} />
+                      {/* <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} /> */}
                     </Col>
                     <Col xl={12}></Col>
                   </Row>
@@ -242,7 +242,7 @@ const Detail = () => {
               <h3>Review</h3>
               <Row className="g-2">
                 <Col xl={12}>
-                  <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} />
+                  {/* <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} /> */}
                 </Col>
                 <Col xl={12}></Col>
               </Row>

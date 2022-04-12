@@ -149,19 +149,23 @@ const Checkout = () => {
 
   const getOngkir = async () => {
     const dataSend = {
-      destination: dataUser?.user?.id_kabupaten,
+      destination: '21',
       weight: 1000,
     };
-    const getDataKota1 = await fetch(`https://apiongkir.herokuapp.com/api/ongkir`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dataSend),
-    });
-
-    const hasilDataKota1 = await getDataKota1.json();
-    setOngkir(hasilDataKota1);
+    try{
+      const getDataKota1 = await fetch(`https://apiongkir.herokuapp.com/api/ongkir`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataSend),
+      });
+  
+      const hasilDataKota1 = await getDataKota1.json();
+      setOngkir(hasilDataKota1);
+    }catch(err){
+      console.log('errrr ',err)
+    }
   };
 
   useEffect(() => {
