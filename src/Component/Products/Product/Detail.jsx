@@ -95,10 +95,10 @@ const Detail = () => {
 
   const submitAddtocart = (e) => {
     e.preventDefault();
+  
     // const Auth = true;
-
     if (currentUser) {
-      dispatch(addToCart(product.data.slug_produk, Quantity));
+      dispatch(addToCart(product.data[0].slug_produk, Quantity));
       Swal.fire({
         title: 'Success',
         text: 'Berhasil menambahkan',
@@ -131,7 +131,7 @@ const Detail = () => {
     setIndex(index);
     const images = myRef.current.children;
 
-    console.log(images);
+    // console.log(images);
     for (let i = 0; i < images.length; i++) {
       images[i].className = images[i].className.replace('active', '');
     }
@@ -174,7 +174,7 @@ const Detail = () => {
               <h2>{error}</h2>
             ) : (
               <Row className="show-grid details" key={product.id}>
-                {console.log(product.data)}
+                {console.log('product.data =>',product.data[0])}
                 <Col md={4}>
                   <div className="big-image">{product.image && <img src={'/' + product.image[Index]} alt="" />}</div>
 
@@ -185,27 +185,27 @@ const Detail = () => {
 
                 <Col md={6}>
                   <div className="box">
-                    <h2>{product.data.nama_produk}</h2>
+                    <h2>{product.data[0].nama_produk}</h2>
 
                     <div className={`${product.slug}`}>
                       <div className="stars-outer">
-                        <div className="stars-inner" style={{ width: countRate(product.data.rating_produk) }}></div>
+                        <div className="stars-inner" style={{ width: countRate(product.data[0].rating_produk) }}></div>
                       </div>
                       <span className="number-rating" dangerouslySetInnerHTML={{ __html: product.rate }}></span>
                     </div>
 
-                    <p className="price">{formatRupiah(product.data.harga_satuan)}</p>
-                    <p>{product.data.deskripsi_produk}</p>
+                    <p className="price">{formatRupiah(product.data[0].harga_satuan)}</p>
+                    <p>{product.data[0].deskripsi_produk}</p>
                   </div>
                 </Col>
                 <Col md={2}>
                   <div className="box-cart">
                     <p>
                       Stock
-                      <span>{product.data.stock_produk}</span>
+                      <span>{product.data[0].stock_produk}</span>
                     </p>
 
-                    {product.data.stock_produk > 0 ? (
+                    {product.data[0].stock_produk > 0 ? (
                       <InputGroup className="w-100 mt-2 mb-3">
                         <InputGroup.Text onClick={handleDecrement} type="button">
                           -

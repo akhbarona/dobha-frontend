@@ -19,4 +19,10 @@ module.exports = (app) => {
       changeOrigin: true,
     })
   );
+  // app.use(
+  //   createProxyMiddleware('/api/transaksi', {
+  //     target: 'https://apiongkir.herokuapp.com',
+  //     changeOrigin: true,
+  //   })
+  // );
 };

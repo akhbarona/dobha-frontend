@@ -39,7 +39,7 @@ const Cart = () => {
     });
   };
 
-  console.log(cartItems)
+  // console.log(cartItems);
   return (
     <section>
       <div className="cart-screen">

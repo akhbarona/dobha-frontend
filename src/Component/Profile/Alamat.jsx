@@ -218,7 +218,9 @@ const Alamat = (props) => {
     // console.log(data);
   };
 
+  // console.log(authHeader())
 
+// console.log(props.dataUser)
   return (
     <>
       <Row>
@@ -269,7 +271,6 @@ const Alamat = (props) => {
       </Row>
       <Form.Group className="mb-1" controlId="exampleForm.ControlTextarea1">
         <Form.Label>Example textarea</Form.Label>
-        {console.log(props.dataUser)}
         <Form.Control
           defaultValue={props.dataUser.alamat}
           onChange={(e) => setAlamat(e.target.value)}
