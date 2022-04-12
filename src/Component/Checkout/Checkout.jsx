@@ -168,12 +168,13 @@ const Checkout = () => {
   // };
 
   const getOngkir = async () => {
-    const berat = (9000 * parseInt(location.state.qty));
+    const berat = (50 * parseInt(location.state.qty));
     try{
       const dataSend = {
         destination:  dataUser?.user?.id_kabupaten,
         weight: berat
       };
+      // https://apiongkir.herokuapp.com
       const getDataKota1 = await fetch(
         `https://apiongkir.herokuapp.com/api/ongkir`,
         {
@@ -292,6 +293,7 @@ const Checkout = () => {
           },
           onUploadProgress: (event) => {},
         };
+        // https://apiongkir.herokuapp.com
         const response = await axios.post(
           `https://apiongkir.herokuapp.com/api/transaksi`,
           formData,
@@ -469,6 +471,24 @@ const Checkout = () => {
                                           {d.service}
                                         </td>
                                       </tr>
+                                      <tr
+                                        style={{
+                                          height: "50px",
+                                        }}
+                                      >
+                                        <th style={{ verticalAlign: "middle" }}>
+                                          Berat Produk
+                                        </th>
+                                        <td
+                                          style={{
+                                            verticalAlign: "middle",
+                                            textAlign: "end",
+                                          }}
+                                        >
+                                          { 50 * parseInt(location.state.qty)}gr
+                                        </td>
+                                      </tr>
+                                     
                                     </tbody>
                                   </table>
                                 </div>
@@ -554,11 +574,26 @@ const Checkout = () => {
                         </li>
                         <li>
                           <span>
+                            {dataUser?.user?.provinsi
+                              ? dataUser?.user?.provinsi
+                              : "alamat belum di seting"}
+                          </span>
+                        </li>
+                        <li>
+                          <span>
+                            {dataUser?.user?.kabupaten
+                              ? dataUser?.user?.kabupaten
+                              : "alamat belum di seting"}
+                          </span>
+                        </li>
+                        <li>
+                          <span>
                             {dataUser?.user?.alamat
                               ? dataUser?.user?.alamat
                               : "alamat belum di seting"}
                           </span>
                         </li>
+                        
                       </ul>
                     </div>
                     <div className="button-beli">
