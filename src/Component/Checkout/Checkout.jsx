@@ -261,6 +261,9 @@ const Checkout = () => {
       formData.set("user_id", dataUser.user.id);
       formData.set("estimasi", estimasiOngkir);
       formData.set("service", serviceOngkir);
+      formData.set("gambar_produk", location.state.imageUrl);
+      formData.set("nama_produk", location.state.name);
+      formData.set("jumlah", location.state.qty);
       // dataUser.user.id,
 
       try {
@@ -275,11 +278,12 @@ const Checkout = () => {
           formData,
           config
         );
-        console.log('response' ,response)
+        // console.log('response' ,response)
       } catch (err) {}
     }
   };
 
+  console.log(location.state.qty)
   return (
     <section>
       <div className="checkout-screen">

@@ -26,6 +26,7 @@ const Pesanan = () => {
         getPesanan()
     },[])
 
+    console.log(pesanan)
     return(
         <Container className="mt-5" style={{height: 450}}>
             {

@@ -8,16 +8,16 @@ export const CART_RESET = 'CART_RESET';
 
 export const addToCart = (id, qty) => async (dispatch, getState) => {
   const { data } = await axios.get(`https://dobha.000webhostapp.com/api/read-product/${id}`);
-  // console.log(data)
+  console.log(data)
   dispatch({
     type: ADD_TO_CART,
     payload: {
-      product: data.data[0].id,
-      name: data.data[0].nama_produk,
-      imageUrl: data.data[0].gambar_produk,
-      slug_produk: data.data[0].slug_produk,
-      price: data.data[0].harga_satuan,
-      countInStock: data.data[0].stock_produk,
+      product: data.data.id,
+      name: data.data.nama_produk,
+      imageUrl: data.data.gambar_produk,
+      slug_produk: data.data.slug_produk,
+      price: data.data.harga_satuan,
+      countInStock: data.data.stock_produk,
       qty,
     },
   });
