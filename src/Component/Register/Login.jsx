@@ -2,7 +2,6 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-
 import AuthService from '../service/auth.service'; // -> mengambil data return fungsi login
 import Swal from 'sweetalert2';
 
@@ -23,6 +22,7 @@ const Login = () => {
           console.log(response);
         },
         (error) => {
+
           Swal.fire({
             icon: 'error',
             title: 'Terjadi Kesalahan ',
