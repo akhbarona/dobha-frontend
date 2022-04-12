@@ -1,27 +1,46 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Card, Container, Row } from 'react-bootstrap';
 import './Pesanansaya.css';
 import axios from 'axios';
 import Table from './Table';
-// import { useTable } from 'react-table';
-
-// import { COLUMNS } from './columns';
+import AuthService from '../service/auth.service';
+import { useNavigate } from 'react-router-dom';
 
 const Pesanansaya = () => {
   const [orderLists, setOrderLists] = useState([]);
-  //   console.log(orderLists);
+  const navigate = useNavigate();
+
   const apiEndpoint = 'http://localhost:3001/pesanansaya';
   useEffect(() => {
     const getOrderLists = () => {
       axios
         .get(apiEndpoint)
-        .then((response) => setOrderLists(response.data))
+        .then((response) => {
+          const data = response.data;
+          const newData = data.map((item, index) => {
+            item.no = index + 1;
+            return item;
+          });
+          //   console.log(pushNo);
+          setOrderLists(newData);
+        })
         .catch((error) => console.log(error));
     };
     getOrderLists();
   }, []);
 
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    if (!user) {
+      // -> jika user belum login maka nge-redirect ke halaman login
+      navigate('/login');
+    }
+  }, []);
   const columns = [
+    {
+      header: 'No',
+      field: 'no',
+    },
     {
       header: 'Nomor Pemesanan',
       field: 'nomor_pesanan',
@@ -76,7 +95,7 @@ const Pesanansaya = () => {
             <div className="pesanan-content">
               <Card className="border-0">
                 <Card.Body className="p-0 ">
-                  <Table columns={columns} records={orderLists} />
+                  <Table columns={columns} records={orderLists} setOrderLists={setOrderLists} />
                 </Card.Body>
               </Card>
             </div>

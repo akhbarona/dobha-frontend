@@ -10,7 +10,7 @@ import { getReviews } from '../../../redux/actions/Reviews';
 import { Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 const Comments = ({ currentUserId, currentUsername, currentName }) => {
-  console.log(currentUsername);
+  // console.log(currentUserId);
   const dispatch = useDispatch();
   const getComment = useSelector((state) => state.getReviews);
 
@@ -20,9 +20,10 @@ const Comments = ({ currentUserId, currentUsername, currentName }) => {
 
   const rootComments = comment.filter((backendComment) => backendComment.parentId === null);
   //   console.log(rootComments);
-  const canRate = currentUserId !== 1 && currentUsername !== 'admin'; //jika userId saat ini admin/superadmin tidak bisa ngerate
-  const exsitUser = comment.find((backendComments) => backendComments.userId === currentUserId); // jika ditemukan user di database maka true
-  console.log(exsitUser);
+  // const canRate = currentUserId !== 1 && currentUsername !== 'admin'; //jika userId saat ini admin/superadmin tidak bisa ngerate
+  const cantRate = currentUsername !== 'admin'; //jika userId saat ini admin/superadmin tidak bisa ngerate
+  const exsitUser = comment.find((backendComments) => backendComments.username === currentUsername); // jika ditemukan user di database maka true
+  // console.log(exsitUser);
 
   const [activeComment, setActiveComment] = useState(null);
   useEffect(() => {
@@ -139,13 +140,15 @@ const Comments = ({ currentUserId, currentUsername, currentName }) => {
               deleteComment={deleteComment}
               updateComment={updateComment}
               currentUserId={currentUserId}
-              canRate={canRate}
+              currentUsername={currentUsername}
+              currentName={currentName}
+              cantRate={cantRate}
             />
           ))
         )}
       </div>
       {/* jika exsitUser bernilai true maka harus jadi false agar comment form tidak muncul */}
-      {!exsitUser && currentUserId && canRate ? (
+      {!exsitUser && currentUserId && cantRate ? (
         <>
           <div className="comment-form-title">Write comment</div>
           <CommentForm submitLabel="Write" currentUsername={currentUsername} currentName={currentName} currentValue={0} handleSubmit={addComment} />

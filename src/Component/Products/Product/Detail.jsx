@@ -27,11 +27,12 @@ const Detail = () => {
   const myRef = useRef(null);
 
   const currentUser = AuthService.getCurrentUser();
-  console.log(currentUser);
+  // console.log(currentUser);
+
   useEffect(() => {
-    if (product && id !== product.id) {
-      dispatch(getProductDetails(id));
-    }
+    // if (product && id !== product.id) {
+    dispatch(getProductDetails(id));
+    // }
     // dispatch(getMoreProducts());
   }, [dispatch, id]);
 
@@ -162,86 +163,88 @@ const Detail = () => {
     <main>
       <section>
         <div className="product-detail-container mt-1">
-        <Container>
-            {loading || loading === undefined? (
+          <Container>
+            {loading || loading === undefined ? (
               <div className="loading">
                 <Spinner animation="border" variant="warning" role="status" className="m-auto">
                   <span className="visually-hidden">Loading...</span>
                 </Spinner>
               </div>
             ) : error ? (
-              <h2>{error}</h2>
+              <h2 className="text-white">Produk Tidak Temukan</h2>
             ) : (
-              <Row className="show-grid details" key={product.id}>
-                {console.log(product.data)}
-                <Col md={4}>
-                  <div className="big-image">{product.image && <img src={'/' + product.image[Index]} alt="" />}</div>
+              <>
+                <Row className="show-grid details" key={product.id}>
+                  {/* {console.log(product.data)} */}
+                  <Col md={4}>
+                    <div className="big-image">{product.image && <img src={'/' + product.image[Index]} alt="" />}</div>
 
-                  <div ref={myRef} className="thumb">
-                    {product.image && product.image.map((image, idx) => <img onClick={() => handleTab(idx)} key={idx} src={'/' + image} alt="" />)}
-                  </div>
-                </Col>
-
-                <Col md={6}>
-                  <div className="box">
-                    <h2>{product.data.nama_produk}</h2>
-
-                    <div className={`${product.slug}`}>
-                      <div className="stars-outer">
-                        <div className="stars-inner" style={{ width: countRate(product.data.rating_produk) }}></div>
-                      </div>
-                      <span className="number-rating" dangerouslySetInnerHTML={{ __html: product.rate }}></span>
+                    <div ref={myRef} className="thumb">
+                      {product.image && product.image.map((image, idx) => <img onClick={() => handleTab(idx)} key={idx} src={'/' + image} alt="" />)}
                     </div>
+                  </Col>
 
-                    <p className="price">{formatRupiah(product.data.harga_satuan)}</p>
-                    <p>{product.data.deskripsi_produk}</p>
-                  </div>
-                </Col>
-                <Col md={2}>
-                  <div className="box-cart">
-                    <p>
-                      Stock
-                      <span>{product.data.stock_produk}</span>
-                    </p>
+                  <Col md={6}>
+                    <div className="box">
+                      <h2>{product.data.nama_produk}</h2>
 
-                    {product.data.stock_produk > 0 ? (
-                      <InputGroup className="w-100 mt-2 mb-3">
-                        <InputGroup.Text onClick={handleDecrement} type="button">
-                          -
-                        </InputGroup.Text>
-                        {/* <div className="form-control text-center">{Quantity}</div> */}
-                        <FormControl min="1" onBlur={onlyNol} onChange={onlyNumber} value={Quantity} className="text-center" />
-                        <InputGroup.Text onClick={handleIncrement} type="button">
-                          +
-                        </InputGroup.Text>
-                      </InputGroup>
-                    ) : (
-                      <label className="btn-sm btn-success px-4 mb-2">Out of stock</label>
-                    )}
+                      <div className="star-produk">
+                        <div className="stars-outer">
+                          <div className="stars-inner" style={{ width: countRate(product.data.rating_produk) }}></div>
+                        </div>
+                        <span className="number-rating">{product.data.rating_produk !== null ? product.data.rating_produk : 0}</span>
+                      </div>
 
-                    <button className="w-100 cart" onClick={submitAddtocart}>
-                      Tambah ke Keranjang
-                    </button>
-                  </div>
-                </Col>
-              </Row>
+                      <p className="price">{formatRupiah(product.data.harga_satuan)}</p>
+                      <p>{product.data.deskripsi_produk}</p>
+                    </div>
+                  </Col>
+                  <Col md={2}>
+                    <div className="box-cart">
+                      <p>
+                        Stock
+                        <span>{product.data.stock_produk}</span>
+                      </p>
+
+                      {product.data.stock_produk > 0 ? (
+                        <InputGroup className="w-100 mt-2 mb-3">
+                          <InputGroup.Text onClick={handleDecrement} type="button">
+                            -
+                          </InputGroup.Text>
+                          {/* <div className="form-control text-center">{Quantity}</div> */}
+                          <FormControl min="1" onBlur={onlyNol} onChange={onlyNumber} value={Quantity} className="text-center" />
+                          <InputGroup.Text onClick={handleIncrement} type="button">
+                            +
+                          </InputGroup.Text>
+                        </InputGroup>
+                      ) : (
+                        <label className="btn-sm btn-success px-4 mb-2">Out of stock</label>
+                      )}
+
+                      <button className="w-100 cart" onClick={submitAddtocart}>
+                        Tambah ke Keranjang
+                      </button>
+                    </div>
+                  </Col>
+                </Row>
+                <div className="comment-box">
+                  <h3>Review</h3>
+                  <Row className="g-2">
+                    <Col xl={12}>
+                      <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} />
+                    </Col>
+                    <Col xl={12}></Col>
+                  </Row>
+                </div>
+              </>
             )}
 
-            <div className="comment-box">
-              <h3>Review</h3>
-              <Row className="g-2">
-                <Col xl={12}>
-                  <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} />
-                </Col>
-                <Col xl={12}></Col>
-              </Row>
-            </div>
             <div className="more-products">
               <h3>Produk Lainnya</h3>
               {moreProduct.loading ? (
                 <h2>Loding...</h2>
               ) : error ? (
-                <h2>{error}</h2>
+                <h2 className="text-white">Produk Tidak Temukan</h2>
               ) : (
                 <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
                   {moreProduct.products &&
@@ -255,11 +258,11 @@ const Detail = () => {
                                 <Card.Title>{item.title}</Card.Title>
                               </Link>
                               <Card.Text className="price">{formatRupiah(item.price)}</Card.Text>
-                              <div className={item.slug}>
+                              <div className="star-produk">
                                 <div className="stars-outer">
-                                  <div className="stars-inner" style={{ width: countRate(item.rate) }}></div>
+                                  <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
                                 </div>
-                                <span className="number-rating" dangerouslySetInnerHTML={{ __html: item.rate }}></span>
+                                <span className="number-rating">{item.rating_produk !== null ? item.rating_produk : 0}</span>
                               </div>
                             </Card.Body>
                           </Card>
@@ -269,7 +272,7 @@ const Detail = () => {
                 </Row>
               )}
             </div>
-          </Container> 
+          </Container>
         </div>
       </section>
     </main>

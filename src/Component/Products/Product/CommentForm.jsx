@@ -21,8 +21,8 @@ const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handl
       } else if (submitLabel === 'Update') {
         handleSubmit(text, bintang);
       } else if (submitLabel === 'Reply') {
-        const username = 'Admin';
-        handleSubmit(text, username);
+        // const username = 'Admin';
+        handleSubmit(text, null, null, currentName, currentUsername);
       }
       // const data = {
       //   id_user: 1,
