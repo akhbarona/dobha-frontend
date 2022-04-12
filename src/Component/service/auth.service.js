@@ -37,7 +37,7 @@ const login = (email, password) => {
       },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       if (response.data.token) {
         sessionStorage.setItem('user', JSON.stringify(response.data));
       }

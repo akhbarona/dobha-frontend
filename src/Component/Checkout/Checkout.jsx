@@ -26,6 +26,7 @@ const Checkout = () => {
   const [serviceOngkir, setServiceOngkir] = useState(0);
   const [dataUser, setUser] = useState([]);
   const [buktiBayar, setBuktiBayar] = useState("");
+  const[loading , setLoading] = useState(false)
   const methodPayment = [
     { method: "gopay", image: "logo-gopay.png" },
     { method: "dana", image: "logo-dana.png" },
@@ -144,13 +145,23 @@ const Checkout = () => {
                       size="md"
                       name="bukti_bayar"
                     />
-                    <button
-                      onClick={() => handleSubmit()}
+                    {
+                      loading?<button
+                      disabled
                       type="button"
                       className="mt-3 w-50 btn-buy"
                     >
-                      Submit
-                    </button>
+                      Loading ...
+                    </button>:
+                    <button
+                    onClick={() => handleSubmit()}
+                    type="button"
+                    className="mt-3 w-50 btn-buy"
+                  >
+                    Submit
+                  </button>
+                    }
+                    
                   </Form>
                 </div>
               </div>
@@ -176,23 +187,42 @@ const Checkout = () => {
   // };
 
   const getOngkir = async () => {
-    const dataSend = {
-      destination: dataUser?.user?.id_kabupaten,
-      weight: 1000,
-    };
-    const getDataKota1 = await fetch(
-      `https://apiongkir.herokuapp.com/api/ongkir`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataSend),
-      }
-    );
-
-    const hasilDataKota1 = await getDataKota1.json();
-    setOngkir(hasilDataKota1);
+    const berat = (9000 * parseInt(location.state.qty));
+    try{
+      const dataSend = {
+        destination:  dataUser?.user?.id_kabupaten,
+        weight: berat
+      };
+      const getDataKota1 = await fetch(
+        `https://apiongkir.herokuapp.com/api/ongkir`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataSend),
+        }
+      );
+  
+      const hasilDataKota1 = await getDataKota1.json();
+      setOngkir(hasilDataKota1);
+    }catch(err){
+      Swal.fire({
+        title: 'Silahkan Lengkapi alamat',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'OK',
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          navigate('/profile');
+          window.location.reload();
+        }else{
+          navigate('/')
+          window.location.reload();
+        }
+      })
+    }
   };
 
   useEffect(() => {
@@ -227,13 +257,17 @@ const Checkout = () => {
   };
 
   const handleSubmit = async () => {
-    // console.log(dataUser);
-    // return;
-    if (buktiBayar !== " ") {
+   
+    if (buktiBayar !== "") {
+      setLoading(true);
       const formData = new FormData();
       if (buktiBayar.target.files[0].size > 1000000) {
-        // setLoading(false);
-        // swal("Failed", "Ukuran file terlalu besar", "error");
+        setLoading(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Batas Ukruan Gambar 1MB!',
+        })
         return;
       }
       // handle image extension
@@ -242,8 +276,12 @@ const Checkout = () => {
         .pop()
         .toLowerCase();
       if (extName !== "jpg" && extName !== "jpeg" && extName !== "png") {
-        // setLoading(false);
-        // swal("Failed", "Extension file tidak di izinkan", "error");
+        setLoading(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Extensi File Tidak di izinkan!',
+        })
         return;
       }
 
@@ -278,12 +316,38 @@ const Checkout = () => {
           formData,
           config
         );
-        // console.log('response' ,response)
+        if(response.status === 200){
+          setLoading(false);
+          Swal.fire({
+            icon: 'success',
+            title: 'success',
+            text: 'Berhasil Membeli Barang',
+          })
+          .then(() => {
+            navigate('/pesanan')
+            window.location.reload()
+          })
+        }else{
+          setLoading(false);
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops..',
+            text: 'Terjadi Kesalahan Server',
+          })
+        }
+
       } catch (err) {}
+    }else{
+      setLoading(false);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Gambar Tidak boleh kosong',
+      })
     }
   };
 
-  console.log(location.state.qty)
+  // console.log(location.state.qty)
   return (
     <section>
       <div className="checkout-screen">

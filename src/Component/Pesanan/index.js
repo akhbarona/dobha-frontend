@@ -1,38 +1,40 @@
 import { Container } from "react-bootstrap"
 import CardPesanan from "./CardPesanan";
 import { useState , useEffect } from "react";
+import AuthService from '../service/auth.service';
+import { useNavigate } from "react-router-dom";
 
 const Pesanan = () => {
-    const[pesanan, setPesanan] = useState([]);
+    const navigate = useNavigate();
 
-    const getPesanan = () => {
-
-        fetch(`http://localhost:3002/api/pesanan/admin@admin.com`,{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-        .then(data => data.json())
-        .then(res => {
-            setPesanan(res.data)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
-
+   
+    const [dataUser, setUser] =  useState({ data: [], loading: true});
+    
+    
     useEffect(() => {
-        getPesanan()
-    },[])
+       try{
+        const user = AuthService.getCurrentUser();
+        if (!user) {
+          navigate("/login");
+        }
+        setUser(prevState => ({
+            ...prevState,
+            data: user,
+            loading: false
+        }));
+       }catch(err){
+        navigate("/login");
+           console.log(err)
+       }
+      }, []);
 
-    console.log(pesanan)
+    // console.log('dataUser' , dataUser.data)
     return(
         <Container className="mt-5" style={{height: 450}}>
             {
-                pesanan.length === 0?
+                 dataUser.loading?
                 <h1>loading</h1>:
-                <CardPesanan pesanan={pesanan}/>
+                <CardPesanan dataUser={dataUser.data.user}/>
             }
            
         </Container>

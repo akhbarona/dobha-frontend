@@ -20,7 +20,7 @@ const Login = () => {
         (res) => {
           navigate('/');
           window.location.reload();
-          console.log(res);
+          console.log(res.token);
         },
         (error) => {
           Swal.fire(

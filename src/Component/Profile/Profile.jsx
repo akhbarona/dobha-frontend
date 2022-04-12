@@ -23,11 +23,15 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
+    try{
+      const user = AuthService.getCurrentUser();
     if (!user) {
       navigate("/login");
     }
     setUser(user.user);
+    }catch(er){
+      
+    }
   }, []);
 
   const Biodata = () => {

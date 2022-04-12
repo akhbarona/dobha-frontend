@@ -390,6 +390,7 @@ function Home() {
           <Route exact path="/checkout" element={<Checkout />} />
           <Route exact path="/blogs" element={<Blogs />} />
           <Route exact path="/blogs/:id" element={<DetailArtikel />} />
+          {/* ubah yudi */}
           <Route exact path="/pesanan" element={<Pesanan />} />
         </Routes>
       </div>
