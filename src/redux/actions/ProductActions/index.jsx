@@ -31,7 +31,7 @@ export const getProducts = () => async (dispatch) => {
 export const getProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: GET_PRODUCT_DETAILS_REQUEST });
-    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/read-product-by-slug/${id}`);
+    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/read-product/${id}`);
     dispatch({
       type: GET_PRODUCT_DETAILS_SUCCESS,
       payload: data,

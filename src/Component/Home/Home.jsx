@@ -22,6 +22,7 @@ import AuthService from '../service/auth.service';
 
 import axios from 'axios';
 import Profile from '../Profile/Profile';
+import Pesanan from '../Pesanan';
 import Pesanansaya from '../Profile/Pesanansaya';
 /* Bagian Kepala */
 function compare(prevProps, nextProps) {
@@ -356,6 +357,7 @@ function Home() {
         location.pathname !== '/cart' &&
         location.pathname !== '/profile' &&
         location.pathname !== '/blogs' &&
+        location.pathname !== '/pesanan' &&
         location.pathname !== `/products/${id}` &&
         location.pathname !== `/blogs/${id}` && <LogoBrand />}
 
@@ -372,6 +374,8 @@ function Home() {
           <Route exact path="/checkout" element={<Checkout />} />
           <Route exact path="/blogs" element={<Blogs />} />
           <Route exact path="/blogs/:id" element={<DetailArtikel />} />
+          {/* ubah yudi */}
+          <Route exact path="/pesanan" element={<Pesanan />} />
         </Routes>
       </div>
       {location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/cart' && <Footer />}

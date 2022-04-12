@@ -17,7 +17,8 @@ const Checkout = () => {
   const [estimasiOngkir, setEstimasiOngkir] = useState(0);
   const [serviceOngkir, setServiceOngkir] = useState(0);
   const [dataUser, setUser] = useState([]);
-  const [buktiBayar, setBuktiBayar] = useState('');
+  const [buktiBayar, setBuktiBayar] = useState("");
+  const[loading , setLoading] = useState(false)
   const methodPayment = [
     { method: 'gopay', image: 'logo-gopay.png' },
     { method: 'dana', image: 'logo-dana.png' },
@@ -119,10 +120,29 @@ const Checkout = () => {
                 <h6>Silahkan Upload Bukti Pembayaran Anda</h6>
                 <div className="confirm-wrapper">
                   <Form controlId="formFileLg" className="mt-3 mb-3">
-                    <Form.Control onChange={(e) => setBuktiBayar(e)} type="file" size="md" name="image" />
-                    <button onClick={() => handleSubmit()} type="button" className="mt-3 w-50 btn-buy">
-                      Submit
-                    </button>
+                    <Form.Control
+                      onChange={(e) => setBuktiBayar(e)}
+                      type="file"
+                      size="md"
+                      name="bukti_bayar"
+                    />
+                    {
+                      loading?<button
+                      disabled
+                      type="button"
+                      className="mt-3 w-50 btn-buy"
+                    >
+                      Loading ...
+                    </button>:
+                    <button
+                    onClick={() => handleSubmit()}
+                    type="button"
+                    className="mt-3 w-50 btn-buy"
+                  >
+                    Submit
+                  </button>
+                    }
+                    
                   </Form>
                 </div>
               </div>
@@ -148,25 +168,50 @@ const Checkout = () => {
   // };
 
   const getOngkir = async () => {
-    const dataSend = {
-      destination: dataUser?.user?.id_kabupaten,
-      weight: 1000,
-    };
-    const getDataKota1 = await fetch(`https://apiongkir.herokuapp.com/api/ongkir`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dataSend),
-    });
-
-    const hasilDataKota1 = await getDataKota1.json();
-    setOngkir(hasilDataKota1);
+    const berat = (9000 * parseInt(location.state.qty));
+    try{
+      const dataSend = {
+        destination:  dataUser?.user?.id_kabupaten,
+        weight: berat
+      };
+      const getDataKota1 = await fetch(
+        `https://apiongkir.herokuapp.com/api/ongkir`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataSend),
+        }
+      );
+  
+      const hasilDataKota1 = await getDataKota1.json();
+      setOngkir(hasilDataKota1);
+    }catch(err){
+      Swal.fire({
+        title: 'Silahkan Lengkapi alamat',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'OK',
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          navigate('/profile');
+          window.location.reload();
+        }else{
+          navigate('/')
+          window.location.reload();
+        }
+      })
+    }
   };
 
   useEffect(() => {
-    getOngkir();
-  }, []);
+    if(dataUser.length != 0){
+      getOngkir();
+
+    }
+  }, [dataUser]);
 
   // console.log("ongkir", ongkir);
 
@@ -185,59 +230,116 @@ const Checkout = () => {
     setServiceOngkir(data[2]);
   };
   const formatRupiah = (money) => {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(money);
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(money);
   };
 
   const handleSubmit = async () => {
-    console.log(dataUser);
-
-    if (buktiBayar !== ' ') {
+   
+    if (buktiBayar !== "") {
+      setLoading(true);
       const formData = new FormData();
-
       if (buktiBayar.target.files[0].size > 1000000) {
-        // setLoading(false);
-        // swal("Failed", "Ukuran file terlalu besar", "error");
+        setLoading(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Batas Ukruan Gambar 1MB!',
+        })
         return;
       }
       // handle image extension
-      const extName = buktiBayar.target.files[0].name.split('.').pop().toLowerCase();
-      if (extName !== 'jpg' && extName !== 'jpeg' && extName !== 'png') {
-        // setLoading(false);
-        // swal("Failed", "Extension file tidak di izinkan", "error");
+      const extName = buktiBayar.target.files[0].name
+        .split(".")
+        .pop()
+        .toLowerCase();
+      if (extName !== "jpg" && extName !== "jpeg" && extName !== "png") {
+        setLoading(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Extensi File Tidak di izinkan!',
+        })
         return;
       }
 
-      formData.append('bukti_bayar', buktiBayar.target.files[0]);
-      formData.set('username', dataUser.user.username);
-      formData.set('email', dataUser.user.email);
-      formData.set('provinsi', '');
-      formData.set('kabupaten', '');
-      formData.set('alamat', dataUser.user.alamat);
-      formData.set('ongkir', hargaOngkir);
-      formData.set('tagihan_total', location.state.totalHarga + Number(hargaOngkir));
-      formData.set('user_id', dataUser.user.id);
-      formData.set('estimasi', estimasiOngkir);
-      formData.set('service', serviceOngkir);
+      formData.append("bukti_bayar", buktiBayar.target.files[0]);
+      formData.set("username", dataUser.user.username);
+      formData.set("email", dataUser.user.email);
+      formData.set("provinsi", dataUser.user.provinsi);
+      formData.set("kabupaten", dataUser.user.kabupaten);
+      formData.set("alamat", dataUser.user.alamat);
+      formData.set("ongkir", hargaOngkir);
+      formData.set(
+        "tagihan_total",
+        location.state.totalHarga + Number(hargaOngkir)
+      );
+      formData.set("user_id", dataUser.user.id);
+      formData.set("estimasi", estimasiOngkir);
+      formData.set("service", serviceOngkir);
+      formData.set("gambar_produk", location.state.imageUrl);
+      formData.set("nama_produk", location.state.name);
+      formData.set("jumlah", location.state.qty);
       // dataUser.user.id,
 
       try {
         const config = {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
           onUploadProgress: (event) => {},
         };
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/transaksi`, formData, config);
+        const response = await axios.post(
+          `https://apiongkir.herokuapp.com/api/transaksi`,
+          formData,
+          config
+        );
+        if(response.status === 200){
+          setLoading(false);
+          Swal.fire({
+            icon: 'success',
+            title: 'success',
+            text: 'Berhasil Membeli Barang',
+          })
+          .then(() => {
+            navigate('/pesanan')
+            window.location.reload()
+          })
+        }else{
+          setLoading(false);
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops..',
+            text: 'Terjadi Kesalahan Server',
+          })
+        }
+
       } catch (err) {}
+    }else{
+      setLoading(false);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Gambar Tidak boleh kosong',
+      })
     }
   };
 
+  // console.log(location.state.qty)
   return (
     <section>
       <div className="checkout-screen">
         {ongkir.length <= 0 ? (
           <div className="loading">
-            <Spinner animation="border" variant="warning" role="status" className="m-auto">
+            <Spinner
+              animation="border"
+              variant="warning"
+              role="status"
+              className="m-auto"
+            >
               <span className="visually-hidden">Loading...</span>
             </Spinner>
           </div>
@@ -264,7 +366,12 @@ const Checkout = () => {
                       onChange={getMethodHandler}
                       label={
                         <>
-                          <img src={item.image} width="180" height="70" alt="hello" />
+                          <img
+                            src={item.image}
+                            width="180"
+                            height="70"
+                            alt="hello"
+                          />
                           {/* <span className="name-method">{item.method}</span> */}
                         </>
                       }
@@ -291,7 +398,11 @@ const Checkout = () => {
                     {ongkir?.rajaongkir?.results[0]?.costs.map((d, i) => {
                       return (
                         <>
-                          <div key={i} className="payment-method mt-2" style={{ color: 'black' }}>
+                          <div
+                            key={i}
+                            className="payment-method mt-2"
+                            style={{ color: "black" }}
+                          >
                             <Form.Check
                               inline
                               name="method-jne"
@@ -299,7 +410,7 @@ const Checkout = () => {
                               value={`${d?.cost[0].value},${d?.cost[0].etd},${d?.service}`}
                               onChange={(e) => getMetodePengriman(e)}
                               label={
-                                <div style={{ color: 'black' }}>
+                                <div style={{ color: "black" }}>
                                   {/* <p> Ongkir : {d?.cost[0].value}</p>
                                <p> Estimasi : {d?.cost[0].etd} Hari</p>
                                <p>Service : {d.service} </p> */}
@@ -307,15 +418,17 @@ const Checkout = () => {
                                     <tbody>
                                       <tr
                                         style={{
-                                          height: '30px',
-                                          fontWeight: '500',
+                                          height: "30px",
+                                          fontWeight: "500",
                                         }}
                                       >
-                                        <th style={{ verticalAlign: 'middle' }}>Ongkos kirim</th>
+                                        <th style={{ verticalAlign: "middle" }}>
+                                          Ongkos kirim
+                                        </th>
                                         <td
                                           style={{
-                                            verticalAlign: 'middle',
-                                            textAlign: 'end',
+                                            verticalAlign: "middle",
+                                            textAlign: "end",
                                           }}
                                         >
                                           {formatRupiah(d?.cost[0].value)}
@@ -323,15 +436,17 @@ const Checkout = () => {
                                       </tr>
                                       <tr
                                         style={{
-                                          height: '30px',
-                                          fontWeight: '500',
+                                          height: "30px",
+                                          fontWeight: "500",
                                         }}
                                       >
-                                        <th style={{ verticalAlign: 'middle' }}>Estimasi Pengiriman</th>
+                                        <th style={{ verticalAlign: "middle" }}>
+                                          Estimasi Pengiriman
+                                        </th>
                                         <td
                                           style={{
-                                            verticalAlign: 'middle',
-                                            textAlign: 'end',
+                                            verticalAlign: "middle",
+                                            textAlign: "end",
                                           }}
                                         >
                                           {d?.cost[0].etd}
@@ -339,14 +454,16 @@ const Checkout = () => {
                                       </tr>
                                       <tr
                                         style={{
-                                          height: '50px',
+                                          height: "50px",
                                         }}
                                       >
-                                        <th style={{ verticalAlign: 'middle' }}>Service Pengiriman</th>
+                                        <th style={{ verticalAlign: "middle" }}>
+                                          Service Pengiriman
+                                        </th>
                                         <td
                                           style={{
-                                            verticalAlign: 'middle',
-                                            textAlign: 'end',
+                                            verticalAlign: "middle",
+                                            textAlign: "end",
                                           }}
                                         >
                                           {d.service}
@@ -369,25 +486,29 @@ const Checkout = () => {
                     <div className="payment-info">
                       <table className="table-payment-info">
                         <tbody>
-                          <tr style={{ height: '30px', fontWeight: '500' }}>
-                            <th style={{ verticalAlign: 'middle' }}>Total Harga (1 Produk)</th>
+                          <tr style={{ height: "30px", fontWeight: "500" }}>
+                            <th style={{ verticalAlign: "middle" }}>
+                              Total Harga (1 Produk)
+                            </th>
                             <td
                               style={{
-                                verticalAlign: 'middle',
-                                fontWeight: 'bold',
-                                textAlign: 'end',
+                                verticalAlign: "middle",
+                                fontWeight: "bold",
+                                textAlign: "end",
                               }}
                             >
                               {formatRupiah(location.state.totalHarga)}
                             </td>
                           </tr>
-                          <tr style={{ height: '30px', fontWeight: '500' }}>
-                            <th style={{ verticalAlign: 'middle' }}>Ongkos kirim</th>
+                          <tr style={{ height: "30px", fontWeight: "500" }}>
+                            <th style={{ verticalAlign: "middle" }}>
+                              Ongkos kirim
+                            </th>
                             <td
                               style={{
-                                verticalAlign: 'middle',
-                                fontWeight: 'bold',
-                                textAlign: 'end',
+                                verticalAlign: "middle",
+                                fontWeight: "bold",
+                                textAlign: "end",
                               }}
                             >
                               {formatRupiah(hargaOngkir)}
@@ -395,19 +516,23 @@ const Checkout = () => {
                           </tr>
                           <tr
                             style={{
-                              height: '50px',
-                              fontWeight: 'bold',
-                              borderTop: '1.2px solid #000',
+                              height: "50px",
+                              fontWeight: "bold",
+                              borderTop: "1.2px solid #000",
                             }}
                           >
-                            <th style={{ verticalAlign: 'middle' }}>Total Tagihan</th>
+                            <th style={{ verticalAlign: "middle" }}>
+                              Total Tagihan
+                            </th>
                             <td
                               style={{
-                                verticalAlign: 'middle',
-                                textAlign: 'end',
+                                verticalAlign: "middle",
+                                textAlign: "end",
                               }}
                             >
-                              {formatRupiah(location.state.totalHarga + Number(hargaOngkir))}
+                              {formatRupiah(
+                                location.state.totalHarga + Number(hargaOngkir)
+                              )}
                             </td>
                           </tr>
                         </tbody>
@@ -428,12 +553,19 @@ const Checkout = () => {
                           <span>{dataUser?.user?.phone_number}</span>
                         </li>
                         <li>
-                          <span>{dataUser?.user?.alamat ? dataUser?.user?.alamat : 'alamat belum di seting'}</span>
+                          <span>
+                            {dataUser?.user?.alamat
+                              ? dataUser?.user?.alamat
+                              : "alamat belum di seting"}
+                          </span>
                         </li>
                       </ul>
                     </div>
                     <div className="button-beli">
-                      <Link to="/profile" className=" btn-buy text-decoration-none">
+                      <Link
+                        to="/profile"
+                        className=" btn-buy text-decoration-none"
+                      >
                         Ubah Alamat
                       </Link>
                     </div>

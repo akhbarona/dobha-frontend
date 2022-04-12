@@ -23,11 +23,15 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
+    try{
+      const user = AuthService.getCurrentUser();
     if (!user) {
       navigate("/login");
     }
     setUser(user.user);
+    }catch(er){
+      
+    }
   }, []);
 
   const Biodata = () => {
@@ -59,7 +63,7 @@ const Profile = () => {
                   <td>081234567890</td>
                 </tr>
               </table> */}
-              <Row>
+              {/* <Row> */}
                 <Row xl={2}>
                   <Col xl={2} lg={4}>
                     <h5 className="my-2" style={{ fontWeight: '500' }}>
@@ -91,12 +95,12 @@ const Profile = () => {
                 </table>
               </Col>
             </Row>
-          </Table>
+          {/* </Table> */}
           <Row className="p-2">
                 <Button variant="primary" className="w-25">
                   <i class="fas fa-edit"></i>Edit
                 </Button>
-              </Row>
+             </Row>
         </Card.Body>
       </Card>
     );

@@ -16,10 +16,10 @@ const Login = () => {
     e.preventDefault();
     try {
       await AuthService.login(email, password).then(
-        (response) => {
-          navigate('/'); // -> me-redirect ke halaman utama || produk
-          window.location.reload(); // -> memberikan efek memuat kembali browser window
-          console.log(response);
+        (res) => {
+          navigate('/');
+          window.location.reload();
+          console.log(res.token);
         },
         (error) => {
 

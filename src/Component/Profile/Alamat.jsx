@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Col, Container, Form, Card, Button, Row } from "react-bootstrap";
 import authHeader from "../service/auth.header";
 import axios from "axios";
+import Swal from 'sweetalert2';
 import './Alamat.css';
 const provinsi = {
   provinsi: [
@@ -185,28 +186,51 @@ const Alamat = (props) => {
     getDataKota();
   }, [prov]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // const auth = authHeader().Authorization
+    // console.log('authHeader().Authorization',);
+    // return
     const data = {
       name: props.dataUser.name,
       username: props.dataUser.username,
       email: props.dataUser.email,
       password: "12345678",
       phone_number: props.dataUser.phone_number,
-      alamat: alamat?alamat:props.dataUser.alamat,
-      provinsi: prov?prov:props.dataUser.provinsi,
-      kabupaten: kabkota?kabkota:props.dataUser.kabupaten,
-      id_kabupaten: idKota ? idKota : props.dataUser.id_kabupaten    
+      alamat: alamat ? alamat : props.dataUser.alamat,
+      provinsi: prov ? prov : props.dataUser.provinsi,
+      kabupaten: kabkota ? kabkota : props.dataUser.kabupaten,
+      id_kabupaten: idKota ? idKota : props.dataUser.id_kabupaten,
     };
-    console.log(data);
+
     axios
-      .post("/api/auth/user/update/admin", data, {
+      .post(`/api/auth/user/update/${props.dataUser.username}`, data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: authHeader().Authorization,
         },
       })
       .then((data) => {
-        console.log(data);
+        console.log(data)
+       if(data.status === 200){
+        Swal.fire({
+          title: 'Update Berhasil Silahlkan Login Kembali',
+          width: 600,
+          padding: '3em',
+          color: '#716add',
+          background: '#fff url(/images/trees.png)',
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("/images/nyan-cat.gif")
+            left top
+            no-repeat
+          `
+        }).then(() => {
+          window.location.reload()
+          sessionStorage.clear();
+        })
+      
+       }
       })
       .catch((err) => {
         console.log(err);
@@ -215,69 +239,74 @@ const Alamat = (props) => {
     // console.log(data);
   };
 
+  // console.log(authHeader())
 
+  console.log("props.dataUser =>", props.dataUser.username);
   return (
     <>
-      <Row>
-        <Col lg={6}>
-          <Form.Group className="mb-1">
-            <Form.Label>Provinsi</Form.Label>
-            <Form.Select
-              defaultValue={props.dataUser.provinsi}
-              onChange={(e) => handleChange(e)}
-            >
-              <option value="">Pilih Provinsi</option>
-              {provinsi.provinsi.map((prov, index) => {
-                return (
-                  <option key={index} value={prov.province}>
-                    {prov.province}
-                  </option>
-                );
-              })}
-            </Form.Select>
-          </Form.Group>
-        </Col>
-
-        <Col lg={6}>
-          {dataKota.length > 0 ? (
+      <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col lg={6}>
             <Form.Group className="mb-1">
-              <Form.Label>Kota</Form.Label>
+              <Form.Label>Provinsi</Form.Label>
               <Form.Select
-                defaultValue={props.dataUser.kabupaten}
-                onChange={(e) => handleChangeKota(e)}
+                defaultValue={props.dataUser.provinsi}
+                onChange={(e) => handleChange(e)}
               >
-                <option value="">Pilih Kota</option>
-                {dataKota.map((kab, index) => {
+                <option value="">Pilih Provinsi</option>
+                {provinsi.provinsi.map((prov, index) => {
                   return (
-                    <option key={index} value={`${kab.city_name}-${kab.city_id}`}>
-                      {kab.city_name}
+                    <option key={index} value={prov.province}>
+                      {prov.province}
                     </option>
                   );
                 })}
               </Form.Select>
             </Form.Group>
-          ) : (
-            ''
-          )}
-        </Col>
-      </Row>
-      <Form.Group className="mb-1" controlId="exampleForm.ControlTextarea1">
-        <Form.Label>Example textarea</Form.Label>
-        {console.log(props.dataUser)}
-        <Form.Control
-          defaultValue={props.dataUser.alamat}
-          onChange={(e) => setAlamat(e.target.value)}
-          as="textarea"
-          placeholder="Alamat detail"
-          rows={3}
-        />
-      </Form.Group>
-      <Form.Group controlId="exampleForm.ControlTextarea1">
+          </Col>
 
-        <Button onClick={handleSubmit} className="btn btn-primary mt-2 w-25 btn-simpan-alamat">
-          SIMPAN
-        </Button>
-      </Form.Group>
+          <Col lg={6}>
+            {dataKota.length > 0 ? (
+              <Form.Group className="mb-1">
+                <Form.Label>Kota</Form.Label>
+                <Form.Select
+                  defaultValue={props.dataUser.kabupaten}
+                  onChange={(e) => handleChangeKota(e)}
+                >
+                  <option value="">Pilih Kota</option>
+                  {dataKota.map((kab, index) => {
+                    return (
+                      <option
+                        key={index}
+                        value={`${kab.city_name}-${kab.city_id}`}
+                      >
+                        {kab.city_name}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+              </Form.Group>
+            ) : (
+              ""
+            )}
+          </Col>
+        </Row>
+        <Form.Group className="mb-1" controlId="exampleForm.ControlTextarea1">
+          <Form.Label>Example textarea</Form.Label>
+          <Form.Control
+            defaultValue={props.dataUser.alamat}
+            onChange={(e) => setAlamat(e.target.value)}
+            as="textarea"
+            placeholder="Alamat detail"
+            rows={3}
+          />
+        </Form.Group>
+        <Form.Group controlId="exampleForm.ControlTextarea1">
+          <Button type="submit" className="btn btn-primary mt-2">
+            SIMPAN
+          </Button>
+        </Form.Group>
+      </Form>
     </>
   );
 };

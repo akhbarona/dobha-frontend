@@ -34,12 +34,15 @@ const Cart = () => {
     // console.log(totalHarga)
     navigate(`/checkout`,{
       state:{
-        totalHarga:totalHarga
+        totalHarga:totalHarga,
+        imageUrl: cartItems[0]?.imageUrl,
+        name: cartItems[0]?.name,
+        qty:  cartItems[0]?.qty
       }
     });
   };
 
-  console.log(cartItems)
+  console.log('cartItems' ,cartItems);
   return (
     <section>
       <div className="cart-screen">

@@ -9,7 +9,7 @@ const CartItem = ({ index, item, qtyChangeHandler, removeHandler }) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(money);
   };
 
-  console.log(item)
+  // console.log(item)
   useEffect(() => {
     if (kuantitas) {
       qtyChangeHandler(item.slug_produk, kuantitas);
