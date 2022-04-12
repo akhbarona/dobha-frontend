@@ -100,7 +100,7 @@ const Header = memo(() => {
                   <Dropdown.Item className="btn-profile-pemilik" as={Link} to="/profile">
                     PROFILE
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/pesanansaya">
+                  <Dropdown.Item as={Link} to="/pesanan">
                     PESANAN SAYA
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="#" onClick={logOut}>
