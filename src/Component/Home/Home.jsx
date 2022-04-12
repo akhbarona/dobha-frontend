@@ -5,8 +5,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
-import dataRatingsTerbaru from '../../dataRatingsTerbaru.json';
-import dataRatingsTerpopuler from '../../dataRatingsTerpopuler.json';
+// import dataRatingsTerbaru from '../../dataRatingsTerbaru.json'; // -> data dummy
+import dataRatingsTerpopuler from '../../dataRatingsTerpopuler.json'; // -> data dummy
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react';
 import { Routes, Route, Link, useLocation, useParams } from 'react-router-dom';
 import Products from '../Products/Products';
@@ -23,6 +23,7 @@ import AuthService from '../service/auth.service';
 import axios from 'axios';
 import Profile from '../Profile/Profile';
 import Pesanan from '../Pesanan';
+import Pesanansaya from '../Profile/Pesanansaya';
 /* Bagian Kepala */
 function compare(prevProps, nextProps) {
   // console.log(prevProps, nextProps);
@@ -36,6 +37,7 @@ const InputSearch = memo(() => {
   };
   return <input value={SearchText} onChange={handleInput} type="text" className="navbar-input" placeholder="Ketik Pencarian..." />;
 }, compare);
+
 const Header = memo(() => {
   console.log('Render Header');
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -98,10 +100,10 @@ const Header = memo(() => {
                   <Dropdown.Item className="btn-profile-pemilik" as={Link} to="/profile">
                     PROFILE
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/pesanan">
+                  <Dropdown.Item as={Link} to="/pesanansaya">
                     PESANAN SAYA
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/login" onClick={logOut}>
+                  <Dropdown.Item as={Link} to="#" onClick={logOut}>
                     LOGOUT
                   </Dropdown.Item>
                 </DropdownButton>
@@ -137,33 +139,35 @@ const LogoBrand = () => {
 };
 /* Bagian Main Content */
 const Main = memo(() => {
-  const [DataTerbaru, setDataTerbaru] = useState(dataRatingsTerbaru);
-  const [DataPopuler, setDataPopuler] = useState(dataRatingsTerpopuler);
+  const [DataTerbaru, setDataTerbaru] = useState([]); // -> berisi data-data produk terbaru
+  const [DataPopuler, setDataPopuler] = useState([]); // -> berisi data-data produk terpopuler
+  const [DataArtikel, setDataArtikelTerbaru] = useState([]); // -> berisi data post terbaru
   console.log('Render Main');
 
   useEffect(() => {
-    getRatings();
+    getNewDataProduct();
+    getPopularDataProduct();
+    getNewArticles();
+  }, []);
 
+  const getNewDataProduct = () => {
     axios
       .get(`https://dobha.herokuapp.com/api/product`)
       .then((res) => setDataTerbaru(res.data.data.product))
       .catch((err) => console.log(err));
-  }, []);
+  };
 
-  const getRatings = () => {
-    const starsTotal = 5;
-    // for (let rating = 0; rating < DataTerbaru.length; rating++) {
-    //   const starPercentage = (DataTerbaru[rating].rate / starsTotal) * 100;
-    //   const starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`;
-    //   document.querySelector(`.${DataTerbaru[rating].slug} .stars-inner`).style.width = starPercentageRounded;
-    //   document.querySelector(`.${DataTerbaru[rating].slug} .number-rating`).innerHTML = DataTerbaru[rating].rate;
-    // }
-    for (let rating = 0; rating < DataPopuler.length; rating++) {
-      const starPercentage = (DataPopuler[rating].rate / starsTotal) * 100;
-      const starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`;
-      document.querySelector(`.${DataPopuler[rating].slug} .stars-inner`).style.width = starPercentageRounded;
-      document.querySelector(`.${DataPopuler[rating].slug} .number-rating`).innerHTML = DataPopuler[rating].rate;
-    }
+  const getPopularDataProduct = () => {
+    axios
+      .get(`http://localhost:3001/popular-product`)
+      .then((res) => setDataPopuler(res.data))
+      .catch((err) => console.log(err));
+  };
+  const getNewArticles = () => {
+    axios
+      .get(`http://localhost:3001/blogs?_limit=3`)
+      .then((res) => setDataArtikelTerbaru(res.data))
+      .then((err) => console.log(err));
   };
   const countRate = (rate) => {
     const starsTotal = 5;
@@ -174,8 +178,15 @@ const Main = memo(() => {
   const formatRupiah = (money) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(money);
   };
+  function handleLength(value, lengths) {
+    if (value.length < lengths) {
+      return value;
+    } else {
+      return value.substring(0, lengths).substring(0, value.substring(0, lengths).lastIndexOf(' ')) + '...';
+    }
+  }
   return (
-    <main>
+    <>
       <section>
         <div className="new-product-container">
           <div className="new-product-wrapper">
@@ -187,28 +198,30 @@ const Main = memo(() => {
                 {DataTerbaru.map((item, index) => {
                   return (
                     <Col key={index}>
-                      <Card>
-                        <Card.Img variant="top" src="/1.jpg" />
-                        <Card.Body>
-                          <Card.Title>{item.nama_produk}</Card.Title>
-                          <Card.Text className="price">{formatRupiah(item.harga)}</Card.Text>
-                          <div className="star-produk">
-                            <div className="stars-outer">
-                              <div className="stars-inner" style={{ width: countRate(item.rate) }}></div>
+                      <Link className="text-decoration-none text-dark" to={`/products/${item.id}`}>
+                        <Card>
+                          <Card.Img variant="top" src="/1.jpg" />
+                          <Card.Body>
+                            <Card.Title>{item.nama_produk}</Card.Title>
+                            <Card.Text className="price">{formatRupiah(item.harga)}</Card.Text>
+                            <div className="star-produk">
+                              <div className="stars-outer">
+                                <div className="stars-inner" style={{ width: countRate(item.rate) }}></div>
+                              </div>
+                              <span className="number-rating">{item.rate}</span>
                             </div>
-                            <span className="number-rating" dangerouslySetInnerHTML={{ __html: item.rate }}></span>
-                          </div>
-                        </Card.Body>
-                      </Card>
+                          </Card.Body>
+                        </Card>
+                      </Link>
                     </Col>
                   );
                 })}
               </Row>
             </Container>
             <div className="btn-readmore">
-              <a className="btn-item-readmore" href="#">
+              <Link className="btn-item-readmore text-decoration-none" to="/products">
                 Lihat Semua
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -225,28 +238,30 @@ const Main = memo(() => {
                   DataPopuler.map((item, index) => {
                     return (
                       <Col key={index}>
-                        <Card>
-                          <Card.Img variant="top" src="/1.jpg" />
-                          <Card.Body>
-                            <Card.Title>{item.title}</Card.Title>
-                            <Card.Text className="price">{item.price}</Card.Text>
-                            <div className={item.slug}>
-                              <div className="stars-outer">
-                                <div className="stars-inner"></div>
+                        <Link className="text-decoration-none text-dark" to={`/products/${item.id}`}>
+                          <Card>
+                            <Card.Img variant="top" src="/1.jpg" />
+                            <Card.Body>
+                              <Card.Title>{item.title}</Card.Title>
+                              <Card.Text className="price">{formatRupiah(item.price)}</Card.Text>
+                              <div className="star-produk">
+                                <div className="stars-outer">
+                                  <div className="stars-inner" style={{ width: countRate(item.rate) }}></div>
+                                </div>
+                                <span className="number-rating">{item.rate}</span>
                               </div>
-                              <span className="number-rating"></span>
-                            </div>
-                          </Card.Body>
-                        </Card>
+                            </Card.Body>
+                          </Card>
+                        </Link>
                       </Col>
                     );
                   })}
               </Row>
             </Container>
             <div className="btn-readmore">
-              <a className="btn-item-readmore" href="#">
+              <Link className="btn-item-readmore text-decoration-none" to="/products">
                 Lihat Semua
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -259,66 +274,33 @@ const Main = memo(() => {
             </h1>
             <Container className="new-post-product">
               <Row className="g-4  row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-3">
-                <Col>
-                  <div className="card-new-post">
-                    <div style={{ textAlign: 'center', padding: '30px' }}>
-                      <img className="img-new-post" src="/1.jpg" />
-                    </div>
-                    <div className="body-new-post">
-                      <h5>Kegunaan Parfum untuk Berbagai Acara</h5>
-                      <p>
-                        Parfum memiliki berbagai kegunaan yang jelas akan sangat dibutuhkan, terutama pada waktu-waktu tertentu. Yang terkesan formal. Namun apa saja minyak wangi yang cocok untuk berbagai acara tersebut dan apa kegunaannya?
-                      </p>
-                      <div className="btn-read-more">
-                        <a href="#" className="btn-item-read-more">
-                          Lihat Selengkapnya
-                        </a>
+                {DataArtikel.map((item, index) => {
+                  return (
+                    <Col key={index}>
+                      <div className="card-new-post">
+                        <div style={{ textAlign: 'center', padding: '30px' }}>
+                          <img className="img-new-post" src="/1.jpg" />
+                        </div>
+                        <div className="body-new-post">
+                          <h5>{handleLength(item.title, 37)}</h5> {/*-> 37 karakter */}
+                          <p>{handleLength(item.intro, 216)}</p>
+                          {/* 216 karakter */}
+                          <div className="btn-read-more">
+                            <Link to={`/blogs/${item.id}`} className="btn-item-read-more text-decoration-none">
+                              Lihat Selengkapnya
+                            </Link>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </Col>
-                <Col>
-                  <div className="card-new-post">
-                    <div style={{ textAlign: 'center', padding: '30px' }}>
-                      <img className="img-new-post" src="/1.jpg" />
-                    </div>
-                    <div className="body-new-post">
-                      <h5>Kegunaan Parfum untuk Berbagai Acara</h5>
-                      <p>
-                        Parfum memiliki berbagai kegunaan yang jelas akan sangat dibutuhkan, terutama pada waktu-waktu tertentu. Yang terkesan formal. Namun apa saja minyak wangi yang cocok untuk berbagai acara tersebut dan apa kegunaannya?
-                      </p>
-                      <div className="btn-read-more">
-                        <a href="#" className="btn-item-read-more">
-                          Lihat Selengkapnya
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-                <Col>
-                  <div className="card-new-post">
-                    <div style={{ textAlign: 'center', padding: '30px' }}>
-                      <img className="img-new-post" src="/1.jpg" />
-                    </div>
-                    <div className="body-new-post">
-                      <h5>Kegunaan Parfum untuk Berbagai Acara</h5>
-                      <p>
-                        Parfum memiliki berbagai kegunaan yang jelas akan sangat dibutuhkan, terutama pada waktu-waktu tertentu. Yang terkesan formal. Namun apa saja minyak wangi yang cocok untuk berbagai acara tersebut dan apa kegunaannya?
-                      </p>
-                      <div className="btn-read-more">
-                        <a href="#" className="btn-item-read-more">
-                          Lihat Selengkapnya
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
+                    </Col>
+                  );
+                })}
               </Row>
             </Container>
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }, compare);
 /* Bagian Footer */
@@ -367,10 +349,11 @@ function Home() {
 
   return (
     <div className="main-home-wrapper">
-      <Header />
+      {location.pathname !== '/login' && location.pathname !== '/register' && <Header />}
       {location.pathname !== '/login' &&
         location.pathname !== '/register' &&
         location.pathname !== '/checkout' &&
+        location.pathname !== '/pesanansaya' &&
         location.pathname !== '/cart' &&
         location.pathname !== '/profile' &&
         location.pathname !== '/blogs' &&
@@ -385,6 +368,7 @@ function Home() {
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/pesanansaya" element={<Pesanansaya />} />
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/products/:id" element={<ProductDetail />} />
           <Route exact path="/checkout" element={<Checkout />} />

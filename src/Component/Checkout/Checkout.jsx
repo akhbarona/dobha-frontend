@@ -1,22 +1,14 @@
-import { useEffect, useState, memo } from "react";
-import "./Checkout.css";
+import { useEffect, useState, memo } from 'react';
+import './Checkout.css';
 // import Confirm from './Confirm';
-import axios from "axios";
-import {
-  Col,
-  Row,
-  Form,
-  Container,
-  Button,
-  Modal,
-  Spinner,
-} from "react-bootstrap";
-import Swal from "sweetalert2";
-import { useDispatch } from "react-redux";
-import { resetCart } from "../../redux/actions/cartActions";
+import axios from 'axios';
+import { Col, Row, Form, Container, Button, Modal, Spinner } from 'react-bootstrap';
+import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { resetCart } from '../../redux/actions/cartActions';
 
-import AuthService from "../service/auth.service";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import AuthService from '../service/auth.service';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const Checkout = () => {
   const location = useLocation();
@@ -28,34 +20,34 @@ const Checkout = () => {
   const [buktiBayar, setBuktiBayar] = useState("");
   const[loading , setLoading] = useState(false)
   const methodPayment = [
-    { method: "gopay", image: "logo-gopay.png" },
-    { method: "dana", image: "logo-dana.png" },
-    { method: "bank bca", image: "logo-bca.png" },
+    { method: 'gopay', image: 'logo-gopay.png' },
+    { method: 'dana', image: 'logo-dana.png' },
+    { method: 'bank bca', image: 'logo-bca.png' },
   ];
   const address = {
-    name: "Jhon Doe",
-    no: "081234567890",
-    address: "Jl.Gatot Subroto No.79 Garuntang, Bandar Lampung",
+    name: 'Jhon Doe',
+    no: '081234567890',
+    address: 'Jl.Gatot Subroto No.79 Garuntang, Bandar Lampung',
   };
 
   const ketikaModalKebuka = [
     {
-      method: "gopay",
-      title: "Dobha Parfume",
-      nomor: "081234567890",
-      image_file_data: "logo-gopay.png",
+      method: 'gopay',
+      title: 'Dobha Parfume',
+      nomor: '081234567890',
+      image_file_data: 'logo-gopay.png',
       transaksi: [
         {
           invoice: {
-            id: "BS2022750001",
+            id: 'BS2022750001',
             weight: 2,
             total: 119000,
           },
         },
       ],
-      nama: "Justin",
-      user_id: "7",
-      username: "justin",
+      nama: 'Justin',
+      user_id: '7',
+      username: 'justin',
     },
   ];
   const dispatch = useDispatch();
@@ -63,7 +55,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [Address, setAddress] = useState(address);
   const [Payment, setPayment] = useState(methodPayment);
-  const [GetPayment, setGetPayment] = useState("");
+  const [GetPayment, setGetPayment] = useState('');
   // const [buttonPopup, setButtonPopup] = useState(false);
 
   const getMethodHandler = (e) => {
@@ -73,23 +65,23 @@ const Checkout = () => {
   };
   const handleMethod = (e) => {
     const { name, checked } = e.target;
-    if (GetPayment === null || GetPayment === "") {
+    if (GetPayment === null || GetPayment === '') {
       Swal.fire({
-        icon: "warning",
-        title: "Oops...",
-        text: "Silahkan pilih Metode Pembayaran!",
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Silahkan pilih Metode Pembayaran!',
       });
     } else if (hargaOngkir === 0) {
       Swal.fire({
-        icon: "warning",
-        title: "Oops...",
-        text: "Silahkan pilih Metode Pengiriman!",
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Silahkan pilih Metode Pengiriman!',
       });
-    } else if (GetPayment === "gopay") {
+    } else if (GetPayment === 'gopay') {
       dispatch(resetCart());
       setModalShow(true);
-    } else if (GetPayment === "dana") {
-    } else if (GetPayment === "bank bca") {
+    } else if (GetPayment === 'dana') {
+    } else if (GetPayment === 'bank bca') {
       setModalShow(true);
     }
     // let tempMethod = Payment.map((method) => (method.method === name ? { ...method, isChecked: checked } : method));
@@ -98,16 +90,9 @@ const Checkout = () => {
   };
   const metodePembayaran = () => {
     return (
-      <Modal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+      <Modal show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Using Grid in Modal
-          </Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">Using Grid in Modal</Modal.Title>
         </Modal.Header>
         <Modal.Body className="show-grid">
           <Container>
@@ -124,11 +109,7 @@ const Checkout = () => {
                   <p className="pg-price">Total bayar</p>
                 </Col>
                 <Col>
-                  <p className="pg-price">
-                    {formatRupiah(
-                      location.state.totalHarga + Number(hargaOngkir)
-                    )}
-                  </p>
+                  <p className="pg-price">{formatRupiah(location.state.totalHarga + Number(hargaOngkir))}</p>
                 </Col>
               </Row>
               <div className="note-payment">
@@ -237,13 +218,13 @@ const Checkout = () => {
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     if (!user) {
-      navigate("/login");
+      navigate('/login');
     }
     setUser(user);
   }, []);
 
   const getMetodePengriman = (e) => {
-    const data = e.target.value.split(",");
+    const data = e.target.value.split(',');
     setHargaOngkir(data[0]);
     setEstimasiOngkir(data[1]);
     setServiceOngkir(data[2]);

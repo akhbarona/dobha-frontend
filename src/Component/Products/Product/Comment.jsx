@@ -1,6 +1,7 @@
 import CommentForm from './CommentForm';
 import { memo, useState } from 'react';
-const Comment = ({ comment, replies, setActiveComment, activeComment, updateComment, deleteComment, addComment, parentId = null, currentUserId }) => {
+import { Link } from 'react-router-dom';
+const Comment = ({ comment, replies, setActiveComment, activeComment, updateComment, deleteComment, addComment, parentId = null, currentUserId, currentUsername, currentName }) => {
   //proses awal menerima dari componen comments.js
   //comment -> isinya -> {id,body,username,userId,parentId,createdAt}
   //replies -> isinya data yang memiliki parentId yg sudah di filter dulu lalu diurutkan dari terkecil ke terbesar berdasarkan waktunya
@@ -11,19 +12,21 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
   //deletComment -> untuk menghapus comment
   //   console.log(replies, 'punyanya commentid', comment.id);
   //   console.log(currentUserId, '', comment.userId);
+  // console.log(comment);
   const isEditing = activeComment && activeComment.id === comment.id && activeComment.type === 'editing'; //ketika activeComment ada dan idnya,typenya sama maka bernilai true
   const isReplying = activeComment && activeComment.id === comment.id && activeComment.type === 'replying'; //ketika activeComment ada dan idnya,typenya sama maka bernilai true
   //   console.log(isReplying, ' ', comment.id, ' ', activeComment);
   const fiveMinutes = 10000;
   const timePassed = new Date() - new Date(comment.createdAt) > fiveMinutes; //waktu saat ini - waktu yang lalu apakah lebih > menit yang sekrang, jika kondisi lebih besar fiveMinutes  maka akan dapat menjalakan variabel canEdit
 
-  const canDelete = currentUserId === 1; //user dan admin bisa hapus komen
+  const canDelete = currentUsername === 'admin'; //user dan admin bisa hapus komen
 
   //   const canReply = Boolean(currentUserId); //isinya true selama sesi user saat ini ada
-  const canReply = currentUserId === 1; //isinya true selama sesi user saat ini ada
+  const canReply = currentUsername === 'admin'; //isinya true selama sesi user saat ini ada
   //   console.log(canReply);
   //   const canEdit = currentUserId === comment.userId && !timePassed; // bisa ngedit dengan syarat userId saat ini sama dengan id comment punyanya tapi dibatasi waktu selama 1menit
-  const canEdit = currentUserId === comment.userId;
+  // const canEdit = currentUserId === comment.userId;
+  const canEdit = currentUsername === comment.username;
   // const [bintang, setBintang] = useState(0);
 
   // console.log('ini di comment', bintang);
@@ -42,15 +45,17 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
       </div>
       <div className="comment-right-part">
         <div className="comment-content">
-          <div className="comment-author">{comment.username}</div>
+          <Link to="#" data-toggle="tooltip" data-placement="top" title={comment.username}>
+            <div className="comment-author">{comment.name}</div>
+          </Link>
           <div>{createdAt}</div>
         </div>
-        {comment.username !== 'Admin' ? (
+        {comment.username !== 'admin' ? (
           <div className="stars-comment">
             <div className="stars-outer">
               <div className="stars-inner" style={{ width: countRate(comment.rate) }}></div>
             </div>
-            <span className="number-rating" dangerouslySetInnerHTML={{ __html: comment.rate }}></span>
+            <span className="number-rating">{comment.rate}</span>
           </div>
         ) : undefined}
 
@@ -62,7 +67,7 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
             submitLabel="Update"
             hasCancelButton
             initialText={comment.body}
-            handleSubmit={(text, bintang) => updateComment(text, bintang, comment.id, comment.username, comment.parentId, comment.userId)}
+            handleSubmit={(text, bintang) => updateComment(text, bintang, comment.id, comment.username, comment.parentId, comment.userId, comment.name)}
             handleCancel={() => {
               setActiveComment(null);
             }}
@@ -94,7 +99,7 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
           <CommentForm
             submitLabel="Reply"
             hasCancelButton
-            handleSubmit={(text, username) => addComment(text, null, replyId, username)}
+            handleSubmit={(text, currentName, currentUsername) => addComment(text, null, replyId, currentName, currentUsername)}
             handleCancel={() => {
               setActiveComment(null);
             }}

@@ -16,7 +16,7 @@ export const GET_MORE_PRODUCT_FAIL = 'GET_MORE_PRODUCT_FAIL';
 export const getProducts = () => async (dispatch) => {
   try {
     dispatch({ type: GET_PRODUCTS_REQUEST });
-    const { data } = await axios.get(`${process.env.REACT_APP_API_URL }/api/read-all-product`);
+    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/read-all-product`);
     dispatch({
       type: GET_PRODUCTS_SUCCESS,
       payload: data,

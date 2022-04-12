@@ -3,13 +3,14 @@ import axios from 'axios';
 import './Comments.css';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
-import { updateComment as updateCommentApi, deleteComment as deleteCommentApi } from './api';
+// import { updateComment as updateCommentApi, deleteComment as deleteCommentApi } from './api';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getReviews } from '../../../redux/actions/Reviews';
 import { Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-const Comments = ({ currentUserId, currentUsername }) => {
+const Comments = ({ currentUserId, currentUsername, currentName }) => {
+  // console.log(currentUserId);
   const dispatch = useDispatch();
   const getComment = useSelector((state) => state.getReviews);
 
@@ -19,9 +20,11 @@ const Comments = ({ currentUserId, currentUsername }) => {
 
   const rootComments = comment.filter((backendComment) => backendComment.parentId === null);
   //   console.log(rootComments);
-  const canRate = currentUserId !== 1; //jika userId saat ini admin/superadmin tidak bisa ngerate
-  const exsitUser = comment.find((backendComments) => backendComments.userId === currentUserId);
-  //   console.log(comment);
+  // const canRate = currentUserId !== 1 && currentUsername !== 'admin'; //jika userId saat ini admin/superadmin tidak bisa ngerate
+  const cantRate = currentUsername !== 'admin'; //jika userId saat ini admin/superadmin tidak bisa ngerate
+  const exsitUser = comment.find((backendComments) => backendComments.username === currentUsername); // jika ditemukan user di database maka true
+  // console.log(exsitUser);
+
   const [activeComment, setActiveComment] = useState(null);
   useEffect(() => {
     dispatch(getReviews());
@@ -29,12 +32,13 @@ const Comments = ({ currentUserId, currentUsername }) => {
 
   const getReplies = (commentId) => comment.filter((backendComment) => backendComment.parentId === commentId).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-  const addComment = (text, bintang = null, parentId = null, username) => {
+  const addComment = (text, bintang = null, parentId = null, name = null, username = null) => {
     const data = {
       body: text,
       parentId,
       userId: currentUserId,
       rate: bintang,
+      name: name,
       username: username,
       createdAt: new Date().toISOString(),
     };
@@ -54,7 +58,7 @@ const Comments = ({ currentUserId, currentUsername }) => {
     // });
   };
 
-  const updateComment = (text, bintang, commentId, username, parentId, userId) => {
+  const updateComment = (text, bintang, commentId, username, parentId, userId, name) => {
     // updateCommentApi(text).then(() => {
     //   const updatedBackendComments = comment.map((backendComment) => {
     //     if (backendComment.id === commentId) {
@@ -71,6 +75,7 @@ const Comments = ({ currentUserId, currentUsername }) => {
       userId: userId,
       rate: bintang,
       username: username,
+      name: name,
       createdAt: new Date().toISOString(),
       id: commentId,
     };
@@ -135,15 +140,18 @@ const Comments = ({ currentUserId, currentUsername }) => {
               deleteComment={deleteComment}
               updateComment={updateComment}
               currentUserId={currentUserId}
-              canRate={canRate}
+              currentUsername={currentUsername}
+              currentName={currentName}
+              cantRate={cantRate}
             />
           ))
         )}
       </div>
-      {!exsitUser && canRate ? (
+      {/* jika exsitUser bernilai true maka harus jadi false agar comment form tidak muncul */}
+      {!exsitUser && currentUserId && cantRate ? (
         <>
           <div className="comment-form-title">Write comment</div>
-          <CommentForm submitLabel="Write" currentUsername={currentUsername} currentValue={0} handleSubmit={addComment} />
+          <CommentForm submitLabel="Write" currentUsername={currentUsername} currentName={currentName} currentValue={0} handleSubmit={addComment} />
         </>
       ) : null}
     </div>

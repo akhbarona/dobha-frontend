@@ -49,70 +49,71 @@ const Products = () => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(money);
   };
 
-
   return (
     <main>
-      {loading || loading === undefined?<p>loading</p>:
-      <section>
-        <div className="products-container">
-          <Container>
-            {/* {Loading ? getRatings() : null} */}
-            <Row>
-              <div className="combo-box-wrapper">
-                <select
-                  className="p-2"
-                  onChange={(e) => {
-                    setSProducts(e.target.value);
-                  }}
-                >
-                  <option value="default">Sortir: Default</option>
-                  <option value="teratas">Teratas</option>
-                </select>
-              </div>
-            </Row>
-          </Container>
-          <div className="products-wrapper">
+      {loading || loading === undefined ? (
+        <p>loading</p>
+      ) : (
+        <section>
+          <div className="products-container">
             <Container>
-              {loading ? (
-                <div className="loading">
-                  <Spinner animation="border" variant="warning" role="status" className="m-auto">
-                    <span className="visually-hidden">Loading...</span>
-                  </Spinner>
+              {/* {Loading ? getRatings() : null} */}
+              <Row>
+                <div className="combo-box-wrapper">
+                  <select
+                    className="p-2"
+                    onChange={(e) => {
+                      setSProducts(e.target.value);
+                    }}
+                  >
+                    <option value="default">Sortir: Default</option>
+                    <option value="teratas">Teratas</option>
+                  </select>
                 </div>
-              ) : error ? (
-                { error }
-              ) : (
-                <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
-                  {products.data.map((item, index) => {
-                    console.log(item)
-                    return (
-                      <Col key={index}>
-                        <Card className="card-center">
-                          {/* {Products && <img src={'/' + Products.[0]} alt="" />} */}
-                          <Card.Img variant="top" src={'https://pasaminang.com/wp-content/uploads/2021/01/Screenshot_2020-12-30-12-53-35-12.jpg'} />
-                          <Card.Body>
-                            <Link className="link-title" to={`/products/${item.slug_produk}`}>
-                              <Card.Title>{item.nama_produk}</Card.Title>
-                            </Link>
-                            <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
-                            <div className={item.slug}>
-                              <div className="stars-outer">
-                                <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
-                              </div>
-                              <span className="number-rating" dangerouslySetInnerHTML={{ __html: item.rating_produk }}></span>
-                            </div>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    );
-                  })}
-                </Row>
-              )}
+              </Row>
             </Container>
+            <div className="products-wrapper">
+              <Container>
+                {loading ? (
+                  <div className="loading">
+                    <Spinner animation="border" variant="warning" role="status" className="m-auto">
+                      <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                  </div>
+                ) : error ? (
+                  { error }
+                ) : (
+                  <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
+                    {products.data.map((item, index) => {
+                      console.log(item);
+                      return (
+                        <Col key={index}>
+                          <Card className="card-center">
+                            {/* {Products && <img src={'/' + Products.[0]} alt="" />} */}
+                            <Card.Img variant="top" src={'https://pasaminang.com/wp-content/uploads/2021/01/Screenshot_2020-12-30-12-53-35-12.jpg'} />
+                            <Card.Body>
+                              <Link className="link-title" to={`/products/${item.slug_produk}`}>
+                                <Card.Title>{item.nama_produk}</Card.Title>
+                              </Link>
+                              <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
+                              <div className={item.slug}>
+                                <div className="stars-outer">
+                                  <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
+                                </div>
+                                <span className="number-rating">{item.rating_produk !== null ? item.rating_produk : 0}</span>
+                              </div>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      );
+                    })}
+                  </Row>
+                )}
+              </Container>
+            </div>
           </div>
-        </div>
-      </section>
-      }
+        </section>
+      )}
     </main>
   );
 };
