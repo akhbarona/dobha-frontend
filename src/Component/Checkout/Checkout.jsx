@@ -174,7 +174,7 @@ const Checkout = () => {
         destination:  dataUser?.user?.id_kabupaten,
         weight: berat
       };
-      // https://apiongkir.herokuapp.com
+      // ${process.env.REACT_APP_API_URL_TRANSAKSI}
       const getDataKota1 = await fetch(
         `https://apiongkir.herokuapp.com/api/ongkir`,
         {
@@ -293,7 +293,7 @@ const Checkout = () => {
           },
           onUploadProgress: (event) => {},
         };
-        // https://apiongkir.herokuapp.com
+        // ${process.env.REACT_APP_API_URL_TRANSAKSI}
         const response = await axios.post(
           `https://apiongkir.herokuapp.com/api/transaksi`,
           formData,
