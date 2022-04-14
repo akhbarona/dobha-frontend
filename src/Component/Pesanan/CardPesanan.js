@@ -18,7 +18,7 @@ const CardPesanan = (props) => {
         data: [],
         loading: true
     }));
-
+    // https://apiongkir.herokuapp.com
     fetch(`https://apiongkir.herokuapp.com/api/pesanan/${props.dataUser.email}`,{
         method: "GET",
         headers: {

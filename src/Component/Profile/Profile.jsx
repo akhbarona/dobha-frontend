@@ -64,7 +64,7 @@ const Profile = () => {
                 </tr>
               </table> */}
               {/* <Row> */}
-                <Row xl={2}>
+                {/* <Row xl={2}>
                   <Col xl={2} lg={4}>
                     <h5 className="my-2" style={{ fontWeight: '500' }}>
                       Nama
@@ -75,7 +75,7 @@ const Profile = () => {
                       Dani
                     </h5>
                   </Col>
-                </Row>
+                </Row> */}
               </Col>
               <Col xs={12} md={8}>
                 <table className="h-50 w-50 isi-content">

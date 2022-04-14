@@ -173,8 +173,8 @@ const Detail = () => {
               <h2 className="text-white">Produk Tidak Temukan</h2>
             ) : (
               <>
-              <Row className="show-grid details" key={product.id}>
-                {console.log('product.data =>',product.data)}
+              <Row className="show-grid details" key={product.data.id}>
+                {/* {console.log('product.data =>',product.data)} */}
                 <Col md={4}>
                   <div className="big-image">{product.image && <img src={'/' + product.image[Index]} alt="" />}</div>
 

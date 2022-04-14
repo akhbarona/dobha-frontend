@@ -201,6 +201,7 @@ const Alamat = (props) => {
       kabupaten: kabkota ? kabkota : props.dataUser.kabupaten,
       id_kabupaten: idKota ? idKota : props.dataUser.id_kabupaten,
     };
+    // console.log(data)
 
     axios
       .post(`/api/auth/user/update/${props.dataUser.username}`, data, {
@@ -249,7 +250,7 @@ const Alamat = (props) => {
       .catch((err) => {
         setLoading(false)
         Swal.fire({
-          title: 'Update Gagal,Silahkan Login Kembali',
+          title: 'Update Gagal',
           width: 600,
           padding: '3em',
           color: '#716add',
@@ -260,9 +261,6 @@ const Alamat = (props) => {
             left top
             no-repeat
           `
-        }).then(() => {
-          window.location.reload()
-          sessionStorage.clear();
         })
       });
 
