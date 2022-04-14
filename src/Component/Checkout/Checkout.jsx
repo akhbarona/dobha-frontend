@@ -270,6 +270,7 @@ const Checkout = () => {
       formData.append("bukti_bayar", buktiBayar.target.files[0]);
       formData.set("username", dataUser.user.username);
       formData.set("email", dataUser.user.email);
+      // formData.set("id_produk", location.state.id);
       formData.set("provinsi", dataUser.user.provinsi);
       formData.set("kabupaten", dataUser.user.kabupaten);
       formData.set("alamat", dataUser.user.alamat);
@@ -293,7 +294,7 @@ const Checkout = () => {
           },
           onUploadProgress: (event) => {},
         };
-        // ${process.env.REACT_APP_API_URL_TRANSAKSI}
+        // https://apiongkir.herokuapp.com
         const response = await axios.post(
           `https://apiongkir.herokuapp.com/api/transaksi`,
           formData,
