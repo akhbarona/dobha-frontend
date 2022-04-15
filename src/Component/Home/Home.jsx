@@ -151,54 +151,29 @@ const Main = memo(() => {
   useEffect(() => {
     const controller = new AbortController();
 
-    getNewDataProduct(controller);
+    getNPA(controller);
 
     return () => controller.abort();
   }, []);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    getPopularDataProduct(controller);
-
-    return () => controller.abort();
-  }, []);
-  useEffect(() => {
-    // getNewArticles();
-  }, []);
-
-  const getNewDataProduct = (controller) => {
+  const getNPA = (controller) => {
     axios
-      .get(`/api/newest-products`, {
+      .all([axios.get(`https://dobha.herokuapp.com/api/newest-products`), axios.get(`https://dobha.herokuapp.com/api/popular-products`), axios.get(`https://dobha.herokuapp.com/api/newest-articles`)], {
         signal: controller.signal,
       })
-      .then((res) => setDataTerbaru(res.data.data))
+      .then(
+        axios.spread((new_products, popular_products, new_articles) => {
+          setDataTerbaru(new_products.data.data);
+          setDataPopuler(popular_products.data.data);
+          setDataArtikelTerbaru(new_articles.data.data);
+          // console.log('produk baru', new_products, 'popular', popular_products, 'artikel baru', new_articles);
+        })
+      )
       .catch((err) => {
         console.log(err.message);
       });
   };
 
-  const getPopularDataProduct = (controller) => {
-    axios
-      .get(`/api/popular-products`, {
-        signal: controller.signal,
-      })
-      .then((res) => setDataPopuler(res.data.data))
-      .catch((err) => {
-        if (err.name === 'AbortError') {
-          console.log('fetch aborted');
-        } else {
-          console.log(err.message);
-        }
-      });
-  };
-
-  // const getNewArticles = async () => {
-  //   await axios
-  //     .get(`/api/newest-articles`)
-  //     .then((res) => console.log(res))
-  //     .then((err) => console.log(err));
-  // };
   const countRate = (rate) => {
     const starsTotal = 5;
     const starPercentage = (rate / starsTotal) * 100;

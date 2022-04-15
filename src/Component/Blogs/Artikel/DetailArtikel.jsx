@@ -13,13 +13,14 @@ const DetailArtikel = () => {
   const articleDetails = useSelector((state) => state.getBlogDetails);
   const articleRelated = useSelector((state) => state.getBlogsRelated);
   const { blog, loading, error } = articleDetails;
-
+  console.log(blog);
   useEffect(() => {
     dispatch(getArticleDetail(id));
-    dispatch(getArtikelRelated());
+    console.log(blog.data.slug);
+    if (blog.data.slug) {
+      dispatch(getArtikelRelated(blog.data.slug));
+    }
   }, [dispatch, id]);
-
-  console.log(blog);
 
   return (
     <main>
@@ -57,17 +58,6 @@ const DetailArtikel = () => {
               ) : (
                 <div className="style-artikel-terkait">
                   <h3>Artikel Terkait</h3>
-                  {articleRelated.blogs &&
-                    articleRelated.blogs.map((items, index) => {
-                      return (
-                        <Card className="Card-Detail" key={index}>
-                          <Card.Img variant="top" src={'/' + items.image_file_data} className="img-card" />
-                          <Card.Body>
-                            <Card.Title className="title-card">{items.title}</Card.Title>
-                          </Card.Body>
-                        </Card>
-                      );
-                    })}
                 </div>
               )}
             </Col>

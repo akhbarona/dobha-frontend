@@ -51,12 +51,13 @@ export const removeBlogsDetails = () => (dispatch) => {
   });
 };
 
-export const getArtikelRelated = () => async (dispatch) => {
+export const getArtikelRelated = (slug) => async (dispatch) => {
   try {
     dispatch({
       type: GET_BLOGS_RELATED_REQUEST,
     });
-    const { data } = await axios.get(`http://localhost:3001/blogs?_limit=3`);
+    const { data } = await axios.get(`${API_URL}/api/related-articles/${slug}`);
+    console.log(data);
     dispatch({
       type: GET_BLOGS_RELATED_SUCCESS,
       payload: data,
