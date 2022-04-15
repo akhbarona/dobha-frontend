@@ -37,12 +37,13 @@ const Cart = () => {
         totalHarga:totalHarga,
         imageUrl: cartItems[0]?.imageUrl,
         name: cartItems[0]?.name,
-        qty:  cartItems[0]?.qty
+        qty:  cartItems[0]?.qty,
+        id: cartItems[0]?.product
       }
     });
   };
 
-  console.log('cartItems' ,cartItems);
+  // console.log('cartItems' ,cartItems);
   return (
     <section>
       <div className="cart-screen">

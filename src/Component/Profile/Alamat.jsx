@@ -151,6 +151,7 @@ const Alamat = (props) => {
   const [dataKota, setDataKota] = useState([]);
   const [kabkota, setKabKota] = useState("");
   const [alamat, setAlamat] = useState("");
+  const [loading , setLoading] = useState(false);
 
 
   const handleChange = (e) => {
@@ -188,9 +189,7 @@ const Alamat = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const auth = authHeader().Authorization
-    // console.log('authHeader().Authorization',);
-    // return
+    setLoading(true)
     const data = {
       name: props.dataUser.name,
       username: props.dataUser.username,
@@ -202,6 +201,7 @@ const Alamat = (props) => {
       kabupaten: kabkota ? kabkota : props.dataUser.kabupaten,
       id_kabupaten: idKota ? idKota : props.dataUser.id_kabupaten,
     };
+    // console.log(data)
 
     axios
       .post(`/api/auth/user/update/${props.dataUser.username}`, data, {
@@ -211,8 +211,8 @@ const Alamat = (props) => {
         },
       })
       .then((data) => {
-        console.log(data)
        if(data.status === 200){
+        setLoading(false)
         Swal.fire({
           title: 'Update Berhasil Silahlkan Login Kembali',
           width: 600,
@@ -230,10 +230,38 @@ const Alamat = (props) => {
           sessionStorage.clear();
         })
       
+       }else{
+        setLoading(false)
+        Swal.fire({
+          title: 'Kesalahan Serever 1',
+          width: 600,
+          padding: '3em',
+          color: '#716add',
+          background: '#fff url(/images/trees.png)',
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("/images/nyan-cat.gif")
+            left top
+            no-repeat
+          `
+        })
        }
       })
       .catch((err) => {
-        console.log(err);
+        setLoading(false)
+        Swal.fire({
+          title: 'Update Gagal',
+          width: 600,
+          padding: '3em',
+          color: '#716add',
+          background: '#fff url(/images/trees.png)',
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("/images/nyan-cat.gif")
+            left top
+            no-repeat
+          `
+        })
       });
 
     // console.log(data);
@@ -241,7 +269,6 @@ const Alamat = (props) => {
 
   // console.log(authHeader())
 
-  console.log("props.dataUser =>", props.dataUser.username);
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -302,9 +329,15 @@ const Alamat = (props) => {
           />
         </Form.Group>
         <Form.Group controlId="exampleForm.ControlTextarea1">
+         {
+           loading?
+           <Button type="button" className="btn btn-primary mt-2" disabled>
+           Loading...
+         </Button>:
           <Button type="submit" className="btn btn-primary mt-2">
-            SIMPAN
-          </Button>
+          SIMPAN
+        </Button>
+         }
         </Form.Group>
       </Form>
     </>

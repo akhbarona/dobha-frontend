@@ -168,12 +168,13 @@ const Checkout = () => {
   // };
 
   const getOngkir = async () => {
-    const berat = (9000 * parseInt(location.state.qty));
+    const berat = (50 * parseInt(location.state.qty));
     try{
       const dataSend = {
         destination:  dataUser?.user?.id_kabupaten,
         weight: berat
       };
+      // ${process.env.REACT_APP_API_URL_TRANSAKSI}
       const getDataKota1 = await fetch(
         `https://apiongkir.herokuapp.com/api/ongkir`,
         {
@@ -269,6 +270,7 @@ const Checkout = () => {
       formData.append("bukti_bayar", buktiBayar.target.files[0]);
       formData.set("username", dataUser.user.username);
       formData.set("email", dataUser.user.email);
+      // formData.set("id_produk", location.state.id);
       formData.set("provinsi", dataUser.user.provinsi);
       formData.set("kabupaten", dataUser.user.kabupaten);
       formData.set("alamat", dataUser.user.alamat);
@@ -292,6 +294,7 @@ const Checkout = () => {
           },
           onUploadProgress: (event) => {},
         };
+        // https://apiongkir.herokuapp.com
         const response = await axios.post(
           `https://apiongkir.herokuapp.com/api/transaksi`,
           formData,
@@ -469,6 +472,24 @@ const Checkout = () => {
                                           {d.service}
                                         </td>
                                       </tr>
+                                      <tr
+                                        style={{
+                                          height: "50px",
+                                        }}
+                                      >
+                                        <th style={{ verticalAlign: "middle" }}>
+                                          Berat Produk
+                                        </th>
+                                        <td
+                                          style={{
+                                            verticalAlign: "middle",
+                                            textAlign: "end",
+                                          }}
+                                        >
+                                          { 50 * parseInt(location.state.qty)}gr
+                                        </td>
+                                      </tr>
+                                     
                                     </tbody>
                                   </table>
                                 </div>
@@ -554,11 +575,26 @@ const Checkout = () => {
                         </li>
                         <li>
                           <span>
+                            {dataUser?.user?.provinsi
+                              ? dataUser?.user?.provinsi
+                              : "alamat belum di seting"}
+                          </span>
+                        </li>
+                        <li>
+                          <span>
+                            {dataUser?.user?.kabupaten
+                              ? dataUser?.user?.kabupaten
+                              : "alamat belum di seting"}
+                          </span>
+                        </li>
+                        <li>
+                          <span>
                             {dataUser?.user?.alamat
                               ? dataUser?.user?.alamat
                               : "alamat belum di seting"}
                           </span>
                         </li>
+                        
                       </ul>
                     </div>
                     <div className="button-beli">

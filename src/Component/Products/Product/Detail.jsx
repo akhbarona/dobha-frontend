@@ -177,8 +177,8 @@ const Detail = () => {
               <h2 className="text-white">Produk Tidak Temukan</h2>
             ) : (
               <>
-                <Row className="show-grid details" key={product.id}>
-                  {console.log('product.data =>', product.data)}
+                <Row className="show-grid details" key={product.data.id}>
+                  {/* {console.log('product.data =>',product.data)} */}
                   <Col md={4}>
                     <div className="big-image">{product.image && <img src={'/' + product.image[Index]} alt="" />}</div>
 
@@ -260,15 +260,6 @@ const Detail = () => {
               </>
             )}
 
-            {/* <div className="comment-box">
-              <h3>Review</h3>
-              <Row className="g-2">
-                <Col xl={12}>
-                  <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} />
-                </Col>
-                <Col xl={12}></Col>
-              </Row>
-            </div> */}
             <div className="more-products">
               <h3>Produk Lainnya</h3>
               {moreProduct.loading ? (

@@ -50,11 +50,8 @@ const Profile = () => {
                   <td>Nomor Telpon</td>
                   <td>{dataUser.phone_number}</td>
                 </tr>
-                <tr>
-                  <td>Alamat</td>
-                  <td>{dataUser.alamat !== null ? dataUser.alamat : 'Alamat Belum diset'}</td>
-                </tr>
               </table>
+
               <Row className="p-2">
                 <Button variant="primary" className="w-25">
                   <i class="fas fa-edit"></i>Edit
@@ -62,7 +59,6 @@ const Profile = () => {
               </Row>
             </Col>
           </Row>
-          {/* </Table> */}
         </Card.Body>
       </Card>
     );
