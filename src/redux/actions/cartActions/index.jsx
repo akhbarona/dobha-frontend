@@ -6,8 +6,10 @@ export const CART_RESET = 'CART_RESET';
 
 // file ini berhubungan dengan backend
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export const addToCart = (id, qty) => async (dispatch, getState) => {
-  const { data } = await axios.get(`https://dobha.herokuapp.com/api/read-product/${id}`);
+  const { data } = await axios.get(`${API_URL}/api/read-product/${id}`);
   // console.log(data)
   dispatch({
     type: ADD_TO_CART,

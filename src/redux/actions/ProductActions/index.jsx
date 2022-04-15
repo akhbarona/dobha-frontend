@@ -13,11 +13,13 @@ export const GET_MORE_PRODUCT_REQUEST = 'GET_MORE_PRODUCT_REQUEST';
 export const GET_MORE_PRODUCT_SUCCESS = 'GET_MORE_PRODUCT_SUCCESS';
 export const GET_MORE_PRODUCT_FAIL = 'GET_MORE_PRODUCT_FAIL';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export const getProducts = () => async (dispatch) => {
   try {
     dispatch({ type: GET_PRODUCTS_REQUEST });
-    const { data } = await axios.get(`/api/read-all-product`);
-    console.log(data)
+    const { data } = await axios.get(`${API_URL}/api/read-all-product`);
+    console.log(data);
     dispatch({
       type: GET_PRODUCTS_SUCCESS,
       payload: data,
@@ -32,7 +34,7 @@ export const getProducts = () => async (dispatch) => {
 export const getProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: GET_PRODUCT_DETAILS_REQUEST });
-    const { data } = await axios.get(`/api/read-product/${id}`);
+    const { data } = await axios.get(`${API_URL}/api/read-product/${id}`);
     dispatch({
       type: GET_PRODUCT_DETAILS_SUCCESS,
       payload: data,
