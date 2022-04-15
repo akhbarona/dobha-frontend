@@ -96,6 +96,10 @@
   margin-right: 15px;
   text-decoration: none;
 }
+
+.read-more-size .fa-solid.fa-calendar {
+  font-family: 'Font Awesome 5 Free' !important;
+}
 .fa-calendar:before {
   margin-right: 10px;
 }
