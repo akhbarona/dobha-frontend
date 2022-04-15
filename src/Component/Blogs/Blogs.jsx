@@ -29,7 +29,6 @@ export const Blogs = () => {
   //   });
   // };
 
-
   return (
     <main>
       <section>
@@ -38,7 +37,7 @@ export const Blogs = () => {
             <h1 className="title-blogs-section">
               <span>Artikel</span>
             </h1>
-            {loading || loading === undefined? (
+            {loading || loading === undefined ? (
               <div className="loading">
                 <Spinner animation="border" variant="warning" role="status" className="m-auto">
                   <span className="visually-hidden">Loading...</span>
@@ -63,23 +62,21 @@ export const Blogs = () => {
                               <i className="fa-solid fa-calendar"></i>
                               {moment(item.created_at).format('Do MMMM YYYY')}
                             </Link>
-                            <Link className="read-more-size x-eyes" to="#">
+                            {/* <Link className="read-more-size " to="#">
                               <i className="fa-solid fa-eye"></i>
                               {item.views}
-                            </Link>
+                            </Link> */}
                           </div>
 
                           <p
                             className="pt-1 pb-4 text-article"
-                            // dangerouslySetInnerHTML={{
-                            //   __html: `${handleLength(item.content, 120)}`,
-                            // }}
-                          >
-                            {item.body}
-                          </p>
+                            dangerouslySetInnerHTML={{
+                              __html: `${item.excerpt}`,
+                            }}
+                          ></p>
 
                           <p className="read-more">
-                            <Link className="read-more-right" to={`/blogs/${item.slug}`}>
+                            <Link className="read-more-right" to={`/article/${item.slug}`}>
                               Baca Selengkapnya
                             </Link>
                           </p>

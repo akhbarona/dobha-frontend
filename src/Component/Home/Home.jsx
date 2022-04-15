@@ -5,10 +5,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
-// import dataRatingsTerbaru from '../../dataRatingsTerbaru.json'; // -> data dummy
-import dataRatingsTerpopuler from '../../dataRatingsTerpopuler.json'; // -> data dummy
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react';
-import { Routes, Route, Link, useLocation, useParams } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, useParams, useNavigate } from 'react-router-dom';
 import Products from '../Products/Products';
 import ProductDetail from '../Products/Product/Detail';
 import { Blogs } from '../Blogs/Blogs';
@@ -16,21 +14,22 @@ import DetailArtikel from '../Blogs/Artikel/DetailArtikel';
 import Login from '../Register/Login';
 import Register from '../Register/Register';
 import Cart from '../Cart/Cart';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Checkout from '../Checkout/Checkout';
 import AuthService from '../service/auth.service';
-
 import axios from 'axios';
 import Profile from '../Profile/Profile';
 import Pesanan from '../Pesanan';
 import Pesanansaya from '../Profile/Pesanansaya';
+
+import { logoutUser } from '../../redux/actions/authActions';
+
 /* Bagian Kepala */
 function compare(prevProps, nextProps) {
-  // console.log(prevProps, nextProps);
   return prevProps.value === nextProps.value;
 }
 const InputSearch = memo(() => {
-  console.log('Render Search');
+  // console.log('Render Search');
   const [SearchText, setSearchText] = useState('');
   const handleInput = (e) => {
     setSearchText(e.target.value);
@@ -39,18 +38,26 @@ const InputSearch = memo(() => {
 }, compare);
 
 const Header = memo(() => {
-  console.log('Render Header');
+  // console.log('Render Header');
   const [currentUser, setCurrentUser] = useState(undefined);
+  const dispatch = useDispatch();
+  const outUser = useSelector((state) => state.authUser);
+  const { isLogout } = outUser;
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     if (user) {
       setCurrentUser(user);
     }
-  }, []);
+    if (isLogout) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    }
+  }, [isLogout]);
+
   const logOut = () => {
-    AuthService.logout();
-    window.location.reload();
+    dispatch(logoutUser());
   };
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
@@ -71,7 +78,7 @@ const Header = memo(() => {
                   <Link to="/products">PRODUK</Link>
                 </li>
                 <li>
-                  <Link to="/blogs">BLOG</Link>
+                  <Link to="/article">ARTIKEL</Link>
                 </li>
               </ul>
             </div>
@@ -93,10 +100,7 @@ const Header = memo(() => {
                 </div>
               )}
               {currentUser ? (
-                // <Link className="navbar-menu" to="/login" onClick={logOut}>
-                //   <div className="navbar-menu-item page-btn-register">LOGOUT</div>
-                // </Link>
-                <DropdownButton variant="warning" id="dropdown-basic-button" className="btn-profile" title={`Hi ${currentUser.user.name}`}>
+                <DropdownButton variant="warning" id="dropdown-basic-button" className="btn-profile" title={`Hi ${currentUser.name}`}>
                   <Dropdown.Item className="btn-profile-pemilik" as={Link} to="/profile">
                     PROFILE
                   </Dropdown.Item>
@@ -142,33 +146,59 @@ const Main = memo(() => {
   const [DataTerbaru, setDataTerbaru] = useState([]); // -> berisi data-data produk terbaru
   const [DataPopuler, setDataPopuler] = useState([]); // -> berisi data-data produk terpopuler
   const [DataArtikel, setDataArtikelTerbaru] = useState([]); // -> berisi data post terbaru
-  console.log('Render Main');
+  // console.log('Render Main');
 
   useEffect(() => {
-    getNewDataProduct();
-    getPopularDataProduct();
-    getNewArticles();
+    const controller = new AbortController();
+
+    getNewDataProduct(controller);
+
+    return () => controller.abort();
   }, []);
 
-  const getNewDataProduct = () => {
+  useEffect(() => {
+    const controller = new AbortController();
+
+    getPopularDataProduct(controller);
+
+    return () => controller.abort();
+  }, []);
+  useEffect(() => {
+    // getNewArticles();
+  }, []);
+
+  const getNewDataProduct = (controller) => {
     axios
-      .get(`https://dobha.herokuapp.com/api/product`)
-      .then((res) => setDataTerbaru(res.data.data.product))
-      .catch((err) => console.log(err));
+      .get(`/api/newest-products`, {
+        signal: controller.signal,
+      })
+      .then((res) => setDataTerbaru(res.data.data))
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
-  const getPopularDataProduct = () => {
+  const getPopularDataProduct = (controller) => {
     axios
-      .get(`http://localhost:3001/popular-product`)
-      .then((res) => setDataPopuler(res.data))
-      .catch((err) => console.log(err));
+      .get(`/api/popular-products`, {
+        signal: controller.signal,
+      })
+      .then((res) => setDataPopuler(res.data.data))
+      .catch((err) => {
+        if (err.name === 'AbortError') {
+          console.log('fetch aborted');
+        } else {
+          console.log(err.message);
+        }
+      });
   };
-  const getNewArticles = () => {
-    axios
-      .get(`http://localhost:3001/blogs?_limit=3`)
-      .then((res) => setDataArtikelTerbaru(res.data))
-      .then((err) => console.log(err));
-  };
+
+  // const getNewArticles = async () => {
+  //   await axios
+  //     .get(`/api/newest-articles`)
+  //     .then((res) => console.log(res))
+  //     .then((err) => console.log(err));
+  // };
   const countRate = (rate) => {
     const starsTotal = 5;
     const starPercentage = (rate / starsTotal) * 100;
@@ -198,17 +228,17 @@ const Main = memo(() => {
                 {DataTerbaru.map((item, index) => {
                   return (
                     <Col key={index}>
-                      <Link className="text-decoration-none text-dark" to={`/products/${item.id}`}>
+                      <Link className="text-decoration-none text-dark" to={`/products/${item.slug_produk}`}>
                         <Card>
                           <Card.Img variant="top" src="/1.jpg" />
                           <Card.Body>
                             <Card.Title>{item.nama_produk}</Card.Title>
-                            <Card.Text className="price">{formatRupiah(item.harga)}</Card.Text>
+                            <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
                             <div className="star-produk">
                               <div className="stars-outer">
-                                <div className="stars-inner" style={{ width: countRate(item.rate) }}></div>
+                                <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
                               </div>
-                              <span className="number-rating">{item.rate}</span>
+                              <span className="number-rating">{item.rating_produk}</span>
                             </div>
                           </Card.Body>
                         </Card>
@@ -238,17 +268,17 @@ const Main = memo(() => {
                   DataPopuler.map((item, index) => {
                     return (
                       <Col key={index}>
-                        <Link className="text-decoration-none text-dark" to={`/products/${item.id}`}>
+                        <Link className="text-decoration-none text-dark" to={`/products/${item.slug_produk}`}>
                           <Card>
                             <Card.Img variant="top" src="/1.jpg" />
                             <Card.Body>
-                              <Card.Title>{item.title}</Card.Title>
-                              <Card.Text className="price">{formatRupiah(item.price)}</Card.Text>
+                              <Card.Title>{item.nama_produk}</Card.Title>
+                              <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
                               <div className="star-produk">
                                 <div className="stars-outer">
-                                  <div className="stars-inner" style={{ width: countRate(item.rate) }}></div>
+                                  <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
                                 </div>
-                                <span className="number-rating">{item.rate}</span>
+                                <span className="number-rating">{item.rating_produk}</span>
                               </div>
                             </Card.Body>
                           </Card>
@@ -283,10 +313,14 @@ const Main = memo(() => {
                         </div>
                         <div className="body-new-post">
                           <h5>{handleLength(item.title, 37)}</h5> {/*-> 37 karakter */}
-                          <p>{handleLength(item.intro, 216)}</p>
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html: `${item.excerpt}`,
+                            }}
+                          ></p>
                           {/* 216 karakter */}
                           <div className="btn-read-more">
-                            <Link to={`/blogs/${item.id}`} className="btn-item-read-more text-decoration-none">
+                            <Link to={`/article/${item.slug}`} className="btn-item-read-more text-decoration-none">
                               Lihat Selengkapnya
                             </Link>
                           </div>
@@ -305,7 +339,7 @@ const Main = memo(() => {
 }, compare);
 /* Bagian Footer */
 const Footer = memo(() => {
-  console.log('Render Footer');
+  // console.log('Render Footer');
   return (
     <footer>
       <div className="footer-container">
@@ -347,6 +381,12 @@ function Home() {
   let location = useLocation();
   let id = location.pathname.split('/').pop();
 
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
+    }
+  }, [AuthService]);
   return (
     <div className="main-home-wrapper">
       {location.pathname !== '/login' && location.pathname !== '/register' && <Header />}
@@ -356,24 +396,25 @@ function Home() {
         location.pathname !== '/pesanansaya' &&
         location.pathname !== '/cart' &&
         location.pathname !== '/profile' &&
-        location.pathname !== '/blogs' &&
+        location.pathname !== '/article' &&
         location.pathname !== '/pesanan' &&
         location.pathname !== `/products/${id}` &&
-        location.pathname !== `/blogs/${id}` && <LogoBrand />}
+        location.pathname !== `/article/${id}` && <LogoBrand />}
 
       <div className="content-wrapper">
         <Routes>
           <Route exact path="/" element={<Main />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
+
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/pesanansaya" element={<Pesanansaya />} />
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/products/:id" element={<ProductDetail />} />
           <Route exact path="/checkout" element={<Checkout />} />
-          <Route exact path="/blogs" element={<Blogs />} />
-          <Route exact path="/blogs/:id" element={<DetailArtikel />} />
+          <Route exact path="/article" element={<Blogs />} />
+          <Route exact path="/article/:id" element={<DetailArtikel />} />
           {/* ubah yudi */}
           <Route exact path="/pesanan" element={<Pesanan />} />
         </Routes>

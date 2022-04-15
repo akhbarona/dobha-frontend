@@ -2,6 +2,7 @@ import CommentForm from './CommentForm';
 import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 const Comment = ({ comment, replies, setActiveComment, activeComment, updateComment, deleteComment, addComment, parentId = null, currentUserId, currentUsername, currentName }) => {
+  console.log(comment);
   //proses awal menerima dari componen comments.js
   //comment -> isinya -> {id,body,username,userId,parentId,createdAt}
   //replies -> isinya data yang memiliki parentId yg sudah di filter dulu lalu diurutkan dari terkecil ke terbesar berdasarkan waktunya
@@ -26,12 +27,12 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
   //   console.log(canReply);
   //   const canEdit = currentUserId === comment.userId && !timePassed; // bisa ngedit dengan syarat userId saat ini sama dengan id comment punyanya tapi dibatasi waktu selama 1menit
   // const canEdit = currentUserId === comment.userId;
-  const canEdit = currentUsername === comment.username;
+  const canEdit = currentUsername === comment.user.username;
   // const [bintang, setBintang] = useState(0);
 
   // console.log('ini di comment', bintang);
   const replyId = parentId ? parentId : comment.id; //Jika si comment memiliki parentId maka kondisi menjadi true dan parentId dieksekusi, jika tidak sebaliknya
-  const createdAt = new Date(comment.createdAt).toLocaleDateString(); //membuat jam memiliki format --/--/----
+  const createdAt = new Date(comment.created_at).toLocaleDateString(); //membuat jam memiliki format --/--/----
   const countRate = (rate) => {
     const starsTotal = 5;
     const starPercentage = (rate / starsTotal) * 100;
@@ -45,8 +46,8 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
       </div>
       <div className="comment-right-part">
         <div className="comment-content">
-          <Link to="#" data-toggle="tooltip" data-placement="top" title={comment.username}>
-            <div className="comment-author">{comment.name}</div>
+          <Link to="#" data-toggle="tooltip" data-placement="top" title={comment.user.username}>
+            <div className="comment-author">{comment.user.name}</div>
           </Link>
           <div>{createdAt}</div>
         </div>
@@ -67,7 +68,7 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
             submitLabel="Update"
             hasCancelButton
             initialText={comment.body}
-            handleSubmit={(text, bintang) => updateComment(text, bintang, comment.id, comment.username, comment.parentId, comment.userId, comment.name)}
+            handleSubmit={(text, bintang) => updateComment(text, bintang, comment.id)}
             handleCancel={() => {
               setActiveComment(null);
             }}

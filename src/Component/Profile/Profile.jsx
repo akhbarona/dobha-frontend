@@ -1,37 +1,24 @@
-import { useState, useEffect } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Nav,
-  Row,
-  Tab,
-  Table,
-  Tabs,
-  Spinner,
-} from "react-bootstrap";
-import "./Profile.css";
-import Alamat from "./Alamat";
-import axios from "axios";
-import authHeader from "../service/auth.header";
-import AuthService from "../service/auth.service";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { Button, Card, Col, Container, Nav, Row, Tab, Table, Tabs, Spinner } from 'react-bootstrap';
+import './Profile.css';
+import Alamat from './Alamat';
+import axios from 'axios';
+import authHeader from '../service/auth.header';
+import AuthService from '../service/auth.service';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const Profile = () => {
   const [dataUser, setUser] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    try{
+    try {
       const user = AuthService.getCurrentUser();
-    if (!user) {
-      navigate("/login");
-    }
-    setUser(user.user);
-    }catch(er){
-      
-    }
+      if (!user) {
+        navigate('/login');
+      }
+      setUser(user.user);
+    } catch (er) {}
   }, []);
 
   const Biodata = () => {
@@ -47,60 +34,35 @@ const Profile = () => {
                 </Button>
               </span>
             </Col>
-            <Col xl={8} lg={8}>
-              {/* <table className="h-50 w-50">
+
+            <Col xs={12} md={8}>
+              <table className="h-50 w-50 isi-content">
                 <tr>
                   <td>Nama</td>
-                  <td>Dhany</td>
+                  <td>{dataUser.username}</td>
                 </tr>
                 <tr>
                   <td>Email</td>
 
-                  <td>dani@gmail.com</td>
+                  <td>{dataUser.email}</td>
                 </tr>
                 <tr>
                   <td>Nomor Telpon</td>
-                  <td>081234567890</td>
+                  <td>{dataUser.phone_number}</td>
                 </tr>
-              </table> */}
-              {/* <Row> */}
-                <Row xl={2}>
-                  <Col xl={2} lg={4}>
-                    <h5 className="my-2" style={{ fontWeight: '500' }}>
-                      Nama
-                    </h5>
-                  </Col>
-                  <Col xl={10} lg={8}>
-                    <h5 className="my-2" style={{ fontWeight: '500' }}>
-                      Dani
-                    </h5>
-                  </Col>
-                </Row>
-              </Col>
-              <Col xs={12} md={8}>
-                <table className="h-50 w-50 isi-content">
-                  <tr>
-                    <td>Nama</td>
-                    <td>{dataUser.username}</td>
-                  </tr>
-                  <tr>
-                    <td>Email</td>
-
-                    <td>{dataUser.email}</td>
-                  </tr>
-                  <tr>
-                    <td>Nomor Telpon</td>
-                    <td>{dataUser.phone_number}</td>
-                  </tr>
-                </table>
-              </Col>
-            </Row>
-          {/* </Table> */}
-          <Row className="p-2">
+                <tr>
+                  <td>Alamat</td>
+                  <td>{dataUser.alamat !== null ? dataUser.alamat : 'Alamat Belum diset'}</td>
+                </tr>
+              </table>
+              <Row className="p-2">
                 <Button variant="primary" className="w-25">
                   <i class="fas fa-edit"></i>Edit
                 </Button>
-             </Row>
+              </Row>
+            </Col>
+          </Row>
+          {/* </Table> */}
         </Card.Body>
       </Card>
     );
@@ -147,12 +109,7 @@ const Profile = () => {
           <Row className="profile-content">
             <div className="background-content">
               {dataUser.length != 0 ? (
-                <Tabs
-                  defaultActiveKey={pilih}
-                  id="uncontrolled-tab-example"
-                  className="mb-3"
-                  onSelect={handleSelect}
-                >
+                <Tabs defaultActiveKey={pilih} id="uncontrolled-tab-example" className="mb-3" onSelect={handleSelect}>
                   <Tab eventKey={1} title="Biodata Diri">
                     <Biodata />
                   </Tab>
@@ -163,12 +120,7 @@ const Profile = () => {
               ) : (
                 <center>
                   <div className="loading">
-                    <Spinner
-                      animation="border"
-                      variant="warning"
-                      role="status"
-                      className="m-auto"
-                    >
+                    <Spinner animation="border" variant="warning" role="status" className="m-auto">
                       <span className="visually-hidden">Loading...</span>
                     </Spinner>
                   </div>

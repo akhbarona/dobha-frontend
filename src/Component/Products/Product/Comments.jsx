@@ -9,45 +9,53 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getReviews } from '../../../redux/actions/Reviews';
 import { Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-const Comments = ({ currentUserId, currentUsername, currentName }) => {
-  // console.log(currentUserId);
+import authHeader from '../../service/auth.header';
+
+const Comments = ({ currentUserId, currentUsername, currentName, slug, product_id }) => {
+  console.log(currentUserId);
   const dispatch = useDispatch();
   const getComment = useSelector((state) => state.getReviews);
 
   const { comment, loading, error } = getComment;
 
-  const [backendComments, setBackendComments] = useState([]);
+  // const [backendComments, setBackendComments] = useState([]);
 
-  const rootComments = comment.filter((backendComment) => backendComment.parentId === null);
+  const rootComments = comment && comment.filter((backendComment) => backendComment.parent_id === null);
   //   console.log(rootComments);
   // const canRate = currentUserId !== 1 && currentUsername !== 'admin'; //jika userId saat ini admin/superadmin tidak bisa ngerate
   const cantRate = currentUsername !== 'admin'; //jika userId saat ini admin/superadmin tidak bisa ngerate
-  const exsitUser = comment.find((backendComments) => backendComments.username === currentUsername); // jika ditemukan user di database maka true
+  const exsitUser = comment && comment.find((backendComments) => backendComments.user.username === currentUsername); // jika ditemukan user di database maka true
   // console.log(exsitUser);
 
   const [activeComment, setActiveComment] = useState(null);
   useEffect(() => {
-    dispatch(getReviews());
-  }, [dispatch]);
+    dispatch(getReviews(slug));
+  }, [dispatch, slug]);
 
-  const getReplies = (commentId) => comment.filter((backendComment) => backendComment.parentId === commentId).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  const getReplies = (commentId) => comment.filter((backendComment) => backendComment.parent_id === commentId).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
-  const addComment = (text, bintang = null, parentId = null, name = null, username = null) => {
+  const addComment = (text, bintang = null) => {
+    // const data = {
+    //   body: text,
+    //   parentId,
+    //   userId: currentUserId,
+    //   rate: bintang,
+    //   name: name,
+    //   username: username,
+    //   createdAt: new Date().toISOString(),
+    // };
     const data = {
       body: text,
-      parentId,
-      userId: currentUserId,
       rate: bintang,
-      name: name,
-      username: username,
-      createdAt: new Date().toISOString(),
     };
     axios
-      .post('http://localhost:3001/comments', data)
+      .post(`/api/product/review-product/${product_id}/${currentUserId}`, data, {
+        headers: authHeader(),
+      })
       .then((comment) => {
         // setBackendComments([comment, ...backendComments]);
         console.log(comment);
-        dispatch(getReviews());
+        dispatch(getReviews(slug));
         setActiveComment(null);
       })
       .catch((err) => console.log(err));
@@ -58,7 +66,7 @@ const Comments = ({ currentUserId, currentUsername, currentName }) => {
     // });
   };
 
-  const updateComment = (text, bintang, commentId, username, parentId, userId, name) => {
+  const updateComment = (text, bintang, commentId) => {
     // updateCommentApi(text).then(() => {
     //   const updatedBackendComments = comment.map((backendComment) => {
     //     if (backendComment.id === commentId) {
@@ -68,22 +76,29 @@ const Comments = ({ currentUserId, currentUsername, currentName }) => {
     //   });
 
     // console.log(createdAt);
+    // const data = {
+    //   body: text,
+    //   rate: bintang,
+    //   parentId: parentId,
+    //   userId: userId,
+    //   rate: bintang,
+    //   username: username,
+    //   name: name,
+    //   createdAt: new Date().toISOString(),
+    //   id: commentId,
+    // };
     const data = {
       body: text,
       rate: bintang,
-      parentId: parentId,
-      userId: userId,
-      rate: bintang,
-      username: username,
-      name: name,
-      createdAt: new Date().toISOString(),
-      id: commentId,
     };
+
     axios
-      .put(`http://localhost:3001/comments/${commentId}`, data)
+      .post(`/api/product/update-review/${product_id}/${commentId}/${currentUserId}`, data, {
+        headers: authHeader(),
+      })
       .then((res) => {
         console.log(res);
-        dispatch(getReviews());
+        dispatch(getReviews(slug));
         setActiveComment(null);
       })
       .catch((err) => console.log(err));
@@ -105,7 +120,7 @@ const Comments = ({ currentUserId, currentUsername, currentName }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:3001/comments/${commentId}`)
+          .delete(`https://dobha.000webhostapp.com/api/auth/admin/delete-review/${product_id}/${commentId}`)
           .then((res) => {
             console.log(res);
             dispatch(getReviews());
@@ -126,7 +141,7 @@ const Comments = ({ currentUserId, currentUsername, currentName }) => {
             </Spinner>
           </div>
         ) : error ? (
-          <h2>{error}</h2>
+          <h2>Silahkan Reviews</h2>
         ) : (
           rootComments &&
           rootComments.map((rootComment) => (

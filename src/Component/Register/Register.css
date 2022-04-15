@@ -1,6 +1,7 @@
 @media only screen and (min-width: 769px) {
   .body-register {
     height: 100vh;
+    overflow: scroll;
   }
 }
 
@@ -30,19 +31,72 @@
   text-decoration: none;
   display: contents;
 }
+.register-wrapper a.back-wrapper::before {
+  content: '\f060';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 600;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: #ff9c06;
+}
 .back-to {
-  color: rgb(182, 112, 0);
+  color: #ff9c06;
   margin-bottom: 0px;
   display: contents;
+  font-weight: 600;
 }
-.teks-Register {
-  display: flex;
+
+/* FormInput */
+.formInput {
+  /* display: flex;
+  flex-direction: column;
+  width: 100%; */
+  margin-top: 20px;
 }
-.teks-Register a h1 {
-  border-bottom: 3px solid rgb(182, 112, 0);
-  font-family: 'Quicksand', sans-serif;
-  color: #fff;
+
+input.from-control {
+  border: none;
+  padding: 10px 11px 11px 11px;
+  min-width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
-.fa-chevron-left {
-  font-size: 25px;
+
+.formInput label {
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: rgb(255, 247, 247);
+}
+
+span.error-pesan {
+  font-size: 15px;
+  padding: 3px;
+  color: #ff9c06;
+  display: none;
+  font-weight: 400;
+}
+
+input:invalid[focused='true'] {
+  border: 3px solid red;
+}
+span.error-pesan::before {
+  content: '\f05a';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  margin-right: 0.6rem;
+  color: red;
+}
+input:invalid[focused='true'] ~ span {
+  display: block;
+}
+
+.Toastify__toast--error {
+  border: 1px solid #eb5757;
+  background: #fae1e2 !important;
+}
+.Toastify__toast--success {
+  border: 1px solid #3a9ea5 !important;
+  background: #f0f9fa !important;
 }
