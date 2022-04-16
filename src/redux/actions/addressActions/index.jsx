@@ -7,7 +7,7 @@ export const GET_ADDRESS_FAIL = 'GET_ADDRESS_FAIL';
 export const getAddress = (id) => async (dispatch) => {
     try {
       dispatch({ type: GET_ADDRES_REQUEST });
-      const { data } = await axios.get(`https://dobha.herokuapp.com/api/user/${id}`);
+      const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/${id}`);
       console.log('data ku', data)
       dispatch({
         type: GET_ADDRES_SUCCESS,
