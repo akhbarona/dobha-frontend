@@ -27,7 +27,7 @@ const Detail = () => {
   const myRef = useRef(null);
 
   const { user: currentUser } = AuthService.getCurrentUser() ? AuthService.getCurrentUser() : { user: null };
-
+  console.log(currentUser);
   useEffect(() => {
     // if (product && id !== product.id) {
     dispatch(getProductDetails(id));
@@ -94,7 +94,7 @@ const Detail = () => {
 
   const submitAddtocart = (e) => {
     e.preventDefault();
-  
+
     // const Auth = true;
     if (currentUser) {
       dispatch(addToCart(product.data.slug_produk, Quantity));
@@ -158,6 +158,10 @@ const Detail = () => {
     }
   };
 
+  const getComment = useSelector((state) => state.getReviews);
+
+  const { comment, loading: memuat, error: err } = getComment;
+
   return (
     <main>
       <section>
@@ -173,10 +177,10 @@ const Detail = () => {
               <h2 className="text-white">Produk Tidak Temukan</h2>
             ) : (
               <>
-              <Row className="show-grid details" key={product.data.id}>
-                {/* {console.log('product.data =>',product.data)} */}
-                <Col md={4}>
-                  <div className="big-image">{product.image && <img src={'/' + product.image[Index]} alt="" />}</div>
+                <Row className="show-grid details" key={product.data.id}>
+                  {/* {console.log('product.data =>',product.data)} */}
+                  <Col md={4}>
+                    <div className="big-image">{product.image && <img src={'/' + product.image[Index]} alt="" />}</div>
 
                     <div ref={myRef} className="thumb">
                       {product.image && product.image.map((image, idx) => <img onClick={() => handleTab(idx)} key={idx} src={'/' + image} alt="" />)}
@@ -230,7 +234,25 @@ const Detail = () => {
                   <h3>Review</h3>
                   <Row className="g-2">
                     <Col xl={12}>
-                      {/* <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} /> */}
+                      {product && comment.length > 0 ? (
+                        <Comments
+                          slug={id}
+                          product_id={product.data.id}
+                          currentUserId={currentUser !== null ? currentUser.id : null}
+                          currentUsername={currentUser !== null ? currentUser.username : null}
+                          currentName={currentUser !== null ? currentUser.name : null}
+                        />
+                      ) : currentUser ? (
+                        <Comments
+                          slug={id}
+                          product_id={product.data.id}
+                          currentUserId={currentUser !== null ? currentUser.id : null}
+                          currentUsername={currentUser !== null ? currentUser.username : null}
+                          currentName={currentUser !== null ? currentUser.name : null}
+                        />
+                      ) : (
+                        <h2 className="text-white text-center p-3">Belum Ada Reviews</h2>
+                      )}
                     </Col>
                     <Col xl={12}></Col>
                   </Row>
@@ -238,15 +260,6 @@ const Detail = () => {
               </>
             )}
 
-            <div className="comment-box">
-              <h3>Review</h3>
-              <Row className="g-2">
-                <Col xl={12}>
-                  {/* <Comments currentUserId={currentUser !== null ? currentUser.user.id : null} currentUsername={currentUser !== null ? currentUser.user.username : null} currentName={currentUser !== null ? currentUser.user.name : null} /> */}
-                </Col>
-                <Col xl={12}></Col>
-              </Row>
-            </div>
             <div className="more-products">
               <h3>Produk Lainnya</h3>
               {moreProduct.loading ? (

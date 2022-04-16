@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { getBlogsReducers, getBlogsDetailsReducers, getBlogsRelatedReducers } from './blogRreducers';
+import { authUserReducers } from './authReducers';
+import { getBlogsReducers, getBlogsDetailsReducers, getBlogsRelatedReducers } from './blogReducers';
 import { cartReducers } from './cartReducers';
 import { getProductsReducers, getProductDetailsReducers, getMoreProductsReducers } from './productReducers';
 import { getReviewReducers } from './reviewsReducers';
@@ -14,5 +15,6 @@ export default combineReducers({
   getBlogDetails: getBlogsDetailsReducers,
   getBlogsRelated: getBlogsRelatedReducers,
   getReviews: getReviewReducers,
-  getAdress: getAddressReducers
+  getAdress: getAddressReducers,
+  authUser: authUserReducers,
 });

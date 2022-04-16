@@ -4,26 +4,20 @@ import {
   Card,
   Col,
   Container,
-  Nav,
   Row,
   Tab,
-  Table,
   Tabs,
   Spinner,
 } from "react-bootstrap";
 import "./Profile.css";
 import Alamat from "./Alamat";
-import axios from "axios";
-import authHeader from "../service/auth.header";
 import AuthService from "../service/auth.service";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getAddress as listAddress } from "../../redux/actions/addressActions";
 
 const Profile = () => {
-  const [dataUser, setUser] = useState([]);
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const getAdress = useSelector((state) => state.getAdress);
   const { address , loading,error } = getAdress.address;
@@ -31,12 +25,13 @@ const Profile = () => {
   useEffect(() => {
     try {
       const user = AuthService.getCurrentUser();
-      dispatch(listAddress(user.user.id));
+      dispatch(listAddress(user.id));
       if (!user) {
         navigate("/login");
       }
-      setUser(user.user);
-    } catch (er) {}
+    } catch (error) {
+      console.log(error.response && error.response.data.message ? error.response.data.message : error.message)
+    }
   }, [dispatch]);
 
   const Biodata = () => {
@@ -61,16 +56,16 @@ const Profile = () => {
               <table className="h-50 isi-content">
                 <tr>
                   <td>Nama</td>
-                  <td>: {dataUser.username}</td>
+                  <td>: {address?.data?.username}</td>
                 </tr>
                 <tr>
                   <td>Email</td>
 
-                  <td>: {dataUser.email}</td>
+                  <td>: {address?.data?.email}</td>
                 </tr>
                 <tr>
                   <td>Nomor Telpon</td>
-                  <td>: {dataUser.phone_number}</td>
+                  <td>: {address?.data?.phone_number}</td>
                 </tr>
               </table>
               <Row className="p-2">
@@ -120,7 +115,6 @@ const Profile = () => {
     setPilih(value);
   };
 
-  // console.log('sessiondata',loading)
 
   return (
     <section>
@@ -152,7 +146,6 @@ const Profile = () => {
                 className="mb-3"
                 onSelect={handleSelect}
               >
-                {/* {console.log("address =>>", address.address.data)} */}
                 <Tab eventKey={1} title="Biodata Diri">
                   <Biodata />
                 </Tab>

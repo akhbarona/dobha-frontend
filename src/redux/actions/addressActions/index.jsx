@@ -8,6 +8,7 @@ export const getAddress = (id) => async (dispatch) => {
     try {
       dispatch({ type: GET_ADDRES_REQUEST });
       const { data } = await axios.get(`https://dobha.herokuapp.com/api/user/${id}`);
+      console.log('data ku', data)
       dispatch({
         type: GET_ADDRES_SUCCESS,
         payload: data,

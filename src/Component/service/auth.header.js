@@ -1,7 +1,9 @@
+import axios from 'axios';
 const authHeader = () => {
-  const user = JSON.parse(sessionStorage.getItem('user'));
-  if (user && user.token) {
-    return { Authorization: `Bearer ` + user.token };
+  const token = JSON.parse(sessionStorage.getItem('token'));
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  if (token && token) {
+    return { Authorization: 'Bearer ' + token };
   } else {
     return {};
   }

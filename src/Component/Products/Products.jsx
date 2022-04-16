@@ -1,9 +1,8 @@
+import axios from 'axios';
 import './Products.css';
 import { memo } from 'react';
 import { useState, useEffect } from 'react';
 import { Row, Card, Container, Col, Spinner } from 'react-bootstrap';
-import dataProdukTerbaru from '../../dataProdukTerbaru.json';
-import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts as listProducts } from '../../redux/actions/ProductActions';
 import { Link } from 'react-router-dom';
@@ -14,31 +13,12 @@ const Products = () => {
   const { products, loading, error } = getProducts;
   const [Products, setProducts] = useState([]);
   const [SProducts, setSProducts] = useState('default');
-  // const [Loading, setLoading] = useState(false);
 
   useEffect(() => {
     // getProducts();
     dispatch(listProducts());
   }, [dispatch]);
 
-  // const getProducts = () => {
-  //   axios
-  //     .get(`http://localhost:3001/products`)
-  //     .then((res) => {
-  //       setProducts(res.data);
-  //       setLoading(!Loading);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-  // const getRatings = () => {
-  //   const starsTotal = 5;
-  //   for (let rating = 0; rating < Products.length; rating++) {
-  //     const starPercentage = (Products[rating].rate / starsTotal) * 100;
-  //     const starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`;
-  //     document.querySelector(`.${Products[rating].slug} .stars-inner`).style.width = starPercentageRounded;
-  //     document.querySelector(`.${Products[rating].slug} .number-rating`).innerHTML = Products[rating].rate;
-  //   }
-  // };
   const countRate = (rate) => {
     const starsTotal = 5;
     const starPercentage = (rate / starsTotal) * 100;

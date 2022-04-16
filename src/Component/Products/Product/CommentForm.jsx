@@ -17,7 +17,7 @@ const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handl
     if (bintang !== 0) {
       // setLoading(true);
       if (submitLabel === 'Write') {
-        handleSubmit(text, bintang, null, currentName, currentUsername);
+        handleSubmit(text, bintang);
       } else if (submitLabel === 'Update') {
         handleSubmit(text, bintang);
       } else if (submitLabel === 'Reply') {

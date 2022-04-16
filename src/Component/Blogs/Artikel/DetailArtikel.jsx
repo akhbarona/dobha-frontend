@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getArticleDetail, getArtikelRelated } from '../../../redux/actions/blogActions';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import parse from 'html-react-parser';
 const DetailArtikel = () => {
   const { id } = useParams();
 
@@ -12,20 +13,21 @@ const DetailArtikel = () => {
   const articleDetails = useSelector((state) => state.getBlogDetails);
   const articleRelated = useSelector((state) => state.getBlogsRelated);
   const { blog, loading, error } = articleDetails;
-
+  console.log(blog);
   useEffect(() => {
     dispatch(getArticleDetail(id));
-    dispatch(getArtikelRelated());
+    console.log(blog.data.slug);
+    if (blog.data.slug) {
+      dispatch(getArtikelRelated(blog.data.slug));
+    }
   }, [dispatch, id]);
-
-  console.log(blog)
 
   return (
     <main>
       <section>
         <div className="body-artikel">
           <Row className="row-cols-1 row-cols-lg-2 row-cols-xl-2">
-            {loading || loading === undefined? (
+            {loading || loading === undefined ? (
               <h2>Loading...</h2>
             ) : error ? (
               <h2>{error}</h2>
@@ -40,7 +42,7 @@ const DetailArtikel = () => {
                       {console.log(blog.data)}
                       <Card.Body>
                         <h2 className="title-card-main">{blog.data.title}</h2>
-                        <Card.Text className="title-card-main">{blog.data.body}</Card.Text>
+                        <Card.Text className="title-card-main">{parse(blog.data.body)}</Card.Text>
                       </Card.Body>
                     </Card>
                   </div>
@@ -56,7 +58,7 @@ const DetailArtikel = () => {
               ) : (
                 <div className="style-artikel-terkait">
                   <h3>Artikel Terkait</h3>
-                  {articleRelated.blogs &&
+                  {/* {articleRelated.blogs &&
                     articleRelated.blogs.map((items, index) => {
                       return (
                         <Card className="Card-Detail" key={index}>
@@ -66,7 +68,7 @@ const DetailArtikel = () => {
                           </Card.Body>
                         </Card>
                       );
-                    })}
+                    })} */}
                 </div>
               )}
             </Col>

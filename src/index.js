@@ -4,12 +4,15 @@ import './index.css';
 import Home from './Component/Home/Home';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import reducers from './redux/reducers';
+import axios from 'axios';
 
 const middleware = [thunk];
 //agar cart item yang sudah dipilih tidak hilang
@@ -22,6 +25,8 @@ const INITIAL_STATE = {
 };
 const rootElement = document.getElementById('root');
 const store = createStore(reducers, INITIAL_STATE, composeWithDevTools(applyMiddleware(...middleware)));
+
+axios.defaults.headers.post['Accept'] = 'application/json';
 
 ReactDOM.render(
   <Provider store={store}>

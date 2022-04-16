@@ -51,7 +51,6 @@ const CardPesanan = (props) => {
               ? error.response.data.message
               : error.message,
         }));
-        // console.(err)
       });
   };
 
@@ -59,11 +58,11 @@ const CardPesanan = (props) => {
     getPesanan();
   }, []);
 
-  console.log('pesanan =>>',pesanan)
 
   return (
     <>
       {pesanan.loading ? (
+        <center>
         <div className="loading">
           <Spinner
             animation="border"
@@ -74,6 +73,7 @@ const CardPesanan = (props) => {
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
+        </center>
       ) : pesanan.err ? (
         <div class="alert alert-danger" role="alert">
           {pesanan.err}{" "}

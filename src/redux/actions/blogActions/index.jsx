@@ -12,10 +12,12 @@ export const GET_BLOGS_RELATED_REQUEST = 'GET_BLOGS_RELATED_REQUEST';
 export const GET_BLOGS_RELATED_SUCCESS = 'GET_BLOGS_RELATED_SUCCESS';
 export const GET_BLOGS_RELATED_FAIL = 'GET_BLOGS_RELATED_FAIL';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export const getArticles = () => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOGS_REQUEST });
-    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/read-all-article`);
+    const { data } = await axios.get(`${API_URL}/api/read-all-article`);
     dispatch({
       type: GET_BLOGS_SUCCESS,
       payload: data,
@@ -31,7 +33,7 @@ export const getArticles = () => async (dispatch) => {
 export const getArticleDetail = (id) => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOGS_DETAILS_REQUEST });
-    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/read-article-by-slug/${id}`);
+    const { data } = await axios.get(`${API_URL}/api/read-article/${id}`);
     dispatch({
       type: GET_BLOGS_DETAILS_SUCCESS,
       payload: data,
@@ -49,12 +51,13 @@ export const removeBlogsDetails = () => (dispatch) => {
   });
 };
 
-export const getArtikelRelated = () => async (dispatch) => {
+export const getArtikelRelated = (slug) => async (dispatch) => {
   try {
     dispatch({
       type: GET_BLOGS_RELATED_REQUEST,
     });
-    const { data } = await axios.get(`http://localhost:3001/blogs?_limit=3`);
+    const { data } = await axios.get(`${API_URL}/api/related-articles/${slug}`);
+    console.log(data);
     dispatch({
       type: GET_BLOGS_RELATED_SUCCESS,
       payload: data,

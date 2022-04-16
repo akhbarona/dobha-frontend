@@ -96,6 +96,10 @@
   margin-right: 15px;
   text-decoration: none;
 }
+
+.read-more-size .fa-solid.fa-calendar {
+  font-family: 'Font Awesome 5 Free' !important;
+}
 .fa-calendar:before {
   margin-right: 10px;
 }
@@ -108,16 +112,16 @@
 .fa-user:before {
   margin-right: 5px;
 }
-.blog-card .description .meta-tag a.read-more-size.x-eyes:after {
+/* .blog-card .description .meta-tag a.read-more-size.x-eyes:after {
   content: 'x views';
-}
+} */
 .blog-card p {
   position: relative;
   margin: 10px 0 0;
 }
-.text-article p {
+/* .text-article p {
   padding-left: 15px;
-}
+} */
 
 @media (min-width: 640px) {
   .blog-card {

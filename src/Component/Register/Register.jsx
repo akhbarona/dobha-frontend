@@ -1,11 +1,21 @@
 import { Row, Col, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FormInput from './FormInput';
 import AuthService from '../service/auth.service';
 import './Register.css';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { createNewUser } from '../../redux/actions/authActions';
+
 const Register = () => {
   const [showPassword, SetshowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const AddUser = useSelector((state) => state.authUser);
+  const { isSuccess } = AddUser;
   const [values, setValues] = useState({
     name: '',
     username: '',
@@ -15,6 +25,15 @@ const Register = () => {
     // confirmpassword: '',
   });
   const navigate = useNavigate();
+  const [getUser] = useState(JSON.parse(sessionStorage.getItem('user')));
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/login');
+    }
+    if (getUser) {
+      navigate('/');
+    }
+  }, [isSuccess, getUser]);
 
   const inputs = [
     {
@@ -22,9 +41,9 @@ const Register = () => {
       name: 'name',
       type: 'text',
       placeholder: 'Nama',
-      errorMessage: 'Nama harus terdiri dari 3-25 karakter dan tidak boleh menyertakan karakter khusus apa pun!',
+      errorMessage: 'Nama harus terdiri dari 3-25 huruf kombinasi abjad besar dan kecil',
       label: 'Nama',
-      pattern: '^[A-Za-z0-9]{3,25}$',
+      pattern: '^[A-Za-z]{3,25}$',
       required: true,
     },
     {
@@ -32,26 +51,26 @@ const Register = () => {
       name: 'username',
       type: 'text',
       placeholder: 'Username',
-      errorMessage: 'Nama pengguna harus terdiri dari 3-16 karakter dan tidak boleh menyertakan karakter khusus apa pun!',
+      errorMessage: 'Username harus terdiri dari 3-25 karakter, huruf pertama abjad kombinasi angka atau garis bawah',
       label: 'Username',
-      pattern: '^[A-Za-z0-9]{3,16}$',
+      pattern: '^[A-Za-z][A-Za-z0-9_]{2,25}$',
       required: true,
     },
     {
       id: 3,
       name: 'email',
-      type: 'text',
-      placeholder: 'Email',
-      errorMessage: 'Harus Menggunakan Email Yang Benar!',
-      label: 'Email',
+      type: 'email',
+      placeholder: 'E-mail',
+      errorMessage: 'E-mail harus menggunakan format yang valid',
+      label: 'E-mail',
       required: true,
     },
     {
       id: 4,
       name: 'phone_number',
-      type: 'text',
-      placeholder: 'Nomor Phone',
-      errorMessage: 'Isi nomor handphone minimal 10-12 karakter angka',
+      type: 'tel',
+      placeholder: 'Nomor Handphone',
+      errorMessage: 'Nomor handphone minimal 10-12 karakter angka',
       label: 'Nomor Handphone',
       pattern: '^[0-9]{10,12}$',
       required: true,
@@ -60,11 +79,11 @@ const Register = () => {
     {
       id: 5,
       name: 'password',
-      type: 'password',
+      type: `${showPassword ? 'text' : 'password'}`,
       placeholder: 'Password',
-      errorMessage: 'Kata sandi harus 8-20 karakter dan menyertakan setidaknya 1 huruf, 1 angka, dan 1 karakter khusus!',
+      errorMessage: 'Kata sandi wajib 8-20 karakter dengan menyertakan setidaknya 1 huruf, 1 angka, dan 1 karakter khusus!',
       label: 'Password',
-      // pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
       required: true,
       autoComplete: 'current-password',
     },
@@ -80,33 +99,24 @@ const Register = () => {
     //   autoComplete: 'current-password',
     // },
   ];
-  // console.log(typeof password);
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(values);
-    try {
-      await AuthService.signup(values.name, values.username, values.email, values.phone_number, values.password).then(
-        (response) => {
-          console.log(response);
-          // check for token and user already exists with 200
-          // console.log('Sign up successfully', response);
-          navigate('/');
-          window.location.reload();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (err) {
-      console.log(err.response.data);
-    }
-    // console.log(values.password);
+
+    const data = {
+      name: values.name,
+      username: values.username,
+      email: values.email,
+      phone_number: values.phone_number,
+      password: values.password,
+    };
+
+    dispatch(createNewUser(data));
   };
-  // console.log(values.confirmpassword);
+
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-  // console.log(values);
 
   return (
     <>
@@ -119,28 +129,29 @@ const Register = () => {
           </div>
         </Col>
         <Col md={7}>
-          <div className="register-wrapper pt-5">
-            <Row className="g-3 row-cols-1">
+          <div className="register-wrapper ">
+            <Row className="g-3 row-cols-1 pt-5 w-100">
               <Col className="m-auto px-4">
-                <Link className="back-wrapper " to="/login">
-                  <h4 className="back-to p-2">
-                    <i className="fa-solid fa-chevron-left"></i>
-                    &ensp; Kembali
-                  </h4>
+                <Link className="back-wrapper" to="/login">
+                  <h4 className="back-to p-2">Kembali</h4>
                 </Link>
               </Col>
+
               <Col className="mt-0">
-                <div className="input-wrapper">
-                  <div className="container-form w-100 p-3">
-                    <Form onSubmit={handleSubmit}>
-                      {inputs.map((input) => (
-                        <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChange} />
-                      ))}
-                      <div>
-                        <button className="Button-Login-Register">Submit</button>
-                      </div>
-                    </Form>
-                  </div>
+                <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss={false} draggable={false} pauseOnHover />
+
+                <div className="container-form w-100 p-3 d-flex justify-content-center">
+                  <Form onSubmit={handleSubmit} className="w-100">
+                    {inputs.map((input) => (
+                      <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChange} showPassword={showPassword} SetshowPassword={SetshowPassword} />
+                    ))}
+
+                    <div className="btn-readmore">
+                      <button type="submit" className="btn-item-readmore text-decoration-none">
+                        BUAT AKUN
+                      </button>
+                    </div>
+                  </Form>
                 </div>
               </Col>
             </Row>

@@ -1,23 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Fredoka+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Fredoka+One&family=Quicksand:wght@700&display=swap');
-
 .left-col {
-  /* height: 100% !important;
-  display: flex;
-  margin: auto; */
   background-color: rgba(255, 255, 255, 0.109);
-  /* border-right: 1px solid rgba(255, 255, 255, 0.411);
-  border-radius: 0px 0px 1000px 0px; */
 }
 .login-wrapper {
   display: flex;
   justify-content: center;
   height: 100%;
 }
-/* .right-col {
-  display: flex;
-  justify-content: center;
-} */
+
 @media only screen and (min-width: 769px) {
   .body-login {
     height: 100vh;
@@ -29,14 +18,9 @@
     overflow: scroll;
   }
 }
-/* .main-register {
-  margin-left: 10px;
-  margin-right: 10px;
-  padding-left: 10px;
-} */
+
 .login-wrapper a.back-wrapper {
   text-decoration: none;
-  /* margin: auto; */
   display: contents;
 }
 .teks-Register {
@@ -83,10 +67,13 @@
   margin-top: 30px;
   font-weight: 600;
 }
-.Button-Login {
-  background-color: rgb(182, 112, 0) !important;
-  width: 120px;
-  border-radius: 10px !important;
+.input-text label {
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: rgb(255, 247, 247);
+}
+.icon-fa {
+  font-family: 'Font Awesome 5 Free' !important;
 }
 .Button-show-password {
   background-color: transparent;
@@ -103,47 +90,27 @@
 .text-password {
   margin-left: 20px;
 }
-.fa-solid,
-.fas {
-  font-family: 'Font Awesome 6 Free' !important;
+.login-wrapper a.back-wrapper::before {
+  content: '\f060';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 600;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: #ff9c06;
 }
 .input-res {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  font: 15px/1 'Open Sans', sans-serif;
-  color: #333;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 100%;
-  max-width: 500px;
-  background-color: rgb(190, 191, 255);
   border: none;
   padding: 10px 11px 11px 11px;
-  border-radius: 3px;
-  box-shadow: none;
-  outline: none;
-  margin: 0;
-  box-sizing: border-box;
+  min-width: 100%;
   height: 50px;
-  font-weight: 600;
   border-radius: 10px;
-}
-.fa-chevron-left {
-  font-size: 25px;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
-.fa-solid {
-  color: rgb(182, 112, 0);
-}
-
-.Button-Login-Register {
-  margin-top: 30px;
-  width: 120px;
-  border-radius: 10px;
-  height: 54px;
-  background-color: rgb(182, 112, 0);
-}
-input.from-control.input-res {
+.login-wrapper .btn-daftar {
+  font-size: 1.2rem;
   font-weight: 600;
+  text-decoration: none;
+  color: #ff9c06;
 }
