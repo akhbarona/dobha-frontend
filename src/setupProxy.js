@@ -13,13 +13,7 @@ module.exports = (app) => {
       changeOrigin: true,
     })
   );
-  app.use(createProxyMiddleware("/api", {
+  app.use(createProxyMiddleware('/api', {
   target: 'https://dobha.herokuapp.com',
   changeOrigin: true, }));
-  // app.use(
-  //   createProxyMiddleware('/api/auth/user/update/test', {
-  //     target: 'https://dobha.000webhostapp.com',
-  //     changeOrigin: true,
-  //   })
-  // );
 };

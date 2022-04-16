@@ -146,13 +146,13 @@ const provinsi = {
 };
 
 const Alamat = (props) => {
-  const [prov, setProv] = useState("");
-  const [idKota, setIdKota] = useState("");
+  const [prov, setProv] = useState('');
+  const [idKota, setIdKota] = useState('');
   const [dataKota, setDataKota] = useState([]);
-  const [kabkota, setKabKota] = useState("");
-  const [alamat, setAlamat] = useState("");
+  const [kabkota, setKabKota] = useState('');
+  const [alamat, setAlamat] = useState('')
   const [loading , setLoading] = useState(false);
-
+console.log(props.dataUser)
 
   const handleChange = (e) => {
     setProv(e.target.value);
@@ -168,9 +168,10 @@ const Alamat = (props) => {
 
   const getDataKota = async () => {
     const hasil = provinsi.provinsi.filter((item) => item['province'] === prov);
+    // console.log(hasil[0].province_id)
     if (hasil[0]?.province_id) {
       const dataSend = { id_prov: hasil[0]?.province_id };
-      const getDataKota1 = await fetch(`https://apiongkir.herokuapp.com/api/kota`, {
+      const getDataKota1 = await fetch(`http://localhost:3002/api/kota`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -189,32 +190,43 @@ const Alamat = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(!alamat || ! prov || ! idKota || ! kabkota){
+      Swal.fire({
+        title: 'Form Harus Terisi Semua',
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        background: '#fff url(/images/trees.png)',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/nyan-cat.gif")
+          left top
+          no-repeat
+        `
+      })
+      return;
+    }
     setLoading(true)
     const data = {
-      name: props.dataUser.name,
-      username: props.dataUser.username,
-      email: props.dataUser.email,
-      password: "12345678",
-      phone_number: props.dataUser.phone_number,
-      alamat: alamat ? alamat : props.dataUser.alamat,
-      provinsi: prov ? prov : props.dataUser.provinsi,
-      kabupaten: kabkota ? kabkota : props.dataUser.kabupaten,
-      id_kabupaten: idKota ? idKota : props.dataUser.id_kabupaten,
+      alamat: alamat ,
+      provinsi: prov ,
+      kabupaten: kabkota ,
+      id_kabupaten: parseInt(idKota),
     };
-    // console.log(data)
-
+     
     axios
-      .post(`/api/auth/user/update/${props.dataUser.username}`, data, {
+      .post(`https://dobha.herokuapp.com/api/auth/user/update-alamat/${props.dataUser.username}`, data, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: authHeader().Authorization,
+           Authorization: authHeader().Authorization,
         },
       })
       .then((data) => {
+        // console.log(data)
        if(data.status === 200){
         setLoading(false)
         Swal.fire({
-          title: 'Update Berhasil Silahlkan Login Kembali',
+          title: 'Update Berhasil',
           width: 600,
           padding: '3em',
           color: '#716add',
@@ -225,9 +237,6 @@ const Alamat = (props) => {
             left top
             no-repeat
           `
-        }).then(() => {
-          window.location.reload()
-          sessionStorage.clear();
         })
       
        }else{
@@ -247,10 +256,11 @@ const Alamat = (props) => {
         })
        }
       })
-      .catch((err) => {
+      .catch((error) => {
+        // console.log(error.response && error.response.data.message ? error.response.data.message : error.message)
         setLoading(false)
         Swal.fire({
-          title: 'Update Gagal',
+          title: `${error.response && error.response.data.message ? error.response.data.message : error.message}`,
           width: 600,
           padding: '3em',
           color: '#716add',
@@ -264,18 +274,15 @@ const Alamat = (props) => {
         })
       });
 
-    // console.log(data);
   };
-
-  // console.log(authHeader())
 
   return (
     <>
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col lg={6}>
+          <Col lg={12}>
             <Form.Group className="mb-1">
-              <Form.Label>Provinsi</Form.Label>
+              <Form.Label style={{color:'black',fontSize:14,fontWeight:'bold'}}>Provinsi</Form.Label>
               <Form.Select
                 defaultValue={props.dataUser.provinsi}
                 onChange={(e) => handleChange(e)}
@@ -292,12 +299,12 @@ const Alamat = (props) => {
             </Form.Group>
           </Col>
 
-          <Col lg={6}>
+          <Col lg={12}>
             {dataKota.length > 0 ? (
               <Form.Group className="mb-1">
-                <Form.Label>Kota</Form.Label>
+                <Form.Label style={{color:'black',fontSize:14,fontWeight:'bold'}}>Kota</Form.Label>
                 <Form.Select
-                  defaultValue={props.dataUser.kabupaten}
+                  defaultValue={`${props.dataUser.kabupaten}-${props.dataUser.id_kabupaten}`}
                   onChange={(e) => handleChangeKota(e)}
                 >
                   <option value="">Pilih Kota</option>
@@ -319,7 +326,7 @@ const Alamat = (props) => {
           </Col>
         </Row>
         <Form.Group className="mb-1" controlId="exampleForm.ControlTextarea1">
-          <Form.Label>Example textarea</Form.Label>
+          <Form.Label style={{color:'black',fontSize:14,fontWeight:'bold'}}>Alamat Detail</Form.Label>
           <Form.Control
             defaultValue={props.dataUser.alamat}
             onChange={(e) => setAlamat(e.target.value)}

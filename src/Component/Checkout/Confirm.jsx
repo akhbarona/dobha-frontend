@@ -5,7 +5,6 @@ const Confirm = (props) => {
     <div className="popup">
       <div className="popup-inner">
         <i className="fa-solid fa-arrow-left close-btn" onClick={() => props.setTrigger(false)}></i>
-
         {props.children}
       </div>
     </div>

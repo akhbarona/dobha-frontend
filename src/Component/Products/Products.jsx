@@ -51,9 +51,7 @@ const Products = () => {
 
   return (
     <main>
-      {loading || loading === undefined ? (
-        <p>loading</p>
-      ) : (
+     
         <section>
           <div className="products-container">
             <Container>
@@ -74,14 +72,16 @@ const Products = () => {
             </Container>
             <div className="products-wrapper">
               <Container>
-                {loading ? (
+                {loading  || loading === undefined ? (
                   <div className="loading">
                     <Spinner animation="border" variant="warning" role="status" className="m-auto">
                       <span className="visually-hidden">Loading...</span>
                     </Spinner>
                   </div>
                 ) : error ? (
-                  { error }
+                  <div class="alert alert-danger" role="alert">
+                  {error}{" "}
+                  </div>
                 ) : (
                   <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
                     {products.data.map((item, index) => {
@@ -112,7 +112,6 @@ const Products = () => {
             </div>
           </div>
         </section>
-      )}
     </main>
   );
 };
