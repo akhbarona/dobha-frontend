@@ -215,7 +215,7 @@ console.log(props.dataUser)
     };
      
     axios
-      .post(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/auth/user/update-alamat/${props.dataUser.username}`, data, {
+      .post(`${process.env.REACT_APP_API_URL}/api/auth/user/update-alamat/${props.dataUser.username}`, data, {
         headers: {
           "Content-Type": "application/json",
            Authorization: authHeader().Authorization,
