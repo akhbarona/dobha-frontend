@@ -15,15 +15,14 @@ const Checkout = () => {
   useEffect(() => {
     try {
       const user = authService.getCurrentUser();
-      dispatch(listAddress(user.user.id));
+      dispatch(listAddress(user.id));
       if (!user) {
         navigate("/login");
       }
     } catch (er) {}
   }, [dispatch]);
 
-  console.log("data checout", loading);
-
+  // console.log("data checout", address);
   return (
     <>
       {loading ? (
