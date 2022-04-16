@@ -171,7 +171,7 @@ console.log(props.dataUser)
     // console.log(hasil[0].province_id)
     if (hasil[0]?.province_id) {
       const dataSend = { id_prov: hasil[0]?.province_id };
-      const getDataKota1 = await fetch(`http://localhost:3002/api/kota`, {
+      const getDataKota1 = await fetch(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/kota`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -215,7 +215,7 @@ console.log(props.dataUser)
     };
      
     axios
-      .post(`https://dobha.herokuapp.com/api/auth/user/update-alamat/${props.dataUser.username}`, data, {
+      .post(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/auth/user/update-alamat/${props.dataUser.username}`, data, {
         headers: {
           "Content-Type": "application/json",
            Authorization: authHeader().Authorization,

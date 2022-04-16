@@ -24,7 +24,7 @@ const CardPesanan = (props) => {
     }));
     // https://apiongkir.herokuapp.com
     fetch(
-      `http://localhost:3002/api/pesanan/${props.dataUser.email}`,
+      `${process.env.REACT_APP_API_URL_TRANSAKSI}/api/pesanan/${props.dataUser.email}`,
       {
         method: "GET",
         headers: {

@@ -189,7 +189,7 @@ const CheckoutSUb = (props) => {
         weight: berat,
       };
       // https://apiongkir.herokuapp.com${process.env.REACT_APP_API_URL_TRANSAKSI}
-      const getDataKota1 = await fetch(`http://localhost:3002/api/ongkir`, {
+      const getDataKota1 = await fetch(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/ongkir`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -307,7 +307,7 @@ const CheckoutSUb = (props) => {
         };
         // https://apiongkir.herokuapp.com
         const response = await axios.post(
-          `http://localhost:3002/api/transaksi`,
+          `${process.env.REACT_APP_API_URL_TRANSAKSI}/api/transaksi`,
           formData,
           config
         );
