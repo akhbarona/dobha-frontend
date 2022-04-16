@@ -2,15 +2,12 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Container, Col, Row, InputGroup, Card, Spinner, FormControl } from 'react-bootstrap';
 import { useState, useEffect, useRef, memo } from 'react';
 import './Detail.css';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductDetails, getMoreProducts } from '../../../redux/actions/ProductActions';
 import { addToCart } from '../../../redux/actions/cartActions';
-
 import Swal from 'sweetalert2';
 // import axios from 'axios';
 import Comments from './Comments';
-
 import AuthService from '../../service/auth.service';
 
 const Detail = () => {
@@ -26,8 +23,8 @@ const Detail = () => {
   const navigate = useNavigate();
   const myRef = useRef(null);
 
-  const { user: currentUser } = AuthService.getCurrentUser() ? AuthService.getCurrentUser() : { user: null };
-  console.log(currentUser);
+  const currentUser  = AuthService.getCurrentUser() ? AuthService.getCurrentUser() : null;
+  // console.log('currentUser' , currentUser.id);
   useEffect(() => {
     // if (product && id !== product.id) {
     dispatch(getProductDetails(id));
