@@ -44,7 +44,9 @@ export const Blogs = () => {
                 </Spinner>
               </div>
             ) : error ? (
-              <h2>{error}</h2>
+              <div class="alert alert-danger" role="alert">
+              {error}{" "}
+              </div>
             ) : (
               blogs &&
               blogs.data.map((item, index) => {
