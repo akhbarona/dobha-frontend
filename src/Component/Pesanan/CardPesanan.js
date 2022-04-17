@@ -84,13 +84,12 @@ const CardPesanan = (props) => {
           <Card.Body style={{ overflowX: "scroll" }}>
             {pesanan.data.length > 0 ? pesanan.data.map((item, index) => {
               return (
-                <Col lg={6} key={index} className="mb-3">
+                <Col lg={12} key={index} className="mb-3">
                   <Card>
                     <Row>
                         <>
                           <Card.Img
-                            className="col-lg-3"
-                            style={{ width: "25%" }}
+                            className="col-lg-4"
                             variant="left"
                             src={
                               item.gambar_produk
@@ -99,13 +98,13 @@ const CardPesanan = (props) => {
                             }
                           />
 
-                          <Card.Body className="col-lg-9">
+                          <Card.Body className="col-lg-8">
                             <Card.Title>{item.nama_produk}</Card.Title>
                           
                             <table>
                               <tr>
                                 <th style={{ width: "60%" }}>Harga total</th>
-                                <th>: {formatRupiah(item.tagihan_total)}</th>
+                                <th style={{fontWeight:'bold'}}>: {formatRupiah(item.tagihan_total)}</th>
                               </tr>
                               <tr>
                                 <td>Tgl Pesanan</td>
@@ -132,7 +131,7 @@ const CardPesanan = (props) => {
                               <tr>
                                 <td>Status</td>
                                 <td>
-                                  : {item.status ? "Dikirin" : "Belum dikirim"}
+                                  : {item.status ? <span style={{fontWeight:'bold',color:'green'}}>Dikirim</span> : <span style={{fontWeight:'bold',color:'red'}}>Belum Dikirim</span>}
                                 </td>
                               </tr>
 
@@ -141,6 +140,19 @@ const CardPesanan = (props) => {
                                 <td>: {item.no_resi ? item.no_resi : "-"}</td>
                               </tr>
                             </table>
+                            {
+                              item.status ?
+                            <>
+                            <button className="btn btn-success mt-3">Review</button>
+                            <a href={`https://cekresi.com/tracking/cek-resi-jne.php?noresi=${item.no_resi ? item.no_resi : "-"}`}  target="_blank"className="btn btn-warning mt-3" style={{marginLeft: 5}}>Cek Resi</a>
+                            </>:
+                            <>
+                            <button className="btn btn-success mt-3" disabled>Review</button>
+                            <button className="btn btn-warning mt-3" style={{marginLeft: 5}} disabled>Cek Resi</button>
+                            </>
+                            }
+                            {/* <button className="btn btn-success mt-3">Review</button>
+                            <a href={`https://cekresi.com/tracking/cek-resi-jne.php?noresi=${item.no_resi ? item.no_resi : "-"}`}  target="_blank"className="btn btn-warning mt-3" style={{marginLeft: 5}}>Cek Resi</a> */}
                           </Card.Body>
                         </>
                     </Row>
