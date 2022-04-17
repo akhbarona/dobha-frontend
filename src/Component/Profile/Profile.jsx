@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  Button,
-  Card,
-  Col,
   Container,
   Row,
   Tab,
@@ -15,12 +12,14 @@ import AuthService from "../service/auth.service";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getAddress as listAddress } from "../../redux/actions/addressActions";
+import Biodata from "./Biodata";
 
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const getAdress = useSelector((state) => state.getAdress);
   const { address , loading,error } = getAdress.address;
+
 
   useEffect(() => {
     try {
@@ -34,53 +33,7 @@ const Profile = () => {
     }
   }, [dispatch]);
 
-  const Biodata = () => {
-    return (
-      <Card className="border-0">
-        <Card.Body className="p-0 ">
-          <Row xl={2} lg={2} md={2} sm={12}>
-            <Col
-              xl={4}
-              lg={4}
-              className="d-flex flex-column justify-content-center "
-            >
-              <i className="fa-solid fa-user fa-10x m-auto icon-profile"></i>
-              <span className="p-2  d-flex  w-100">
-                <Button variant="primary" className="m-auto w-50">
-                  <i class="fas fa-edit"></i>Ubah Foto
-                </Button>
-              </span>
-            </Col>
-
-            <Col xs={12} md={8}>
-              <table className="h-50 isi-content">
-                <tr>
-                  <td>Nama</td>
-                  <td>: {address?.data?.username}</td>
-                </tr>
-                <tr>
-                  <td>Email</td>
-
-                  <td>: {address?.data?.email}</td>
-                </tr>
-                <tr>
-                  <td>Nomor Telpon</td>
-                  <td>: {address?.data?.phone_number}</td>
-                </tr>
-              </table>
-              <Row className="p-2">
-                <Button variant="primary" className="w-25">
-                  <i class="fas fa-edit"></i>Edit
-                </Button>
-              </Row>
-            </Col>
-          </Row>
-          {/* </Table> */}
-        </Card.Body>
-      </Card>
-    );
-  };
-
+  
   // const handleUpdateProfile = () => {
 
   //   const dataSend = {
@@ -147,7 +100,7 @@ const Profile = () => {
                 onSelect={handleSelect}
               >
                 <Tab eventKey={1} title="Biodata Diri">
-                  <Biodata />
+                  <Biodata address={address.data} />
                 </Tab>
                 <Tab eventKey={2} title="Alamat">
                   <Alamat dataUser={address.data} />
