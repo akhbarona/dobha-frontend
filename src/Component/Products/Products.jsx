@@ -19,6 +19,14 @@ const Products = () => {
     dispatch(listProducts());
   }, [dispatch]);
 
+  function handleLength(value, lengths) {
+    if (value.length < lengths) {
+      return value;
+    } else {
+      return value.substring(0, lengths).substring(0, value.substring(0, lengths).lastIndexOf(' ')) + '...';
+    }
+  }
+
   const countRate = (rate) => {
     const starsTotal = 5;
     const starPercentage = (rate / starsTotal) * 100;
@@ -67,12 +75,12 @@ const Products = () => {
                     {products.data.map((item, index) => {
                       return (
                         <Col key={index}>
-                          <Card className="card-center">
+                          <Card className="card-center h-100">
                             {/* {Products && <img src={'/' + Products.[0]} alt="" />} */}
-                            <Card.Img variant="top" src={'https://pasaminang.com/wp-content/uploads/2021/01/Screenshot_2020-12-30-12-53-35-12.jpg'} />
+                            <Card.Img variant="top" className="h-100" src={'https://pasaminang.com/wp-content/uploads/2021/01/Screenshot_2020-12-30-12-53-35-12.jpg'} />
                             <Card.Body>
                               <Link className="link-title" to={`/products/${item.slug_produk}`}>
-                                <Card.Title>{item.nama_produk}</Card.Title>
+                                <Card.Title>{handleLength(item.nama_produk, 20)}</Card.Title>
                               </Link>
                               <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
                               <div className={item.slug}>
