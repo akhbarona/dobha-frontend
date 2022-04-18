@@ -4,6 +4,8 @@ import { getBlogsReducers, getBlogsDetailsReducers, getBlogsRelatedReducers } fr
 import { cartReducers } from './cartReducers';
 import { getProductsReducers, getProductDetailsReducers, getMoreProductsReducers } from './productReducers';
 import { getReviewReducers } from './reviewsReducers';
+import { getAddressReducers } from './address';
+
 export default combineReducers({
   cart: cartReducers,
   getProducts: getProductsReducers,
@@ -13,5 +15,6 @@ export default combineReducers({
   getBlogDetails: getBlogsDetailsReducers,
   getBlogsRelated: getBlogsRelatedReducers,
   getReviews: getReviewReducers,
+  getAdress: getAddressReducers,
   authUser: authUserReducers,
 });
