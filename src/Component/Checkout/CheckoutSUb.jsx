@@ -1,63 +1,55 @@
-import { useEffect, useState, memo } from "react";
-import "./Checkout.css";
+import { useEffect, useState, memo } from 'react';
+import './Checkout.css';
 // import Confirm from './Confirm';
-import axios from "axios";
-import {
-  Col,
-  Row,
-  Form,
-  Container,
-  Button,
-  Modal,
-  Spinner,
-} from "react-bootstrap";
-import Swal from "sweetalert2";
-import { useDispatch } from "react-redux";
-import { resetCart } from "../../redux/actions/cartActions";
-import AuthService from "../service/auth.service";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import axios from 'axios';
+import { Col, Row, Form, Container, Button, Modal, Spinner } from 'react-bootstrap';
+import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { resetCart } from '../../redux/actions/cartActions';
+import AuthService from '../service/auth.service';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const CheckoutSUb = (props) => {
-  console.log("props.dataUser ==>", props.dataUser.username);
+  console.log('props.dataUser ==>', props.dataUser.username);
   const location = useLocation();
   const [ongkir, setOngkir] = useState([]);
   const [hargaOngkir, setHargaOngkir] = useState(0);
   const [estimasiOngkir, setEstimasiOngkir] = useState(0);
   const [serviceOngkir, setServiceOngkir] = useState(0);
   const [dataUser, setUser] = useState([]);
-  const [buktiBayar, setBuktiBayar] = useState("");
+  const [buktiBayar, setBuktiBayar] = useState('');
   const [loading, setLoading] = useState(false);
   const methodPayment = [
-    { method: "gopay", image: "logo-gopay.png" },
-    { method: "dana", image: "logo-dana.png" },
-    { method: "bank bca", image: "logo-bca.png" },
+    { method: 'gopay', image: 'logo-gopay.png' },
+    { method: 'dana', image: 'logo-dana.png' },
+    { method: 'bank bca', image: 'logo-bca.png' },
   ];
 
   const ketikaModalKebuka = [
     {
-      method: "gopay",
-      title: "Dobha Parfume",
-      nomor: "081234567890",
-      image_file_data: "logo-gopay.png",
+      method: 'gopay',
+      title: 'Dobha Parfume',
+      nomor: '081234567890',
+      image_file_data: 'logo-gopay.png',
       transaksi: [
         {
           invoice: {
-            id: "BS2022750001",
+            id: 'BS2022750001',
             weight: 2,
             total: 119000,
           },
         },
       ],
-      nama: "Justin",
-      user_id: "7",
-      username: "justin",
+      nama: 'Justin',
+      user_id: '7',
+      username: 'justin',
     },
   ];
   const dispatch = useDispatch();
   const [modalShow, setModalShow] = useState(false);
   const navigate = useNavigate();
   const [Payment, setPayment] = useState(methodPayment);
-  const [GetPayment, setGetPayment] = useState("");
+  const [GetPayment, setGetPayment] = useState('');
   // const [buttonPopup, setButtonPopup] = useState(false);
 
   const getMethodHandler = (e) => {
@@ -67,23 +59,23 @@ const CheckoutSUb = (props) => {
   };
   const handleMethod = (e) => {
     const { name, checked } = e.target;
-    if (GetPayment === null || GetPayment === "") {
+    if (GetPayment === null || GetPayment === '') {
       Swal.fire({
-        icon: "warning",
-        title: "Oops...",
-        text: "Silahkan pilih Metode Pembayaran!",
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Silahkan pilih Metode Pembayaran!',
       });
     } else if (hargaOngkir === 0) {
       Swal.fire({
-        icon: "warning",
-        title: "Oops...",
-        text: "Silahkan pilih Metode Pengiriman!",
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Silahkan pilih Metode Pengiriman!',
       });
-    } else if (GetPayment === "gopay") {
+    } else if (GetPayment === 'gopay') {
       dispatch(resetCart());
       setModalShow(true);
-    } else if (GetPayment === "dana") {
-    } else if (GetPayment === "bank bca") {
+    } else if (GetPayment === 'dana') {
+    } else if (GetPayment === 'bank bca') {
       setModalShow(true);
     }
     // let tempMethod = Payment.map((method) => (method.method === name ? { ...method, isChecked: checked } : method));
@@ -92,16 +84,9 @@ const CheckoutSUb = (props) => {
   };
   const metodePembayaran = () => {
     return (
-      <Modal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+      <Modal show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Using Grid in Modal
-          </Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">Using Grid in Modal</Modal.Title>
         </Modal.Header>
         <Modal.Body className="show-grid">
           <Container>
@@ -118,11 +103,7 @@ const CheckoutSUb = (props) => {
                   <p className="pg-price">Total bayar</p>
                 </Col>
                 <Col>
-                  <p className="pg-price">
-                    {formatRupiah(
-                      location.state.totalHarga + Number(hargaOngkir)
-                    )}
-                  </p>
+                  <p className="pg-price">{location.state && formatRupiah(location.state.totalHarga + Number(hargaOngkir))}</p>
                 </Col>
               </Row>
               <div className="note-payment">
@@ -133,26 +114,13 @@ const CheckoutSUb = (props) => {
                 <h6>Silahkan Upload Bukti Pembayaran Anda</h6>
                 <div className="confirm-wrapper">
                   <Form controlId="formFileLg" className="mt-3 mb-3">
-                    <Form.Control
-                      onChange={(e) => setBuktiBayar(e)}
-                      type="file"
-                      size="md"
-                      name="bukti_bayar"
-                    />
+                    <Form.Control onChange={(e) => setBuktiBayar(e)} type="file" size="md" name="bukti_bayar" />
                     {loading ? (
-                      <button
-                        disabled
-                        type="button"
-                        className="mt-3 w-50 btn-buy"
-                      >
+                      <button disabled type="button" className="mt-3 w-50 btn-buy">
                         Loading ...
                       </button>
                     ) : (
-                      <button
-                        onClick={() => handleSubmit()}
-                        type="button"
-                        className="mt-3 w-50 btn-buy"
-                      >
+                      <button onClick={() => handleSubmit()} type="button" className="mt-3 w-50 btn-buy">
                         Submit
                       </button>
                     )}
@@ -190,9 +158,9 @@ const CheckoutSUb = (props) => {
       };
       // https://apiongkir.herokuapp.com${process.env.REACT_APP_API_URL_TRANSAKSI}
       const getDataKota1 = await fetch(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/ongkir`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(dataSend),
       });
@@ -201,17 +169,17 @@ const CheckoutSUb = (props) => {
       setOngkir(hasilDataKota1);
     } catch (err) {
       Swal.fire({
-        title: "Silahkan Lengkapi alamat",
+        title: 'Silahkan Lengkapi alamat',
         showDenyButton: true,
         showCancelButton: false,
-        confirmButtonText: "OK",
+        confirmButtonText: 'OK',
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          navigate("/profile");
+          navigate('/profile');
           window.location.reload();
         } else {
-          navigate("/");
+          navigate('/');
           window.location.reload();
         }
       });
@@ -230,112 +198,102 @@ const CheckoutSUb = (props) => {
     const user = AuthService.getCurrentUser();
     // console.log(user)
     if (!user) {
-      navigate("/login");
+      navigate('/login');
     }
     setUser(user);
   }, []);
 
   const getMetodePengriman = (e) => {
-    const data = e.target.value.split(",");
+    const data = e.target.value.split(',');
     setHargaOngkir(data[0]);
     setEstimasiOngkir(data[1]);
     setServiceOngkir(data[2]);
   };
   const formatRupiah = (money) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
       minimumFractionDigits: 0,
     }).format(money);
   };
 
   const handleSubmit = async () => {
-    if (buktiBayar !== "") {
+    if (buktiBayar !== '') {
       setLoading(true);
       const formData = new FormData();
       if (buktiBayar.target.files[0].size > 1000000) {
         setLoading(false);
         Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Batas Ukruan Gambar 1MB!",
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Batas Ukruan Gambar 1MB!',
         });
         return;
       }
       // handle image extension
-      const extName = buktiBayar.target.files[0].name
-        .split(".")
-        .pop()
-        .toLowerCase();
-      if (extName !== "jpg" && extName !== "jpeg" && extName !== "png") {
+      const extName = buktiBayar.target.files[0].name.split('.').pop().toLowerCase();
+      if (extName !== 'jpg' && extName !== 'jpeg' && extName !== 'png') {
         setLoading(false);
         Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Extensi File Tidak di izinkan!",
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Extensi File Tidak di izinkan!',
         });
         return;
       }
 
-      formData.append("bukti_bayar", buktiBayar.target.files[0]);
-      formData.set("username", props.dataUser.username);
-      formData.set("email", props.dataUser.email);
+      formData.append('bukti_bayar', buktiBayar.target.files[0]);
+      formData.set('username', props.dataUser.username);
+      formData.set('email', props.dataUser.email);
       // formData.set("id_produk", location.state.id);
-      formData.set("provinsi", props.dataUser.provinsi);
-      formData.set("kabupaten", props.dataUser.kabupaten);
-      formData.set("alamat", props.dataUser.alamat);
-      formData.set("ongkir", hargaOngkir);
-      formData.set(
-        "tagihan_total",
-        location.state.totalHarga + Number(hargaOngkir)
-      );
-      formData.set("user_id", props.dataUser.id);
-      formData.set("produk_id", location.state.id);
-      formData.set("estimasi", estimasiOngkir);
-      formData.set("service", serviceOngkir);
-      formData.set("gambar_produk", location.state.imageUrl);
-      formData.set("nama_produk", location.state.name);
-      formData.set("jumlah", location.state.qty);
+      formData.set('provinsi', props.dataUser.provinsi);
+      formData.set('kabupaten', props.dataUser.kabupaten);
+      formData.set('alamat', props.dataUser.alamat);
+      formData.set('ongkir', hargaOngkir);
+      formData.set('tagihan_total', location.state.totalHarga + Number(hargaOngkir));
+      formData.set('user_id', props.dataUser.id);
+      formData.set('produk_id', location.state.id);
+      formData.set('estimasi', estimasiOngkir);
+      formData.set('service', serviceOngkir);
+      formData.set('gambar_produk', location.state.imageUrl);
+      formData.set('nama_produk', location.state.name);
+      formData.set('jumlah', location.state.qty);
       // dataUser.user.id,
 
       try {
         const config = {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
           onUploadProgress: (event) => {},
         };
         // https://apiongkir.herokuapp.com
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_URL_TRANSAKSI}/api/transaksi`,
-          formData,
-          config
-        );
+        const response = await axios.post(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/transaksi`, formData, config);
         if (response.status === 200) {
           setLoading(false);
           Swal.fire({
-            icon: "success",
-            title: "success",
-            text: "Berhasil Membeli Barang",
+            icon: 'success',
+            title: 'success',
+            text: 'Berhasil Membeli Barang',
           }).then(() => {
-            navigate("/pesanan");
+            navigate('/pesanan');
             window.location.reload();
           });
         } else {
           setLoading(false);
           Swal.fire({
-            icon: "error",
-            title: "Oops..",
-            text: "Terjadi Kesalahan Server",
+            icon: 'error',
+            title: 'Oops..',
+            text: 'Terjadi Kesalahan Server',
           });
         }
       } catch (err) {}
     } else {
       setLoading(false);
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Gambar Tidak boleh kosong",
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Gambar Tidak boleh kosong',
       });
     }
   };
@@ -347,12 +305,7 @@ const CheckoutSUb = (props) => {
         {ongkir.length <= 0 ? (
           <center>
             <div className="loading">
-              <Spinner
-                animation="border"
-                variant="warning"
-                role="status"
-                className="m-auto"
-              >
+              <Spinner animation="border" variant="warning" role="status" className="m-auto">
                 <span className="visually-hidden">Loading...</span>
               </Spinner>
             </div>
@@ -380,12 +333,7 @@ const CheckoutSUb = (props) => {
                       onChange={getMethodHandler}
                       label={
                         <>
-                          <img
-                            src={item.image}
-                            width="180"
-                            height="70"
-                            alt="hello"
-                          />
+                          <img src={item.image} width="180" height="70" alt="hello" />
                           {/* <span className="name-method">{item.method}</span> */}
                         </>
                       }
@@ -411,97 +359,85 @@ const CheckoutSUb = (props) => {
                     </div>
                     {ongkir?.rajaongkir?.results[0]?.costs.map((d, i) => {
                       return (
-                          <div
-                            key={i}
-                            className="payment-method mt-2"
-                            style={{ color: "black" }}
-                          >
-                            <Form.Check
-                              inline
-                              name="method-jne"
-                              type="radio"
-                              value={`${d?.cost[0].value},${d?.cost[0].etd},${d?.service}`}
-                              onChange={(e) => getMetodePengriman(e)}
-                              label={
-                                <div style={{ color: "black" }}>
-                                  <table className="table-payment-info">
-                                    <tbody>
-                                      <tr
+                        <div key={i} className="payment-method mt-2" style={{ color: 'black' }}>
+                          <Form.Check
+                            inline
+                            name="method-jne"
+                            type="radio"
+                            value={`${d?.cost[0].value},${d?.cost[0].etd},${d?.service}`}
+                            onChange={(e) => getMetodePengriman(e)}
+                            label={
+                              <div style={{ color: 'black' }}>
+                                <table className="table-payment-info">
+                                  <tbody>
+                                    <tr
+                                      style={{
+                                        height: '30px',
+                                        fontWeight: '500',
+                                      }}
+                                    >
+                                      <th style={{ verticalAlign: 'middle' }}>Ongkos kirim</th>
+                                      <td
                                         style={{
-                                          height: "30px",
-                                          fontWeight: "500",
+                                          verticalAlign: 'middle',
+                                          textAlign: 'end',
                                         }}
                                       >
-                                        <th style={{ verticalAlign: "middle" }}>
-                                          Ongkos kirim
-                                        </th>
-                                        <td
-                                          style={{
-                                            verticalAlign: "middle",
-                                            textAlign: "end",
-                                          }}
-                                        >
-                                          {formatRupiah(d?.cost[0].value)}
-                                        </td>
-                                      </tr>
-                                      <tr
+                                        {formatRupiah(d?.cost[0].value)}
+                                      </td>
+                                    </tr>
+                                    <tr
+                                      style={{
+                                        height: '30px',
+                                        fontWeight: '500',
+                                      }}
+                                    >
+                                      <th style={{ verticalAlign: 'middle' }}>Estimasi Pengiriman</th>
+                                      <td
                                         style={{
-                                          height: "30px",
-                                          fontWeight: "500",
+                                          verticalAlign: 'middle',
+                                          textAlign: 'end',
                                         }}
                                       >
-                                        <th style={{ verticalAlign: "middle" }}>
-                                          Estimasi Pengiriman
-                                        </th>
-                                        <td
-                                          style={{
-                                            verticalAlign: "middle",
-                                            textAlign: "end",
-                                          }}
-                                        >
-                                          {d?.cost[0].etd}
-                                        </td>
-                                      </tr>
-                                      <tr
+                                        {d?.cost[0].etd}
+                                      </td>
+                                    </tr>
+                                    <tr
+                                      style={{
+                                        height: '50px',
+                                      }}
+                                    >
+                                      <th style={{ verticalAlign: 'middle' }}>Service Pengiriman</th>
+                                      <td
                                         style={{
-                                          height: "50px",
+                                          verticalAlign: 'middle',
+                                          textAlign: 'end',
                                         }}
                                       >
-                                        <th style={{ verticalAlign: "middle" }}>
-                                          Service Pengiriman
-                                        </th>
-                                        <td
-                                          style={{
-                                            verticalAlign: "middle",
-                                            textAlign: "end",
-                                          }}
-                                        >
-                                          {d.service}
-                                        </td>
-                                      </tr>
-                                      <tr
+                                        {d.service}
+                                      </td>
+                                    </tr>
+                                    <tr
+                                      style={{
+                                        height: '50px',
+                                      }}
+                                    >
+                                      <th style={{ verticalAlign: 'middle' }}>Berat Produk</th>
+                                      <td
                                         style={{
-                                          height: "50px",
+                                          verticalAlign: 'middle',
+                                          textAlign: 'end',
                                         }}
                                       >
-                                        <th style={{ verticalAlign: "middle" }}>
-                                          Berat Produk
-                                        </th>
-                                        <td
-                                          style={{
-                                            verticalAlign: "middle",
-                                            textAlign: "end",
-                                          }}
-                                        >
-                                          {50 * parseInt(location.state.qty)}gr
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-                              }
-                            />
-                          </div>
+                                        {location.state && 50 * parseInt(location.state.qty)}gr
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            }
+                          />
+                        </div>
                       );
                     })}
                   </Col>
@@ -512,29 +448,25 @@ const CheckoutSUb = (props) => {
                     <div className="payment-info">
                       <table className="table-payment-info">
                         <tbody>
-                          <tr style={{ height: "30px", fontWeight: "500" }}>
-                            <th style={{ verticalAlign: "middle" }}>
-                              Total Harga (1 Produk)
-                            </th>
+                          <tr style={{ height: '30px', fontWeight: '500' }}>
+                            <th style={{ verticalAlign: 'middle' }}>Total Harga (1 Produk)</th>
                             <td
                               style={{
-                                verticalAlign: "middle",
-                                fontWeight: "bold",
-                                textAlign: "end",
+                                verticalAlign: 'middle',
+                                fontWeight: 'bold',
+                                textAlign: 'end',
                               }}
                             >
-                              {formatRupiah(location.state.totalHarga)}
+                              {location.state && formatRupiah(location.state.totalHarga)}
                             </td>
                           </tr>
-                          <tr style={{ height: "30px", fontWeight: "500" }}>
-                            <th style={{ verticalAlign: "middle" }}>
-                              Ongkos kirim
-                            </th>
+                          <tr style={{ height: '30px', fontWeight: '500' }}>
+                            <th style={{ verticalAlign: 'middle' }}>Ongkos kirim</th>
                             <td
                               style={{
-                                verticalAlign: "middle",
-                                fontWeight: "bold",
-                                textAlign: "end",
+                                verticalAlign: 'middle',
+                                fontWeight: 'bold',
+                                textAlign: 'end',
                               }}
                             >
                               {formatRupiah(hargaOngkir)}
@@ -542,23 +474,19 @@ const CheckoutSUb = (props) => {
                           </tr>
                           <tr
                             style={{
-                              height: "50px",
-                              fontWeight: "bold",
-                              borderTop: "1.2px solid #000",
+                              height: '50px',
+                              fontWeight: 'bold',
+                              borderTop: '1.2px solid #000',
                             }}
                           >
-                            <th style={{ verticalAlign: "middle" }}>
-                              Total Tagihan
-                            </th>
+                            <th style={{ verticalAlign: 'middle' }}>Total Tagihan</th>
                             <td
                               style={{
-                                verticalAlign: "middle",
-                                textAlign: "end",
+                                verticalAlign: 'middle',
+                                textAlign: 'end',
                               }}
                             >
-                              {formatRupiah(
-                                location.state.totalHarga + Number(hargaOngkir)
-                              )}
+                              {location.state && formatRupiah(location.state.totalHarga + Number(hargaOngkir))}
                             </td>
                           </tr>
                         </tbody>
@@ -579,33 +507,18 @@ const CheckoutSUb = (props) => {
                           <span>{props.dataUser.phone_number}</span>
                         </li>
                         <li>
-                          <span>
-                            {props.dataUser.provinsi
-                              ? props.dataUser.provinsi
-                              : "alamat belum di seting"}
-                          </span>
+                          <span>{props.dataUser.provinsi ? props.dataUser.provinsi : 'alamat belum di seting'}</span>
                         </li>
                         <li>
-                          <span>
-                            {props.dataUser.kabupaten
-                              ? props.dataUser.kabupaten
-                              : "alamat belum di seting"}
-                          </span>
+                          <span>{props.dataUser.kabupaten ? props.dataUser.kabupaten : 'alamat belum di seting'}</span>
                         </li>
                         <li>
-                          <span>
-                            {props.dataUser.alamat
-                              ? props.dataUser.alamat
-                              : "alamat belum di seting"}
-                          </span>
+                          <span>{props.dataUser.alamat ? props.dataUser.alamat : 'alamat belum di seting'}</span>
                         </li>
                       </ul>
                     </div>
                     <div className="button-beli">
-                      <Link
-                        to="/profile"
-                        className=" btn-buy text-decoration-none"
-                      >
+                      <Link to="/profile" className=" btn-buy text-decoration-none">
                         Ubah Alamat
                       </Link>
                     </div>

@@ -2,7 +2,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import authHeader from '../../../Component/service/auth.header';
-
+import setCookie from '../../../hooks/setCookie';
+import Authservice from '../../../Component/service/auth.service';
 export const ADD_NEW_USER = 'ADD_NEW_USER';
 
 export const LOGIN_USER = 'LOGIN_USER';
@@ -74,9 +75,13 @@ export const loginUser = (data_user) => async (dispatch, getState) => {
   try {
     const { data } = await axios.post(`${API_URL}/api/auth/user/login`, data_user);
     // console.log(data);
-    sessionStorage.setItem('token', JSON.stringify(data.token));
-    sessionStorage.setItem('user', JSON.stringify(data.user));
-    sessionStorage.setItem('expired', JSON.stringify(data.expired_token));
+    // sessionStorage.setItem('token', JSON.stringify(data.token));
+    // sessionStorage.setItem('user', JSON.stringify(data.user));
+    // sessionStorage.setItem('expired', JSON.stringify(data.expired_token));
+    setCookie('token', JSON.stringify(data.token), data.expired_token);
+    setCookie('user', JSON.stringify(data.user), data.expired_token);
+    // setCookie('expired', data.expired_token, data.expired_token);
+    Authservice.runLogoutTimer(dispatch, data.expired_token);
     dispatch({
       type: LOGIN_USER,
     });
@@ -99,7 +104,7 @@ export const logoutUser = () => async (dispatch) => {
     const { data } = await axios.post(`${API_URL}/api/auth/user/logout`, {
       headers: authHeader(),
     });
-
+    // console.log(data);
     dispatch({
       type: LOGOUT_USER,
     });

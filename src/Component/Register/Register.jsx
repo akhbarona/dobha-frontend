@@ -15,7 +15,7 @@ const Register = () => {
   const [showPassword, SetshowPassword] = useState(false);
   const dispatch = useDispatch();
   const AddUser = useSelector((state) => state.authUser);
-  const { isSuccess } = AddUser;
+  const { isRegistrasi } = AddUser;
   const [values, setValues] = useState({
     name: '',
     username: '',
@@ -27,13 +27,13 @@ const Register = () => {
   const navigate = useNavigate();
   const [getUser] = useState(JSON.parse(sessionStorage.getItem('user')));
   useEffect(() => {
-    if (isSuccess) {
+    if (isRegistrasi) {
       navigate('/login');
     }
     if (getUser) {
       navigate('/');
     }
-  }, [isSuccess, getUser]);
+  }, [isRegistrasi, getUser]);
 
   const inputs = [
     {

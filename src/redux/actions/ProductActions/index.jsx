@@ -52,12 +52,12 @@ export const removeProductDetails = () => (dispatch) => {
   });
 };
 
-export const getMoreProducts = () => async (dispatch) => {
+export const getMoreProducts = (category_id) => async (dispatch) => {
   try {
     dispatch({
       type: GET_MORE_PRODUCT_REQUEST,
     });
-    const { data } = await axios.get(`http://localhost:3001/products?_limit=5`);
+    const { data } = await axios.get(`${API_URL}/api/related-products/${category_id}`);
     dispatch({
       type: GET_MORE_PRODUCT_SUCCESS,
       payload: data,

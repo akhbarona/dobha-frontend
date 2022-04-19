@@ -1,5 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 import { ADD_NEW_USER, LOGIN_USER, LOGOUT_USER } from '../../actions/authActions';
 import Swal from 'sweetalert2';
+import removeCookie from '../../../hooks/removeCookie';
 
 const user = {};
 
@@ -9,7 +11,7 @@ export const authUserReducers = (state = user, action) => {
       Swal.fire({ title: 'Terima Kasih Telah Mendaftar!', text: 'E-mail verifikasi telah dikirim silahkan cek e-mail anda', icon: 'success', showConfirmButton: true });
       return {
         ...state,
-        isSuccess: true,
+        isRegistrasi: true,
         users: action.payload,
       };
     case LOGIN_USER:
@@ -19,8 +21,12 @@ export const authUserReducers = (state = user, action) => {
         isSuccess: true,
       };
     case LOGOUT_USER:
-      sessionStorage.clear();
+      // sessionStorage.clear();
+      removeCookie('user');
+      removeCookie('token');
+      // <Navigate to="/login" />;
       Swal.fire({ title: 'Anda Telah Logout!', icon: 'success', showConfirmButton: true });
+
       return {
         isLogout: true,
       };

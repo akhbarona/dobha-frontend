@@ -17,20 +17,26 @@ const Detail = () => {
   const productDetails = useSelector((state) => state.getProductDetails);
   const moreProduct = useSelector((state) => state.getMoreProducts);
   const { product, loading, error } = productDetails;
+  const { products } = moreProduct;
   const [Quantity, setQuantity] = useState(1);
   const [Index, setIndex] = useState(0);
   // const [MoreProducts, setMoreProducts] = useState([]);
   const navigate = useNavigate();
   const myRef = useRef(null);
-
-  const currentUser  = AuthService.getCurrentUser() ? AuthService.getCurrentUser() : null;
+  console.log(product);
+  const currentUser = AuthService.getCurrentUser() ? AuthService.getCurrentUser() : null;
   // console.log('currentUser' , currentUser.id);
   useEffect(() => {
     // if (product && id !== product.id) {
     dispatch(getProductDetails(id));
     // }
-    // dispatch(getMoreProducts());
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (product && product.data) {
+      dispatch(getMoreProducts(product.data.product_category_id));
+    }
+  }, [dispatch, product]);
 
   const handleDecrement = () => {
     if (Quantity > 1) {
@@ -265,17 +271,17 @@ const Detail = () => {
                 <h2 className="text-white">Produk Tidak Temukan</h2>
               ) : (
                 <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
-                  {moreProduct.products &&
-                    moreProduct.products.map((item, index) => {
+                  {moreProduct.products.data &&
+                    moreProduct.products.data.map((item, index) => {
                       return (
                         <Col key={index}>
                           <Card className="card-center">
-                            <Card.Img variant="top" src={'/' + item.image[0]} />
+                            <Card.Img variant="top" src={'/' + item.gambar_produk} />
                             <Card.Body>
-                              <Link className="link-title" to={`/products/${item.id}`}>
+                              <Link className="link-title" to={`/products/${item.slug_produk}`}>
                                 <Card.Title>{item.title}</Card.Title>
                               </Link>
-                              <Card.Text className="price">{formatRupiah(item.price)}</Card.Text>
+                              <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
                               <div className="star-produk">
                                 <div className="stars-outer">
                                   <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>

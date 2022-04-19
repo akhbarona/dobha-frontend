@@ -51,12 +51,12 @@ export const removeBlogsDetails = () => (dispatch) => {
   });
 };
 
-export const getArtikelRelated = (slug) => async (dispatch) => {
+export const getArtikelRelated = (category_id) => async (dispatch) => {
   try {
     dispatch({
       type: GET_BLOGS_RELATED_REQUEST,
     });
-    const { data } = await axios.get(`${API_URL}/api/related-articles/${slug}`);
+    const { data } = await axios.get(`${API_URL}/api/related-articles/${category_id}`);
     console.log(data);
     dispatch({
       type: GET_BLOGS_RELATED_SUCCESS,

@@ -8,6 +8,8 @@ import { loginUser } from '../../redux/actions/authActions';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import getCookie from '../../hooks/getCookie';
+import AuthService from '../service/auth.service';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,7 +20,9 @@ const Login = () => {
   const dispatch = useDispatch();
   const LoginUser = useSelector((state) => state.authUser);
   const { isSuccess } = LoginUser;
-  const [getUser] = useState(JSON.parse(sessionStorage.getItem('user')));
+  // const [getUser] = useState(JSON.parse(sessionStorage.getItem('user')));
+  const user = AuthService.getCurrentUser();
+  const [getUser] = useState(user);
   console.log(getUser);
   useEffect(() => {
     if (isSuccess) {

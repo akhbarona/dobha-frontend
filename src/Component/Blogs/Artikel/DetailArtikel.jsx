@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getArticleDetail, getArtikelRelated } from '../../../redux/actions/blogActions';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 const DetailArtikel = () => {
   const { id } = useParams();
@@ -16,12 +16,13 @@ const DetailArtikel = () => {
   console.log(blog);
   useEffect(() => {
     dispatch(getArticleDetail(id));
-    console.log(blog.data.slug);
-    if (blog.data.slug) {
-      dispatch(getArtikelRelated(blog.data.slug));
-    }
+    // console.log(blog.data.slug);
   }, [dispatch, id]);
-
+  useEffect(() => {
+    if (blog && blog.data) {
+      dispatch(getArtikelRelated(blog.data.category_id));
+    }
+  }, [dispatch, blog]);
   return (
     <main>
       <section>
@@ -58,17 +59,19 @@ const DetailArtikel = () => {
               ) : (
                 <div className="style-artikel-terkait">
                   <h3>Artikel Terkait</h3>
-                  {/* {articleRelated.blogs &&
-                    articleRelated.blogs.map((items, index) => {
+                  {articleRelated.blogs.data &&
+                    articleRelated.blogs.data.map((items, index) => {
                       return (
                         <Card className="Card-Detail" key={index}>
                           <Card.Img variant="top" src={'/' + items.image_file_data} className="img-card" />
                           <Card.Body>
-                            <Card.Title className="title-card">{items.title}</Card.Title>
+                            <Link className="read-more-right text-decoration-none text-white" to={`/article/${items.slug}`}>
+                              <Card.Title className="title-card">{items.title}</Card.Title>
+                            </Link>
                           </Card.Body>
                         </Card>
                       );
-                    })} */}
+                    })}
                 </div>
               )}
             </Col>

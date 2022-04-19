@@ -43,9 +43,10 @@ const Header = memo(() => {
   const dispatch = useDispatch();
   const outUser = useSelector((state) => state.authUser);
   const { isLogout } = outUser;
-
+  const navigate = useNavigate();
   useEffect(() => {
     const user = AuthService.getCurrentUser();
+    console.log(user);
     if (user) {
       setCurrentUser(user);
     }
@@ -356,12 +357,6 @@ function Home() {
   let location = useLocation();
   let id = location.pathname.split('/').pop();
 
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
-    }
-  }, [AuthService]);
   return (
     <div className="main-home-wrapper">
       {location.pathname !== '/login' && location.pathname !== '/register' && <Header />}
