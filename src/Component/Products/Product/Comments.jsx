@@ -10,6 +10,7 @@ import { getReviews } from '../../../redux/actions/Reviews';
 import { Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import authHeader from '../../service/auth.header';
+import { getProductDetails } from '../../../redux/actions/ProductActions';
 
 const Comments = ({ currentUserId, currentUsername, currentName, slug, product_id }) => {
   console.log(currentUserId);
@@ -98,6 +99,7 @@ const Comments = ({ currentUserId, currentUsername, currentName, slug, product_i
       })
       .then((res) => {
         console.log(res);
+        dispatch(getProductDetails(slug));
         dispatch(getReviews(slug));
         setActiveComment(null);
       })
@@ -163,12 +165,12 @@ const Comments = ({ currentUserId, currentUsername, currentName, slug, product_i
         )}
       </div>
       {/* jika exsitUser bernilai true maka harus jadi false agar comment form tidak muncul */}
-      {!exsitUser && currentUserId && cantRate ? (
+      {/* {!exsitUser && currentUserId && cantRate ? (
         <>
           <div className="comment-form-title">Write comment</div>
           <CommentForm submitLabel="Write" currentUsername={currentUsername} currentName={currentName} currentValue={0} handleSubmit={addComment} />
         </>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

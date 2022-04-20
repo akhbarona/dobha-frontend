@@ -237,15 +237,7 @@ const Detail = () => {
                   <h3>Review</h3>
                   <Row className="g-2">
                     <Col xl={12}>
-                      {product && comment.length > 0 ? (
-                        <Comments
-                          slug={id}
-                          product_id={product.data.id}
-                          currentUserId={currentUser !== null ? currentUser.id : null}
-                          currentUsername={currentUser !== null ? currentUser.username : null}
-                          currentName={currentUser !== null ? currentUser.name : null}
-                        />
-                      ) : currentUser ? (
+                      {product.data.review.length > 0 ? (
                         <Comments
                           slug={id}
                           product_id={product.data.id}
