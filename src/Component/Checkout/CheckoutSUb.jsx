@@ -10,7 +10,6 @@ import AuthService from '../service/auth.service';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const CheckoutSUb = (props) => {
-  console.log('props.dataUser ==>', props.dataUser.username);
   const location = useLocation();
   const [ongkir, setOngkir] = useState([]);
   const [hargaOngkir, setHargaOngkir] = useState(0);
@@ -218,6 +217,7 @@ const CheckoutSUb = (props) => {
   };
 
   const handleSubmit = async () => {
+    
     if (buktiBayar !== '') {
       setLoading(true);
       const formData = new FormData();
@@ -245,7 +245,6 @@ const CheckoutSUb = (props) => {
       formData.append('bukti_bayar', buktiBayar.target.files[0]);
       formData.set('username', props.dataUser.username);
       formData.set('email', props.dataUser.email);
-      // formData.set("id_produk", location.state.id);
       formData.set('provinsi', props.dataUser.provinsi);
       formData.set('kabupaten', props.dataUser.kabupaten);
       formData.set('alamat', props.dataUser.alamat);
@@ -258,7 +257,6 @@ const CheckoutSUb = (props) => {
       formData.set('gambar_produk', location.state.imageUrl);
       formData.set('nama_produk', location.state.name);
       formData.set('jumlah', location.state.qty);
-      // dataUser.user.id,
 
       try {
         const config = {
