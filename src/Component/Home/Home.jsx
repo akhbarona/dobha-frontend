@@ -20,7 +20,7 @@ import AuthService from '../service/auth.service';
 import axios from 'axios';
 import Profile from '../Profile/Profile';
 import Pesanan from '../Pesanan';
-import Pesanansaya from '../Profile/Pesanansaya';
+// import Pesanansaya from '../Profile/Pesanansaya';
 
 import { logoutUser } from '../../redux/actions/authActions';
 
@@ -379,7 +379,7 @@ function Home() {
 
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/pesanansaya" element={<Pesanansaya />} />
+          {/* <Route exact path="/pesanansaya" element={<Pesanansaya />} /> */}
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/products/:id" element={<ProductDetail />} />
           <Route exact path="/checkout" element={<Checkout />} />

@@ -44,8 +44,8 @@ export const Blogs = () => {
                 </Spinner>
               </div>
             ) : error ? (
-              <div class="alert alert-danger" role="alert">
-              {error}{" "}
+              <div className="alert alert-danger" role="alert">
+                {error}{' '}
               </div>
             ) : (
               blogs &&

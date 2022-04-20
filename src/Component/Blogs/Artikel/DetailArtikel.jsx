@@ -43,7 +43,7 @@ const DetailArtikel = () => {
                       {console.log(blog.data)}
                       <Card.Body>
                         <h2 className="title-card-main">{blog.data.title}</h2>
-                        <Card.Text className="title-card-main">{parse(blog.data.body)}</Card.Text>
+                        <Card.Text className="title-card-main" dangerouslySetInnerHTML={{ __html: blog.data.body }}></Card.Text>
                       </Card.Body>
                     </Card>
                   </div>
