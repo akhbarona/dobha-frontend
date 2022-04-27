@@ -6,7 +6,7 @@ import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react';
-import { Routes, Route, Link, useLocation, useParams, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, useParams, useNavigate, Navigate } from 'react-router-dom';
 import Products from '../Products/Products';
 import ProductDetail from '../Products/Product/Detail';
 import { Blogs } from '../Blogs/Blogs';
@@ -23,6 +23,7 @@ import Pesanan from '../Pesanan';
 // import Pesanansaya from '../Profile/Pesanansaya';
 
 import { logoutUser } from '../../redux/actions/authActions';
+import PageNotFound from './PageNotFound';
 
 /* Bagian Kepala */
 function compare(prevProps, nextProps) {
@@ -362,6 +363,7 @@ function Home() {
       {location.pathname !== '/login' && location.pathname !== '/register' && <Header />}
       {location.pathname !== '/login' &&
         location.pathname !== '/register' &&
+        location.pathname !== '/pagenotfound' &&
         location.pathname !== '/checkout' &&
         location.pathname !== '/pesanansaya' &&
         location.pathname !== '/cart' &&
@@ -375,6 +377,7 @@ function Home() {
         <Routes>
           <Route exact path="/" element={<Main />} />
           <Route exact path="/login" element={<Login />} />
+
           <Route exact path="/register" element={<Register />} />
 
           <Route exact path="/cart" element={<Cart />} />
@@ -387,6 +390,8 @@ function Home() {
           <Route exact path="/article/:id" element={<DetailArtikel />} />
           {/* ubah yudi */}
           <Route exact path="/pesanan" element={<Pesanan />} />
+          <Route path="/pagenotfound" element={<PageNotFound />} />
+          <Route path="*" element={<Navigate to="/pagenotfound" />} />
         </Routes>
       </div>
       {location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/cart' && <Footer />}

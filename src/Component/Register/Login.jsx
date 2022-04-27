@@ -10,6 +10,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import getCookie from '../../hooks/getCookie';
 import AuthService from '../service/auth.service';
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -42,7 +44,45 @@ const Login = () => {
     };
     dispatch(loginUser(data));
   };
-
+  const hanldeForgotPassword = () => {
+    Swal.fire({
+      title: 'Masukkan e-mail anda',
+      input: 'email',
+      inputAttributes: {
+        autocapitalize: 'off',
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Kirim',
+      showLoaderOnConfirm: true,
+      backdrop: true,
+      preConfirm: (email) => {
+        const data = new FormData();
+        data.append('email', email);
+        return axios
+          .post(`https://dobha.herokuapp.com/api/forgot-password`, data, {
+            headers: {
+              Accept: 'application/json',
+              'Content-type': 'application/json',
+            },
+          })
+          .then((response) => {
+            return response;
+          })
+          .catch((error) => {
+            console.log(error);
+            Swal.showValidationMessage(`Request failed: ${error.response.data.errors.email}`);
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading(),
+    }).then((result) => {
+      // console.log(result);
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `${result.value.data.status}`,
+        });
+      }
+    });
+  };
   return (
     <>
       <Row className="body-login">
@@ -98,9 +138,9 @@ const Login = () => {
                         MASUK
                       </button>
                       <span className="text-password">
-                        <Link className="text-decoration-none" to="/">
+                        <button type="button" className="btn-lupapassword" onClick={hanldeForgotPassword}>
                           Lupa Password?
-                        </Link>
+                        </button>
                       </span>
                     </div>
                   </Form>

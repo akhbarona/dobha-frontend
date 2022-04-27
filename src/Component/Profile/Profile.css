@@ -23,3 +23,25 @@
 .icon-profile.fa-user:before {
   margin-right: 0px;
 }
+.fa-solid {
+  font-family: 'Font Awesome 6 Free' !important;
+}
+.css-19nhuia {
+  position: absolute;
+  /* top: 290px; */
+  height: 40px;
+  /* width: 258px; */
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  /* border: 2px solid red; */
+}
+.css-dg3e5c-unf-btn {
+  position: relative;
+}
