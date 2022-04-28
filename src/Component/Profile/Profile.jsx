@@ -68,6 +68,7 @@ const Profile = () => {
     setPilih(value);
   };
 
+  // console.log(address.data)
 
   return (
     <section>

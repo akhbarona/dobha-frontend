@@ -7,7 +7,7 @@ import axios from 'axios';
 import authHeader from '../service/auth.header';
 import Swal from 'sweetalert2';
 
-const CommentReview = ({ currentUserId, product_id, setModalShow }) => {
+const CommentReview = ({ currentUserId, product_id, setModalShow ,dataItem ,getPesanan }) => {
   console.log(currentUserId);
   console.log(product_id);
   const [text, setText] = useState('');
@@ -18,9 +18,7 @@ const CommentReview = ({ currentUserId, product_id, setModalShow }) => {
   const isTextareaDisabled = text.length === 0;
 
   const addComment = (text, bintang = null) => {
-    console.log(text);
-    console.log(bintang);
-    const data = {
+       const data = {
       body: text,
       rate: bintang,
     };
@@ -28,7 +26,14 @@ const CommentReview = ({ currentUserId, product_id, setModalShow }) => {
       .post(`https://dobha.herokuapp.com/api/product/review-product/${product_id}/${currentUserId}`, data, {
         headers: authHeader(),
       })
-      .then((comment) => {
+      .then(async(comment) => {
+       await fetch(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/review/${dataItem.id}`,{
+          method: 'PUT',
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        getPesanan();
         console.log(comment);
         Swal.fire({ title: 'Terima Kasih Review Anda!', icon: 'success', showConfirmButton: false });
         setModalShow(false);
