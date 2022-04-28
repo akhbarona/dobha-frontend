@@ -63,6 +63,7 @@ const CardPesanan = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const [Produk_id, setProduk_id] = useState(null);
   const [User_id, setUser_id] = useState(null);
+  const [dataItem, setDataItemm] = useState([]);
   // const currentUser = AuthService.getCurrentUser() ? AuthService.getCurrentUser() : null;
   // console.log(currentUser);
   const ModalReview = ({ produk_id, currentUserId }) => {
@@ -81,6 +82,8 @@ const CardPesanan = (props) => {
         </Modal.Header>
         <Modal.Body>
           <CommentReview
+          getPesanan={getPesanan}
+            dataItem={dataItem}
             product_id={produk_id}
             setModalShow={setModalShow}
             currentUserId={currentUserId}
@@ -98,30 +101,44 @@ const CardPesanan = (props) => {
     setModalShow(true);
     setUser_id(item.user_id);
     setProduk_id(item.produk_id);
+    setDataItemm(item);
   };
 
-  const handleDiterima = async(id) => {
-   try{
+  const handleDiterima = async (id) => {
+    try {
+      const hasil = await fetch(
+        `${process.env.REACT_APP_API_URL_TRANSAKSI}/api/diterima/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-     const hasil  = await fetch(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/diterima/${id}` ,{
-       method:'PUT',
-       headers: {
-        "Content-Type": "application/json",
-      },
-     })
-
-     const res = await hasil.json();
-     if(res.status === 200){
-      getPesanan();
-      Swal.fire({ title: 'Berhasil di Update!', icon: 'success', showConfirmButton: true });
-     }else{
-      Swal.fire({ title: 'Gagl di Update!', icon: 'warning', showConfirmButton: true });
-     }
-   }catch(error){
-    Swal.fire({ title: 'Gagal di Update!', icon: 'error', showConfirmButton: true });
-
-   }
-  }
+      const res = await hasil.json();
+      if (res.status === 200) {
+        getPesanan();
+        Swal.fire({
+          title: "Berhasil di Update!",
+          icon: "success",
+          showConfirmButton: true,
+        });
+      } else {
+        Swal.fire({
+          title: "Gagl di Update!",
+          icon: "warning",
+          showConfirmButton: true,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Gagal di Update!",
+        icon: "error",
+        showConfirmButton: true,
+      });
+    }
+  };
 
   return (
     <>
@@ -153,6 +170,7 @@ const CardPesanan = (props) => {
                     <Col lg={12} key={index} className="mb-3">
                       <Card>
                         <Row>
+                          {console.log(item)}
                           <>
                             <Card.Img
                               className="col-lg-4"
@@ -242,7 +260,8 @@ const CardPesanan = (props) => {
                                   </tr>
                                 </tbody>
                               </table>
-                              {item.status === "1" && !item.review ? (
+                              {(item.status === "1" || item.status === "2") &&
+                              !item.review ? (
                                 <>
                                   {/* item.statuscomment ? undefined : */}
                                   <button
@@ -255,6 +274,7 @@ const CardPesanan = (props) => {
                                     href={`https://cekresi.com/tracking/cek-resi-jne.php?noresi=${
                                       item.no_resi ? item.no_resi : "-"
                                     }`}
+                                    rel="noreferrer"
                                     target="_blank"
                                     className="btn btn-warning mt-3"
                                     style={{ marginLeft: 5 }}
@@ -272,8 +292,8 @@ const CardPesanan = (props) => {
                                   </button>
                                   <button
                                     className="btn btn-warning mt-3"
-                                    style={{ marginLeft: 5 }}
                                     disabled
+                                    style={{ marginLeft: 5 }}
                                   >
                                     Tracking
                                   </button>
@@ -293,7 +313,6 @@ const CardPesanan = (props) => {
                                   className="btn btn-primary mt-3"
                                   style={{ marginLeft: 5 }}
                                   disabled
-
                                 >
                                   Diterima
                                 </button>
