@@ -73,7 +73,7 @@ export const createNewUser = (data_user) => async (dispatch, getState) => {
 export const loginUser = (data_user) => async (dispatch, getState) => {
   console.log(data_user);
   try {
-    const { data } = await axios.post(`https://dobha.herokuapp.com/api/auth/user/login`, data_user);
+    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/login`, data_user);
     // console.log(data);
     // sessionStorage.setItem('token', JSON.stringify(data.token));
     // sessionStorage.setItem('user', JSON.stringify(data.user));
