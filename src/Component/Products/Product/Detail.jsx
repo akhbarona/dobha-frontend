@@ -203,11 +203,15 @@ const Detail = () => {
                         <div className="stars-outer">
                           <div className="stars-inner" style={{ width: countRate(product.data.rating_produk) }}></div>
                         </div>
-                        <span className="number-rating">{product.data.rating_produk !== null ? product.data.rating_produk : 0}</span>
+                        <span className="number-rating">{product.data.rating_produk !== null ? parseFloat(product.data.rating_produk).toFixed(1) : 0}</span>
                       </div>
 
                       <p className="price">{formatRupiah(product.data.harga_satuan)}</p>
-                      <p>{product.data.deskripsi_produk}</p>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: `${product.data.deskripsi_produk}`,
+                        }}
+                      ></p>
                     </div>
                   </Col>
                   <Col md={2}>
@@ -231,10 +235,11 @@ const Detail = () => {
                       ) : (
                         <label className="btn-sm btn-success px-4 mb-2">Out of stock</label>
                       )}
-
-                      <button className="w-100 cart" onClick={submitAddtocart}>
-                        Tambah ke Keranjang
-                      </button>
+                      {product.data.stock_produk > 0 ? (
+                        <button className="w-100 cart" onClick={submitAddtocart}>
+                          Tambah ke Keranjang
+                        </button>
+                      ) : null}
                     </div>
                   </Col>
                 </Row>
@@ -283,7 +288,7 @@ const Detail = () => {
                                 <div className="stars-outer">
                                   <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
                                 </div>
-                                <span className="number-rating">{item.rating_produk !== null ? item.rating_produk : 0}</span>
+                                <span className="number-rating">{item.rating_produk !== null ? parseFloat(item.rating_produk).toFixed(1) : 0}</span>
                               </div>
                             </Card.Body>
                           </Card>

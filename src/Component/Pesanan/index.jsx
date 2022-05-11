@@ -1,9 +1,9 @@
-import { Container } from "react-bootstrap";
-import CardPesanan from "./CardPesanan";
-import { useState, useEffect } from "react";
-import AuthService from "../service/auth.service";
-import { useNavigate } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
+import { Container } from 'react-bootstrap';
+import CardPesanan from './CardPesanan';
+import { useState, useEffect } from 'react';
+import AuthService from '../service/auth.service';
+import { useNavigate } from 'react-router-dom';
+import { Spinner } from 'react-bootstrap';
 
 const Pesanan = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Pesanan = () => {
     try {
       const user = AuthService.getCurrentUser();
       if (!user) {
-        navigate("/login");
+        navigate('/login');
       }
       setUser((prevState) => ({
         ...prevState,
@@ -20,7 +20,7 @@ const Pesanan = () => {
         loading: false,
       }));
     } catch (err) {
-      navigate("/login");
+      navigate('/login');
       //    console.log(err)
     }
   }, []);
@@ -30,12 +30,7 @@ const Pesanan = () => {
       {dataUser.loading ? (
         <center>
           <div className="loading">
-            <Spinner
-              animation="border"
-              variant="warning"
-              role="status"
-              className="m-auto"
-            >
+            <Spinner animation="border" variant="warning" role="status" className="m-auto">
               <span className="visually-hidden">Loading...</span>
             </Spinner>
           </div>

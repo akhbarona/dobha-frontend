@@ -24,30 +24,10 @@ const CheckoutSUb = (props) => {
     { method: 'bank bca', image: 'logo-bca.png' },
   ];
 
-  const ketikaModalKebuka = [
-    {
-      method: 'gopay',
-      title: 'Dobha Parfume',
-      nomor: '081234567890',
-      image_file_data: 'logo-gopay.png',
-      transaksi: [
-        {
-          invoice: {
-            id: 'BS2022750001',
-            weight: 2,
-            total: 119000,
-          },
-        },
-      ],
-      nama: 'Justin',
-      user_id: '7',
-      username: 'justin',
-    },
-  ];
   const dispatch = useDispatch();
   const [modalShow, setModalShowGopay] = useState(false);
   const [modalShowBca, setModalShowBca] = useState(false);
-  const [modalShowDana , setModalShowDana] = useState(false);
+  const [modalShowDana, setModalShowDana] = useState(false);
   const navigate = useNavigate();
   const [Payment, setPayment] = useState(methodPayment);
   const [GetPayment, setGetPayment] = useState('');
@@ -82,7 +62,6 @@ const CheckoutSUb = (props) => {
       dispatch(resetCart());
       setModalShowBca(true);
     }
-    
   };
 
   const metodePembayaranDana = () => {
@@ -320,7 +299,6 @@ const CheckoutSUb = (props) => {
   };
 
   const handleSubmit = async () => {
-  
     if (buktiBayar !== '') {
       setLoading(true);
       const formData = new FormData();

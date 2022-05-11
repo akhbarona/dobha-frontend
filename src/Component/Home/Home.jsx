@@ -215,7 +215,7 @@ const Main = memo(() => {
                               <div className="stars-outer">
                                 <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
                               </div>
-                              <span className="number-rating">{item.rating_produk}</span>
+                              <span className="number-rating">{parseFloat(item.rating_produk).toFixed(1)}</span>
                             </div>
                           </Card.Body>
                         </Card>
@@ -255,7 +255,7 @@ const Main = memo(() => {
                                 <div className="stars-outer">
                                   <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
                                 </div>
-                                <span className="number-rating">{item.rating_produk}</span>
+                                <span className="number-rating">{parseFloat(item.rating_produk).toFixed(1)}</span>
                               </div>
                             </Card.Body>
                           </Card>
@@ -284,18 +284,20 @@ const Main = memo(() => {
                 {DataArtikel.map((item, index) => {
                   return (
                     <Col key={index}>
-                      <div className="card-new-post">
+                      <div className="card-new-post" style={{ display: 'flex', flexDirection: 'column' }}>
                         <div style={{ textAlign: 'center', padding: '30px' }}>
                           <img className="img-new-post" src="/1.jpg" />
                         </div>
-                        <div className="body-new-post">
-                          <h5>{handleLength(item.title, 37)}</h5> {/*-> 37 karakter */}
-                          <p
-                            dangerouslySetInnerHTML={{
-                              __html: `${item.excerpt}`,
-                            }}
-                          ></p>
-                          {/* 216 karakter */}
+                        <div className="body-new-post" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                          <div>
+                            <h5>{handleLength(item.title, 37)}</h5> {/*-> 37 karakter */}
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: `${item.excerpt}`,
+                              }}
+                            ></p>
+                            {/* 216 karakter */}
+                          </div>
                           <div className="btn-read-more">
                             <Link to={`/article/${item.slug}`} className="btn-item-read-more text-decoration-none">
                               Lihat Selengkapnya
