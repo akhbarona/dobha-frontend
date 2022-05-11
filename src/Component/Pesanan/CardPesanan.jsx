@@ -82,7 +82,7 @@ const CardPesanan = (props) => {
         </Modal.Header>
         <Modal.Body>
           <CommentReview
-          getPesanan={getPesanan}
+            getPesanan={getPesanan}
             dataItem={dataItem}
             product_id={produk_id}
             setModalShow={setModalShow}
@@ -263,13 +263,7 @@ const CardPesanan = (props) => {
                               {(item.status === "1" || item.status === "2") &&
                               !item.review ? (
                                 <>
-                                  {/* item.statuscomment ? undefined : */}
-                                  <button
-                                    className="btn btn-success mt-3"
-                                    onClick={() => handleReview(item)}
-                                  >
-                                    Review
-                                  </button>
+                                 
                                   <a
                                     href={`https://cekresi.com/tracking/cek-resi-jne.php?noresi=${
                                       item.no_resi ? item.no_resi : "-"
@@ -284,12 +278,7 @@ const CardPesanan = (props) => {
                                 </>
                               ) : (
                                 <>
-                                  <button
-                                    className="btn btn-success mt-3"
-                                    disabled
-                                  >
-                                    Review
-                                  </button>
+                                 
                                   <button
                                     className="btn btn-warning mt-3"
                                     disabled
@@ -298,6 +287,29 @@ const CardPesanan = (props) => {
                                     Tracking
                                   </button>
                                 </>
+                              )}
+
+                              {(item.status === "1" || item.status === "2") &&
+                              !item.review && item.status === "2" ? (
+                                <span style={{paddingLeft: 8}}>
+                                  {/* item.statuscomment ? undefined : */}
+                                  <button
+                                    className="btn btn-success mt-3"
+                                    onClick={() => handleReview(item)}
+                                  >
+                                    Review
+                                  </button>
+                                  
+                                </span>
+                              ) : (
+                                <span style={{paddingLeft: 8}}>
+                                  <button
+                                    className="btn btn-success mt-3"
+                                    disabled
+                                  >
+                                    Review
+                                  </button>
+                                </span>
                               )}
 
                               {item.status === "1" ? (
