@@ -15,7 +15,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const createNewUser = (data_user) => async (dispatch, getState) => {
   console.log(data_user);
   try {
-    const { data } = await axios.post(`${API_URL}/api/auth/user/register`, data_user);
+    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/register`, data_user);
     console.log(data);
     dispatch({
       type: ADD_NEW_USER,
@@ -73,7 +73,7 @@ export const createNewUser = (data_user) => async (dispatch, getState) => {
 export const loginUser = (data_user) => async (dispatch, getState) => {
   console.log(data_user);
   try {
-    const { data } = await axios.post(`${API_URL}/api/auth/user/login`, data_user);
+    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/login`, data_user);
     // console.log(data);
     // sessionStorage.setItem('token', JSON.stringify(data.token));
     // sessionStorage.setItem('user', JSON.stringify(data.user));
@@ -101,7 +101,7 @@ export const loginUser = (data_user) => async (dispatch, getState) => {
 
 export const logoutUser = () => async (dispatch) => {
   try {
-    const { data } = await axios.post(`${API_URL}/api/auth/user/logout`, {
+    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/logout`, {
       headers: authHeader(),
     });
     // console.log(data);

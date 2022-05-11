@@ -345,51 +345,67 @@ const CheckoutSUb = (props) => {
         return;
       }
 
-      formData.append('bukti_bayar', buktiBayar.target.files[0]);
-      formData.set('username', props.dataUser.username);
-      formData.set('email', props.dataUser.email);
-      formData.set('provinsi', props.dataUser.provinsi);
-      formData.set('kabupaten', props.dataUser.kabupaten);
-      formData.set('alamat', props.dataUser.alamat);
-      formData.set('ongkir', hargaOngkir);
-      formData.set('tagihan_total', location.state.totalHarga + Number(hargaOngkir));
-      formData.set('user_id', props.dataUser.id);
-      formData.set('produk_id', location.state.id);
-      formData.set('estimasi', estimasiOngkir);
-      formData.set('service', serviceOngkir);
-      formData.set('gambar_produk', location.state.imageUrl);
-      formData.set('nama_produk', location.state.name);
-      formData.set('jumlah', location.state.qty);
-      formData.set('metode_pembayaran', GetPayment);
-
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          onUploadProgress: (event) => {},
-        };
-        // https://apiongkir.herokuapp.com
-        const response = await axios.post(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/transaksi`, formData, config);
-        if (response.status === 200) {
+      Swal.fire({
+        title: 'Pastikan Bukti Pembayaran Benar dan Jumlah Sesuai',
+        showDenyButton: true,
+        // showCancelButton: true,
+        confirmButtonText: 'Konfimasi',
+        denyButtonText: `Cancel`,
+      }).then(async(result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          formData.append('bukti_bayar', buktiBayar.target.files[0]);
+          formData.set('username', props.dataUser.username);
+          formData.set('email', props.dataUser.email);
+          formData.set('provinsi', props.dataUser.provinsi);
+          formData.set('kabupaten', props.dataUser.kabupaten);
+          formData.set('alamat', props.dataUser.alamat);
+          formData.set('ongkir', hargaOngkir);
+          formData.set('tagihan_total', location.state.totalHarga + Number(hargaOngkir));
+          formData.set('user_id', props.dataUser.id);
+          formData.set('produk_id', location.state.id);
+          formData.set('estimasi', estimasiOngkir);
+          formData.set('service', serviceOngkir);
+          formData.set('gambar_produk', location.state.imageUrl);
+          formData.set('nama_produk', location.state.name);
+          formData.set('jumlah', location.state.qty);
+          formData.set('metode_pembayaran', GetPayment);
+    
+          try {
+            const config = {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              onUploadProgress: (event) => {},
+            };
+            // https://apiongkir.herokuapp.com
+            const response = await axios.post(`${process.env.REACT_APP_API_URL_TRANSAKSI}/api/transaksi`, formData, config);
+            if (response.status === 200) {
+              setLoading(false);
+              Swal.fire({
+                icon: 'success',
+                title: 'success',
+                text: 'Berhasil Membeli Barang',
+              }).then(() => {
+                navigate('/pesanan');
+                window.location.reload();
+              });
+            } else {
+              setLoading(false);
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops..',
+                text: 'Terjadi Kesalahan Server',
+              });
+            }
+          } catch (err) {
+            setLoading(false);
+          }
+          // Swal.fire('Saved!', '', 'success')
+        }else{
           setLoading(false);
-          Swal.fire({
-            icon: 'success',
-            title: 'success',
-            text: 'Berhasil Membeli Barang',
-          }).then(() => {
-            navigate('/pesanan');
-            window.location.reload();
-          });
-        } else {
-          setLoading(false);
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops..',
-            text: 'Terjadi Kesalahan Server',
-          });
         }
-      } catch (err) {}
+      })
     } else {
       setLoading(false);
       Swal.fire({
