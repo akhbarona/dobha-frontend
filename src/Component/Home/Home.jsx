@@ -1,12 +1,12 @@
 import './Home.css';
 import { Badge } from '@mui/material';
-import { Card, Col, Container, Dropdown, DropdownButton, Row } from 'react-bootstrap';
+import { Card, Col, Container, Dropdown, DropdownButton, Row, Navbar, Nav, Spinner } from 'react-bootstrap';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react';
-import { Routes, Route, Link, useLocation, useParams, useNavigate, Navigate } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, useParams, useNavigate, Navigate, NavLink } from 'react-router-dom';
 import Products from '../Products/Products';
 import ProductDetail from '../Products/Product/Detail';
 import { Blogs } from '../Blogs/Blogs';
@@ -24,7 +24,9 @@ import Pesanan from '../Pesanan';
 
 import { logoutUser } from '../../redux/actions/authActions';
 import PageNotFound from './PageNotFound';
+import getCookie from '../../hooks/getCookie';
 
+import { getAddress as listAddress } from '../../redux/actions/addressActions';
 /* Bagian Kepala */
 function compare(prevProps, nextProps) {
   return prevProps.value === nextProps.value;
@@ -40,17 +42,29 @@ const InputSearch = memo(() => {
 
 const Header = memo(() => {
   // console.log('Render Header');
-  const [currentUser, setCurrentUser] = useState(undefined);
+
+  const [currentUser, setCurrentUser] = useState(null);
   const dispatch = useDispatch();
   const outUser = useSelector((state) => state.authUser);
   const { isLogout } = outUser;
   const navigate = useNavigate();
+  const getAdress = useSelector((state) => state.getAdress);
+  const { address, loading, error } = getAdress.address;
+
+  console.log(address);
+
   useEffect(() => {
+    // const getTime = getCookie('expiredtime');
     const user = AuthService.getCurrentUser();
     console.log(user);
-    if (user) {
+    if (user && user.id) {
       setCurrentUser(user);
+      dispatch(listAddress(user.id));
     }
+    // console.log(user);
+
+    // AuthService.runLogoutTimer(dispatch, Number(getTime));
+
     if (isLogout) {
       setTimeout(() => {
         window.location.reload();
@@ -68,7 +82,7 @@ const Header = memo(() => {
   };
   return (
     <header className="sticky-top">
-      <nav>
+      {/* <nav>
         <div className="navbar-container">
           <div className="navbar-wrapper">
             <div className="navbar-left">
@@ -126,7 +140,66 @@ const Header = memo(() => {
             </div>
           </div>
         </div>
-      </nav>
+      </nav> */}
+      <Navbar style={{ backgroundColor: '#202744' }} expand="lg">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse style={{ padding: '10px 20px', backgroundColor: '#202744' }} id="basic-navbar-nav">
+          <Nav className="container-fluid">
+            <Nav.Item>
+              <Nav.Link style={{ color: '#fff', fontWeight: '600' }} as={Link} to="/">
+                HOME
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link style={{ color: '#fff', fontWeight: '600' }} as={Link} to="/products">
+                PRODUK
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link style={{ color: '#fff', fontWeight: '600' }} as={Link} to="/article">
+                ARTIKEL
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+          {currentUser && (
+            <Nav.Item className="ml-auto">
+              <div className="navbar-menu-item">
+                <Link to="/cart">
+                  <Badge badgeContent={getCartCount()} color="primary">
+                    <div className="cart-filled">
+                      <ShoppingCartOutlined style={{ color: 'black' }} />
+                    </div>
+                  </Badge>
+                </Link>
+              </div>
+            </Nav.Item>
+          )}
+          {currentUser ? (
+            <Nav.Item>
+              <DropdownButton variant="warning" id="dropdown-basic-button" className="btn-profile" title={`Hi ${address.data ? address.data.name : 'Loading...'}`}>
+                <Dropdown.Item as={NavLink} to="/profile">
+                  PROFILE
+                </Dropdown.Item>
+                <Dropdown.Item as={NavLink} to="/pesanan">
+                  PESANAN SAYA
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="#" onClick={logOut}>
+                  LOGOUT
+                </Dropdown.Item>
+              </DropdownButton>
+            </Nav.Item>
+          ) : (
+            <>
+              <Link className="navbar-menu" to="/login">
+                <div className="navbar-menu-item page-btn-login">LOGIN</div>
+              </Link>
+              <Link className="navbar-menu" to="/register">
+                <div className="navbar-menu-item page-btn-register">REGISTER</div>
+              </Link>
+            </>
+          )}
+        </Navbar.Collapse>
+      </Navbar>
     </header>
   );
 });
@@ -192,6 +265,10 @@ const Main = memo(() => {
       return value.substring(0, lengths).substring(0, value.substring(0, lengths).lastIndexOf(' ')) + '...';
     }
   }
+  function isImage(url) {
+    const regex = /https:\/\/drive\.google\.com/g;
+    return regex.test(url);
+  }
   return (
     <>
       <section>
@@ -206,8 +283,12 @@ const Main = memo(() => {
                   return (
                     <Col key={index}>
                       <Link className="text-decoration-none text-dark" to={`/products/${item.slug_produk}`}>
-                        <Card>
-                          <Card.Img variant="top" src="/1.jpg" />
+                        <Card className="h-100">
+                          <Card.Img
+                            className="image-top"
+                            variant="top"
+                            src={isImage(item.gambar_produk) ? item.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'}
+                          />
                           <Card.Body>
                             <Card.Title>{item.nama_produk}</Card.Title>
                             <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
@@ -246,8 +327,13 @@ const Main = memo(() => {
                     return (
                       <Col key={index}>
                         <Link className="text-decoration-none text-dark" to={`/products/${item.slug_produk}`}>
-                          <Card>
-                            <Card.Img variant="top" src="/1.jpg" />
+                          <Card className="h-100">
+                            <Card.Img
+                              className="image-top"
+                              variant="top"
+                              src={isImage(item.gambar_produk) ? item.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'}
+                              alt="gambar-produk"
+                            />
                             <Card.Body>
                               <Card.Title>{item.nama_produk}</Card.Title>
                               <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
@@ -286,7 +372,7 @@ const Main = memo(() => {
                     <Col key={index}>
                       <div className="card-new-post" style={{ display: 'flex', flexDirection: 'column' }}>
                         <div style={{ textAlign: 'center', padding: '30px' }}>
-                          <img className="img-new-post" src="/1.jpg" />
+                          <img className="img-new-post" src={isImage(item.image) ? item.image : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'} />
                         </div>
                         <div className="body-new-post" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                           <div>

@@ -6,18 +6,30 @@ import { Row, Card, Container, Col, Spinner } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts as listProducts } from '../../redux/actions/ProductActions';
 import { Link } from 'react-router-dom';
-
+import Pages from './Pages';
 const Products = () => {
   const dispatch = useDispatch();
   const getProducts = useSelector((state) => state.getProducts);
   const { products, loading, error } = getProducts;
-  const [Products, setProducts] = useState([]);
+  // const [Products, setProducts] = useState([]);
   const [SProducts, setSProducts] = useState('default');
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sessionsPerPage, setSessionsPerPage] = useState(4);
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     // getProducts();
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(currentPage));
+  }, [dispatch, currentPage]);
+
+  useEffect(() => {
+    if (products && products.meta) {
+      setTotalItems(products.meta.total);
+      setSessionsPerPage(products.meta.per_page);
+      setCurrentPage(products.meta.current_page);
+    }
+  }, [products]);
 
   function handleLength(value, lengths) {
     if (value.length < lengths) {
@@ -26,7 +38,10 @@ const Products = () => {
       return value.substring(0, lengths).substring(0, value.substring(0, lengths).lastIndexOf(' ')) + '...';
     }
   }
-
+  function isImage(url) {
+    const regex = /https:\/\/drive\.google\.com/g;
+    return regex.test(url);
+  }
   const countRate = (rate) => {
     const starsTotal = 5;
     const starPercentage = (rate / starsTotal) * 100;
@@ -75,7 +90,11 @@ const Products = () => {
                       <Col key={index}>
                         <Card className="card-center h-100">
                           {/* {Products && <img src={'/' + Products.[0]} alt="" />} */}
-                          <Card.Img variant="top" className="h-100" src={'https://pasaminang.com/wp-content/uploads/2021/01/Screenshot_2020-12-30-12-53-35-12.jpg'} />
+                          <Card.Img
+                            variant="top"
+                            className="h-75"
+                            src={isImage(item.gambar_produk) ? item.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'}
+                          />
                           <Card.Body>
                             <Link className="link-title" to={`/products/${item.slug_produk}`}>
                               <Card.Title>{handleLength(item.nama_produk, 20)}</Card.Title>
@@ -94,6 +113,9 @@ const Products = () => {
                   })}
                 </Row>
               )}
+              <div className="d-flex justify-content-center mt-5">
+                <Pages itemsCount={totalItems} itemsPerPage={sessionsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+              </div>
             </Container>
           </div>
         </div>

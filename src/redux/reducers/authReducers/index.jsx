@@ -24,6 +24,8 @@ export const authUserReducers = (state = user, action) => {
       // sessionStorage.clear();
       removeCookie('user');
       removeCookie('token');
+      removeCookie('expired');
+      removeCookie('expiredtime');
       // <Navigate to="/login" />;
       Swal.fire({ title: 'Anda Telah Logout!', icon: 'success', showConfirmButton: true });
 

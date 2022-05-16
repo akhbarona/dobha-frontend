@@ -1,8 +1,4 @@
-import {
-  GET_ADDRESS_FAIL,
-  GET_ADDRES_SUCCESS,
-  GET_ADDRES_REQUEST,
-} from "../../actions/addressActions";
+import { GET_ADDRESS_FAIL, GET_ADDRES_SUCCESS, GET_ADDRES_REQUEST } from '../../actions/addressActions';
 
 const initialState = {
   address: {

@@ -61,9 +61,12 @@ const DetailArtikel = () => {
                   <h3>Artikel Terkait</h3>
                   {articleRelated.blogs.data &&
                     articleRelated.blogs.data.map((items, index) => {
+                      {
+                        console.log(items);
+                      }
                       return (
                         <Card className="Card-Detail" key={index}>
-                          <Card.Img variant="top" src={'/' + items.image_file_data} className="img-card" />
+                          <Card.Img variant="top" src={items.image} className="img-card" />
                           <Card.Body>
                             <Link className="read-more-right text-decoration-none text-white" to={`/article/${items.slug}`}>
                               <Card.Title className="title-card">{items.title}</Card.Title>

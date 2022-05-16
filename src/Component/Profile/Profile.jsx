@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Tab, Tabs, Spinner } from 'react-bootstrap';
 import './Profile.css';
+
 import Alamat from './Alamat';
 import AuthService from '../service/auth.service';
 import { useNavigate } from 'react-router-dom';
@@ -14,15 +15,18 @@ const Profile = () => {
   const getAdress = useSelector((state) => state.getAdress);
   const { address, loading, error } = getAdress.address;
 
+  // const [isHidden, setIsHidden] = useState(false);
+
+  // const handle = () => {
+  //   setIsHidden(true);
+  // };
+  const user = AuthService.getCurrentUser();
+  const [getUser] = useState(user);
   useEffect(() => {
-    try {
-      const user = AuthService.getCurrentUser();
+    if (user) {
       dispatch(listAddress(user.id));
-      if (!user) {
-        navigate('/login');
-      }
-    } catch (error) {
-      console.log(error.response && error.response.data.message ? error.response.data.message : error.message);
+    } else {
+      navigate('/login');
     }
   }, [dispatch]);
 

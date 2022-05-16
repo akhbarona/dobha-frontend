@@ -14,10 +14,10 @@ export const GET_BLOGS_RELATED_FAIL = 'GET_BLOGS_RELATED_FAIL';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const getArticles = () => async (dispatch) => {
+export const getArticles = (page) => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOGS_REQUEST });
-    const { data } = await axios.get(`${API_URL}/api/read-all-article`);
+    const { data } = await axios.get(`${API_URL}/api/read-all-article-paginate?page=` + page);
     dispatch({
       type: GET_BLOGS_SUCCESS,
       payload: data,

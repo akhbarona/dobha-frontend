@@ -78,10 +78,12 @@ export const loginUser = (data_user) => async (dispatch, getState) => {
     // sessionStorage.setItem('token', JSON.stringify(data.token));
     // sessionStorage.setItem('user', JSON.stringify(data.user));
     // sessionStorage.setItem('expired', JSON.stringify(data.expired_token));
-    setCookie('token', JSON.stringify(data.token), data.expired_token);
-    setCookie('user', JSON.stringify(data.user), data.expired_token);
-    // setCookie('expired', data.expired_token, data.expired_token);
-    Authservice.runLogoutTimer(dispatch, data.expired_token);
+    setCookie('token', JSON.stringify(data.token), 120000);
+    setCookie('user', JSON.stringify(data.user), 120000);
+
+    setCookie('expired', 120000, 120000);
+    setCookie('expiredtime', 120000, 120000);
+    Authservice.runLogoutTimer(dispatch, 120000);
     dispatch({
       type: LOGIN_USER,
     });
@@ -109,6 +111,9 @@ export const logoutUser = () => async (dispatch) => {
       type: LOGOUT_USER,
     });
   } catch (error) {
+    dispatch({
+      type: LOGOUT_USER,
+    });
     console.log(error.message);
   }
 };

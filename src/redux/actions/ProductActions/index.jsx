@@ -15,10 +15,10 @@ export const GET_MORE_PRODUCT_FAIL = 'GET_MORE_PRODUCT_FAIL';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const getProducts = () => async (dispatch) => {
+export const getProducts = (page) => async (dispatch) => {
   try {
     dispatch({ type: GET_PRODUCTS_REQUEST });
-    const { data } = await axios.get(`${API_URL}/api/read-all-product`);
+    const { data } = await axios.get(`${API_URL}/api/read-all-product-paginate?page=` + page);
     console.log(data);
     dispatch({
       type: GET_PRODUCTS_SUCCESS,

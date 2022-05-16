@@ -9,9 +9,15 @@ const getCurrentUser = () => {
   }
 };
 const runLogoutTimer = (dispatch, timer) => {
+  const oneMinute = new Date(new Date().getTime() + timer);
+  console.log(oneMinute);
+  const dateNow = new Date();
+  const myTimetoExpired = oneMinute - dateNow;
+  console.log(myTimetoExpired);
+  console.log(myTimetoExpired - 5000);
   setTimeout(() => {
     dispatch(logoutUser());
-  }, 1800000 - 10000);
+  }, myTimetoExpired - 5000);
 };
 const authService = {
   getCurrentUser,

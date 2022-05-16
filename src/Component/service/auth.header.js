@@ -5,7 +5,7 @@ const authHeader = () => {
   // const token = JSON.parse(sessionStorage.getItem('token'));
   const token = JSON.parse(getCookie('token'));
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-  if (token && token) {
+  if (token) {
     return { Authorization: 'Bearer ' + token };
   } else {
     return {};

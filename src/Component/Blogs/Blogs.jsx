@@ -7,16 +7,29 @@ import moment from 'moment';
 import 'moment/locale/id';
 import { useDispatch, useSelector } from 'react-redux';
 import { getArticles as getBlogs } from '../../redux/actions/blogActions';
+import Pages from './Pages';
 
 export const Blogs = () => {
   const dispatch = useDispatch();
   const getArticles = useSelector((state) => state.getBlogs);
   const { blogs, loading, error } = getArticles;
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sessionsPerPage, setSessionsPerPage] = useState(4);
+  const [totalItems, setTotalItems] = useState(0);
+
   useEffect(() => {
     // getArticles();
-    dispatch(getBlogs());
-  }, []);
+    dispatch(getBlogs(currentPage));
+  }, [dispatch, currentPage]);
+
+  useEffect(() => {
+    if (blogs && blogs.meta) {
+      setTotalItems(blogs.meta.total);
+      setSessionsPerPage(blogs.meta.per_page);
+      setCurrentPage(blogs.meta.current_page);
+    }
+  }, [blogs]);
   // const getArticles = () => {
   // axios
   //   .get('http://localhost:3001/blogs')
@@ -55,7 +68,7 @@ export const Blogs = () => {
                     <Col md={12}>
                       <div className="blog-card w-100">
                         <div className="meta">
-                          <div className="photo" style={{ backgroundImage: 'url(' + '/' + item.image + ')' }}></div>
+                          <div className="photo" style={{ backgroundImage: `url("${item.image}")` }}></div>
                         </div>
                         <div className="description">
                           <h3>{item.title}</h3>
@@ -89,6 +102,9 @@ export const Blogs = () => {
                 );
               })
             )}
+            <div className="d-flex justify-content-center">
+              <Pages itemsCount={totalItems} itemsPerPage={sessionsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+            </div>
           </Container>
         </div>
       </section>
