@@ -27,7 +27,7 @@
 
 /* Blog Cards  */
 .blog-card {
-  display: flex;
+  /* display: flex; */
   margin: auto;
   overflow: hidden;
   z-index: 0;
@@ -58,7 +58,7 @@
   width: 100%;
 }
 .blog-card .description {
-  padding: 1rem;
+  padding: 2rem;
   /* position: relative; */
   color: #fff;
   margin: auto;
@@ -125,6 +125,7 @@
 
 @media (min-width: 640px) {
   .blog-card {
+    display: flex;
     flex-direction: row;
     min-height: 180px;
   }

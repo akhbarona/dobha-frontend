@@ -3,6 +3,9 @@ import {
   GET_MORE_PRODUCT_REQUEST,
   GET_MORE_PRODUCT_SUCCESS,
   GET_PRODUCTS_FAIL,
+  GET_PRODUCTS_POPULAR_FAIL,
+  GET_PRODUCTS_POPULAR_REQUEST,
+  GET_PRODUCTS_POPULAR_SUCCESS,
   GET_PRODUCTS_REQUEST,
   GET_PRODUCTS_SUCCESS,
   GET_PRODUCT_DETAILS_FAIL,
@@ -34,6 +37,29 @@ export const getProductsReducers = (state = initialState, action) => {
       return state;
   }
 };
+const initialPopularState = { productspopular: [] };
+export const getProductsPopularReducers = (state = initialPopularState, action) => {
+  switch (action.type) {
+    case GET_PRODUCTS_POPULAR_REQUEST:
+      return {
+        loadingPopular: true,
+        productspopular: [],
+      };
+    case GET_PRODUCTS_POPULAR_SUCCESS:
+      return {
+        loadingPopular: false,
+        productspopular: action.payload,
+      };
+    case GET_PRODUCTS_POPULAR_FAIL:
+      return {
+        loadingPopular: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 export const getProductDetailsReducers = (state = { product: {} }, action) => {
   switch (action.type) {
     case GET_PRODUCT_DETAILS_REQUEST:

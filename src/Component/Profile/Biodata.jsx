@@ -9,6 +9,7 @@ import { getAddress as listAddress } from '../../redux/actions/addressActions';
 
 import Cookie from 'js-cookie';
 import { useDispatch } from 'react-redux';
+import setCookie from '../../hooks/setCookie';
 const Biodata = ({ address }) => {
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState(address.username);
@@ -38,18 +39,23 @@ const Biodata = ({ address }) => {
         setloadingUpdate(true);
         const user = authService.getCurrentUser();
         // setCookie('user', JSON.stringify(data.user), getCookie('')); // ini harusnya dipakai
-        const OldTime = JSON.parse(getCookie('expired'));
-        console.log(new Date(OldTime));
-        const newTime = new Date(OldTime) - new Date();
-        const newExpiredTime = new Date(new Date().getTime() + newTime);
+
+        // const OldTime = JSON.parse(getCookie('expired'));
+        // console.log(new Date(OldTime));
+        // const newTime = new Date(OldTime) - new Date();
+        // const newExpiredTime = new Date(new Date().getTime() + newTime);
+        // console.log(newExpiredTime);
+
+        const OldUNIX = JSON.parse(getCookie('expired_timestamp'));
+        const toISOString = new Date(OldUNIX);
         dispatch(listAddress(address.id));
-        console.log(newExpiredTime);
-        Cookie.set('user', JSON.stringify(hasil.data.user), {
-          expires: newExpiredTime,
-          secure: true,
-          sameSite: 'strict',
-          path: '/',
-        });
+        setCookie('user', JSON.stringify(hasil.data.user), OldUNIX);
+        // Cookie.set('user', JSON.stringify(hasil.data.user), {
+        //   expires: toISOString,
+        //   secure: true,
+        //   sameSite: 'strict',
+        //   path: '/',
+        // });
         Swal.fire({
           title: 'Update Berhasil',
           width: 600,

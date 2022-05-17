@@ -23,11 +23,19 @@ const Profile = () => {
   const user = AuthService.getCurrentUser();
   const [getUser] = useState(user);
   useEffect(() => {
+    let isApiSubscribed = true;
     if (user) {
-      dispatch(listAddress(user.id));
+      if (isApiSubscribed) {
+        dispatch(listAddress(user.id));
+      }
     } else {
       navigate('/login');
     }
+
+    return () => {
+      // cancel the subscription
+      isApiSubscribed = false;
+    };
   }, [dispatch]);
 
   // const handleUpdateProfile = () => {

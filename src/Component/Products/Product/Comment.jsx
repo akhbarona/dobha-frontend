@@ -39,10 +39,14 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
     const starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`;
     return starPercentageRounded;
   };
+  function isImage(url) {
+    const regex = /https:\/\/drive\.google\.com/g;
+    return regex.test(url);
+  }
   return (
     <div key={comment.id} className="comment test">
-      <div className="comment-image-container">
-        <img src="/user-icon.png" />
+      <div style={{ maxHeight: '48px', maxWidth: '48px' }} className="comment-image-container">
+        <img style={{ height: '100%', width: '100%', objectFit: 'cover' }} src={isImage(comment.user.photo) ? comment.user.photo : '/user-icon.png'} />
       </div>
       <div className="comment-right-part">
         <div className="comment-content">
@@ -76,25 +80,32 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
           />
         )}
         <div className="comment-actions">
+          {/*******************************************************************************************************/}
           {/* dibawah ini kondisi canReply selalu true karena di variabel diatas diset seperti itu makanya setiap komen pasti ada reply*/}
-          {canReply && (
+          {/* {canReply && (
             <div className="comment-action" onClick={() => setActiveComment({ id: comment.id, type: 'replying' })}>
               Reply
             </div>
-          )}
+          )} */}
+          {/*******************************************************************************************************/}
+
           {/* dibawah ini kondisi canEdit bisa tampil & diklik apabila kentuan divariabel diatas bernilai true */}
           {canEdit && (
             <div className="comment-action" onClick={() => setActiveComment({ id: comment.id, type: 'editing' })}>
               Edit
             </div>
           )}
+
+          {/*******************************************************************************************************/}
           {/* dibawah ini kondisi canDelete bisa tampil & diklik apabila kentutan divariabel diatas bernilai true */}
-          {canDelete && (
+          {/* {canDelete && (
             <div className="comment-action" onClick={() => deleteComment(comment.id)}>
               Delete
             </div>
-          )}
+          )} */}
+          {/*******************************************************************************************************/}
         </div>
+
         {/* dibawah ini kondisi jika isReplying true maka ditampilkan form ngisi komennya */}
         {isReplying && (
           <CommentForm
@@ -107,8 +118,8 @@ const Comment = ({ comment, replies, setActiveComment, activeComment, updateComm
             currentUserId={currentUserId}
           />
         )}
-        {/* dibawah ini ketika replies di array [] length-nya lebih dari 0 tidak kosong maka dijalankan child commentnya */}
 
+        {/* dibawah ini ketika replies di array [] length-nya lebih dari 0 tidak kosong maka dijalankan child commentnya */}
         {replies.length > 0 && (
           <div className="replies">
             {replies.map((reply) => (

@@ -4,6 +4,10 @@ export const GET_PRODUCTS_REQUEST = 'GET_PRODUCTS_REQUEST';
 export const GET_PRODUCTS_SUCCESS = 'GET_PRODUCTS_SUCCESS';
 export const GET_PRODUCTS_FAIL = 'GET_PRODUCTS_FAIL';
 
+export const GET_PRODUCTS_POPULAR_REQUEST = 'GET_PRODUCTS_POPULAR_REQUEST';
+export const GET_PRODUCTS_POPULAR_SUCCESS = 'GET_PRODUCTS_POPULAR_SUCCESS';
+export const GET_PRODUCTS_POPULAR_FAIL = 'GET_PRODUCTS_POPULAR_FAIL';
+
 export const GET_PRODUCT_DETAILS_REQUEST = 'GET_PRODUCT_DETAILS_REQUEST';
 export const GET_PRODUCT_DETAILS_SUCCESS = 'GET_PRODUCT_DETAILS_SUCCESS';
 export const GET_PRODUCT_DETAILS_FAIL = 'GET_PRODUCT_DETAILS_FAIL';
@@ -27,6 +31,23 @@ export const getProducts = (page) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GET_PRODUCTS_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const getProdcutsPopular = (page) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_PRODUCTS_POPULAR_REQUEST });
+    const { data } = await axios.get(`${API_URL}/api/sort/popular-products?page=` + page);
+    console.log(data);
+    dispatch({
+      type: GET_PRODUCTS_POPULAR_SUCCESS,
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PRODUCTS_POPULAR_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message,
     });
   }

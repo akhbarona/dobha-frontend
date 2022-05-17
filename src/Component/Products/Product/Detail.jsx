@@ -191,7 +191,7 @@ const Detail = () => {
               <>
                 <Row className="show-grid details" key={product.data.id}>
                   {/* {console.log('product.data =>',product.data)} */}
-                  <Col md={4}>
+                  <Col sm={12} lg={6} xl={4}>
                     <div className="big-image">
                       {<img src={product.data.gambar_produk ? product.data.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'} alt="" />}
                     </div>
@@ -201,7 +201,7 @@ const Detail = () => {
                     </div>
                   </Col>
 
-                  <Col md={6}>
+                  <Col sm={12} lg={6} xl={6}>
                     <div className="box">
                       <h2>{product.data.nama_produk}</h2>
 
@@ -220,7 +220,7 @@ const Detail = () => {
                       ></p>
                     </div>
                   </Col>
-                  <Col md={2}>
+                  <Col sm={12} lg={12} xl={2}>
                     <div className="box-cart">
                       <p>
                         Stock
@@ -283,21 +283,25 @@ const Detail = () => {
                     moreProduct.products.data.map((item, index) => {
                       return (
                         <Col key={index}>
-                          <Card className="card-center h-100">
-                            <Card.Img className="h-75" variant="top" src={item.gambar_produk ? item.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'} />
-                            <Card.Body>
-                              <Link className="link-title" to={`/products/${item.slug_produk}`}>
+                          <Link className="link-title" to={`/products/${item.slug_produk}`}>
+                            <Card className="card-center h-100">
+                              <Card.Img
+                                className="h-75"
+                                variant="top"
+                                src={item.gambar_produk ? item.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'}
+                              />
+                              <Card.Body>
                                 <Card.Title>{item.nama_produk}</Card.Title>
-                              </Link>
-                              <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
-                              <div className="star-produk">
-                                <div className="stars-outer">
-                                  <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
+                                <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
+                                <div className="star-produk">
+                                  <div className="stars-outer">
+                                    <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
+                                  </div>
+                                  <span className="number-rating">{item.rating_produk !== null ? parseFloat(item.rating_produk).toFixed(1) : 0}</span>
                                 </div>
-                                <span className="number-rating">{item.rating_produk !== null ? parseFloat(item.rating_produk).toFixed(1) : 0}</span>
-                              </div>
-                            </Card.Body>
-                          </Card>
+                              </Card.Body>
+                            </Card>
+                          </Link>
                         </Col>
                       );
                     })}

@@ -47,7 +47,7 @@ export const Blogs = () => {
       <section>
         <div className="blogs-container">
           <Container>
-            <h1 className="title-blogs-section">
+            <h1 className="title-blogs-section mb-5">
               <span>Artikel</span>
             </h1>
             {loading || loading === undefined ? (
@@ -64,7 +64,7 @@ export const Blogs = () => {
               blogs &&
               blogs.data.map((item, index) => {
                 return (
-                  <Row className="p-5" key={index}>
+                  <div className="px-2" key={index}>
                     <Col md={12}>
                       <div className="blog-card w-100">
                         <div className="meta">
@@ -98,7 +98,7 @@ export const Blogs = () => {
                         </div>
                       </div>
                     </Col>
-                  </Row>
+                  </div>
                 );
               })
             )}

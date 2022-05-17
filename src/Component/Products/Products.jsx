@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { useState, useEffect } from 'react';
 import { Row, Card, Container, Col, Spinner } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProducts as listProducts } from '../../redux/actions/ProductActions';
+import { getProducts as listProducts, getProdcutsPopular as listProductsPopular } from '../../redux/actions/ProductActions';
 import { Link } from 'react-router-dom';
 import Pages from './Pages';
 const Products = () => {
@@ -12,15 +12,22 @@ const Products = () => {
   const getProducts = useSelector((state) => state.getProducts);
   const { products, loading, error } = getProducts;
   // const [Products, setProducts] = useState([]);
+
+  const getProdcutsPopular = useSelector((state) => state.getProductsPopular);
+  const { productspopular, loadingPopular, errorPopular } = getProdcutsPopular;
+  console.log(productspopular);
   const [SProducts, setSProducts] = useState('default');
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [sessionsPerPage, setSessionsPerPage] = useState(4);
+  const [sessionsPerPage, setSessionsPerPage] = useState(5);
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     // getProducts();
+
     dispatch(listProducts(currentPage));
+
+    dispatch(listProductsPopular(currentPage));
   }, [dispatch, currentPage]);
 
   useEffect(() => {
@@ -29,7 +36,13 @@ const Products = () => {
       setSessionsPerPage(products.meta.per_page);
       setCurrentPage(products.meta.current_page);
     }
-  }, [products]);
+
+    if (productspopular && productspopular.data) {
+      setTotalItems(productspopular.total);
+      setSessionsPerPage(productspopular.per_page);
+      setCurrentPage(productspopular.current_page);
+    }
+  }, [products, productspopular]);
 
   function handleLength(value, lengths) {
     if (value.length < lengths) {
@@ -73,49 +86,100 @@ const Products = () => {
           </Container>
           <div className="products-wrapper">
             <Container>
-              {loading || loading === undefined ? (
-                <div className="loading">
-                  <Spinner animation="border" variant="warning" role="status" className="m-auto">
-                    <span className="visually-hidden">Loading...</span>
-                  </Spinner>
-                </div>
-              ) : error ? (
-                <div className="alert alert-danger" role="alert">
-                  {error}{' '}
-                </div>
-              ) : (
-                <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
-                  {products.data.map((item, index) => {
-                    return (
-                      <Col key={index}>
-                        <Card className="card-center h-100">
-                          {/* {Products && <img src={'/' + Products.[0]} alt="" />} */}
-                          <Card.Img
-                            variant="top"
-                            className="h-75"
-                            src={isImage(item.gambar_produk) ? item.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'}
-                          />
-                          <Card.Body>
+              {SProducts === 'default' ? (
+                <>
+                  {loading || loading === undefined ? (
+                    <div className="loading">
+                      <Spinner animation="border" variant="warning" role="status" className="m-auto">
+                        <span className="visually-hidden">Loading...</span>
+                      </Spinner>
+                    </div>
+                  ) : error ? (
+                    <div className="alert alert-danger" role="alert">
+                      {error}{' '}
+                    </div>
+                  ) : (
+                    <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
+                      {products.data.map((item, index) => {
+                        return (
+                          <Col key={index}>
                             <Link className="link-title" to={`/products/${item.slug_produk}`}>
-                              <Card.Title>{handleLength(item.nama_produk, 20)}</Card.Title>
+                              <Card className="card-center h-100">
+                                {/* {Products && <img src={'/' + Products.[0]} alt="" />} */}
+                                <Card.Img
+                                  variant="top"
+                                  className="h-75"
+                                  src={isImage(item.gambar_produk) ? item.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'}
+                                />
+                                <Card.Body>
+                                  <Card.Title>{handleLength(item.nama_produk, 20)}</Card.Title>
+                                  <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
+                                  <div className={item.slug}>
+                                    <div className="stars-outer">
+                                      <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
+                                    </div>
+                                    <span className="number-rating">{item.rating_produk !== null ? parseFloat(item.rating_produk).toFixed(1) : 0}</span>
+                                  </div>
+                                </Card.Body>
+                              </Card>
                             </Link>
-                            <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
-                            <div className={item.slug}>
-                              <div className="stars-outer">
-                                <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
-                              </div>
-                              <span className="number-rating">{item.rating_produk !== null ? parseFloat(item.rating_produk).toFixed(1) : 0}</span>
-                            </div>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    );
-                  })}
-                </Row>
-              )}
-              <div className="d-flex justify-content-center mt-5">
-                <Pages itemsCount={totalItems} itemsPerPage={sessionsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-              </div>
+                          </Col>
+                        );
+                      })}
+                    </Row>
+                  )}
+                  <div className="d-flex justify-content-center mt-5">
+                    <Pages itemsCount={totalItems} itemsPerPage={sessionsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                  </div>
+                </>
+              ) : SProducts === 'teratas' ? (
+                <>
+                  {loadingPopular ? (
+                    <div className="loading">
+                      <Spinner animation="border" variant="warning" role="status" className="m-auto">
+                        <span className="visually-hidden">Loading...</span>
+                      </Spinner>
+                    </div>
+                  ) : errorPopular ? (
+                    <div className="alert alert-danger" role="alert">
+                      {error}{' '}
+                    </div>
+                  ) : (
+                    <Row className="g-4 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
+                      {productspopular &&
+                        productspopular.data.map((item, index) => {
+                          return (
+                            <Col key={index}>
+                              <Link className="link-title" to={`/products/${item.slug_produk}`}>
+                                <Card className="card-center h-100">
+                                  {/* {Products && <img src={'/' + Products.[0]} alt="" />} */}
+                                  <Card.Img
+                                    variant="top"
+                                    className="h-75"
+                                    src={isImage(item.gambar_produk) ? item.gambar_produk : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'}
+                                  />
+                                  <Card.Body>
+                                    <Card.Title>{handleLength(item.nama_produk, 20)}</Card.Title>
+                                    <Card.Text className="price">{formatRupiah(item.harga_satuan)}</Card.Text>
+                                    <div className={item.slug}>
+                                      <div className="stars-outer">
+                                        <div className="stars-inner" style={{ width: countRate(item.rating_produk) }}></div>
+                                      </div>
+                                      <span className="number-rating">{item.rating_produk !== null ? parseFloat(item.rating_produk).toFixed(1) : 0}</span>
+                                    </div>
+                                  </Card.Body>
+                                </Card>
+                              </Link>
+                            </Col>
+                          );
+                        })}
+                    </Row>
+                  )}
+                  <div className="d-flex justify-content-center mt-5">
+                    <Pages itemsCount={totalItems} itemsPerPage={sessionsPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                  </div>
+                </>
+              ) : undefined}
             </Container>
           </div>
         </div>

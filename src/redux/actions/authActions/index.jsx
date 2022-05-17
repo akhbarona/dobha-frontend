@@ -74,16 +74,22 @@ export const loginUser = (data_user) => async (dispatch, getState) => {
   console.log(data_user);
   try {
     const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/user/login`, data_user);
-    // console.log(data);
+    console.log(data);
     // sessionStorage.setItem('token', JSON.stringify(data.token));
     // sessionStorage.setItem('user', JSON.stringify(data.user));
     // sessionStorage.setItem('expired', JSON.stringify(data.expired_token));
-    setCookie('token', JSON.stringify(data.token), 120000);
-    setCookie('user', JSON.stringify(data.user), 120000);
 
-    setCookie('expired', 120000, 120000);
-    setCookie('expiredtime', 120000, 120000);
-    Authservice.runLogoutTimer(dispatch, 120000);
+    const UNIX = new Date(data.expired_token_timestamp * 1000).getTime();
+    console.log(UNIX); // <- 1652803836000
+    setCookie('token', JSON.stringify(data.token), UNIX);
+    setCookie('user', JSON.stringify(data.user), UNIX);
+
+    setCookie('expired_token', data.expired_token, UNIX);
+    // setCookie('expiredtime', 120000, 120000);
+    setCookie('expired_timestamp', UNIX, UNIX); // params 2 = 1652803836000, params 3 = 1652803836000 to 2022-05-17T16:10:36.540Z
+
+    Authservice.runLogoutTimer(dispatch, UNIX);
+
     dispatch({
       type: LOGIN_USER,
     });

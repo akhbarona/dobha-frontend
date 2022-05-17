@@ -56,7 +56,7 @@ const Header = memo(() => {
   useEffect(() => {
     // const getTime = getCookie('expiredtime');
     const user = AuthService.getCurrentUser();
-    console.log(user);
+    // console.log(user);
     if (user && user.id) {
       setCurrentUser(user);
       dispatch(listAddress(user.id));
@@ -363,7 +363,7 @@ const Main = memo(() => {
         <div className="new-post-container">
           <div className="new-post-wrapper">
             <h1 className="title-label-section">
-              <span>New Post</span>
+              <span>Artikel Terbaru</span>
             </h1>
             <Container className="new-post-product">
               <Row className="g-4  row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-3">
