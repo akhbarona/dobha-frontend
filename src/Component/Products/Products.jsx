@@ -24,9 +24,7 @@ const Products = () => {
 
   useEffect(() => {
     // getProducts();
-
     dispatch(listProducts(currentPage));
-
     dispatch(listProductsPopular(currentPage));
   }, [dispatch, currentPage]);
 
