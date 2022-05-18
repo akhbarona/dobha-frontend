@@ -222,7 +222,7 @@ const CardPesanan = (props) => {
                                   </tr>
                                 </tbody>
                               </table>
-                              {(item.status === '1' || item.status === '2') && !item.review ? (
+                              {(item.status === '1') && !item.review ? (
                                 <>
                                   <a href={`https://cekresi.com/tracking/cek-resi-jne.php?noresi=${item.no_resi ? item.no_resi : '-'}`} rel="noreferrer" target="_blank" className="btn btn-warning mt-3" style={{ marginLeft: 5 }}>
                                     Tracking
