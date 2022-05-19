@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 import Comments from './Comments';
 import AuthService from '../../service/auth.service';
 // uji coba
-// import { resetCart } from '../../../redux/actions/cartActions'
+import { resetCart } from '../../../redux/actions/cartActions';
 
 const Detail = () => {
   const { id } = useParams();
@@ -99,10 +99,8 @@ const Detail = () => {
 
   const submitAddtocart = (e) => {
     e.preventDefault();
-
     // uji coba
-    // dispatch(resetCart());
-
+    dispatch(resetCart());
     // const Auth = true;
     if (currentUser) {
       dispatch(addToCart(product.data.slug_produk, Quantity));

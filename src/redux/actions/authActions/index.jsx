@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import authHeader from '../../../Component/service/auth.header';
 import setCookie from '../../../hooks/setCookie';
-import Authservice from '../../../Component/service/auth.service';
+// import Authservice from '../../../Component/service/auth.service';
 export const ADD_NEW_USER = 'ADD_NEW_USER';
 
 export const LOGIN_USER = 'LOGIN_USER';
@@ -88,7 +88,7 @@ export const loginUser = (data_user) => async (dispatch, getState) => {
     // setCookie('expiredtime', 120000, 120000);
     setCookie('expired_timestamp', UNIX, UNIX); // params 2 = 1652803836000, params 3 = 1652803836000 to 2022-05-17T16:10:36.540Z
 
-    Authservice.runLogoutTimer(dispatch, UNIX);
+    // Authservice.runLogoutTimer(dispatch, UNIX);
 
     dispatch({
       type: LOGIN_USER,

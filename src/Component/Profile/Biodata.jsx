@@ -47,7 +47,8 @@ const Biodata = ({ address }) => {
         // console.log(newExpiredTime);
 
         const OldUNIX = JSON.parse(getCookie('expired_timestamp'));
-        const toISOString = new Date(OldUNIX);
+
+        // const toISOString = new Date(OldUNIX);
         dispatch(listAddress(address.id));
         setCookie('user', JSON.stringify(hasil.data.user), OldUNIX);
         // Cookie.set('user', JSON.stringify(hasil.data.user), {

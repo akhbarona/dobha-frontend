@@ -119,6 +119,11 @@ const CardPesanan = (props) => {
     }
   };
 
+  function isImage(url) {
+    const regex = /https:\/\/drive\.google\.com/g;
+    return regex.test(url);
+  }
+
   return (
     <>
       {pesanan.loading ? (
@@ -144,9 +149,8 @@ const CardPesanan = (props) => {
                     <Col lg={12} key={index} className="mb-3">
                       <Card>
                         <Row>
-                          {console.log(item)}
                           <>
-                            <Card.Img className="col-lg-4" variant="left" src={item.gambar_produk ? 'https://pasaminang.com/wp-content/uploads/2021/01/Screenshot_2020-12-30-12-53-35-12.jpg' : item.gambar_produk} />
+                            <Card.Img className="col-lg-4" variant="left"  src={isImage(item.gambar_produk) ? item.gambar_produk : 'https://pasaminang.com/wp-content/uploads/2021/01/Screenshot_2020-12-30-12-53-35-12.jpg'} />
 
                             <Card.Body className="col-lg-8">
                               <Card.Title>{item.nama_produk}</Card.Title>
@@ -218,7 +222,7 @@ const CardPesanan = (props) => {
                                   </tr>
                                 </tbody>
                               </table>
-                              {(item.status === '1' || item.status === '2') && !item.review ? (
+                              {(item.status === '1') && !item.review ? (
                                 <>
                                   <a href={`https://cekresi.com/tracking/cek-resi-jne.php?noresi=${item.no_resi ? item.no_resi : '-'}`} rel="noreferrer" target="_blank" className="btn btn-warning mt-3" style={{ marginLeft: 5 }}>
                                     Tracking

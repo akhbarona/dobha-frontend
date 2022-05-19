@@ -63,6 +63,56 @@ const Header = memo(() => {
     }
     // console.log(user);
 
+    const decodedJWT = AuthService.getToken();
+
+    // console.log(decodedJWT);
+    if (decodedJWT) {
+      const UNIX = JSON.parse(getCookie('expired_timestamp'));
+      const isAuth = () => {
+        const isExpiredJWT = () => {
+          const dateNow = new Date();
+          const miliseconds = dateNow.getTime() / 1000;
+          // console.log(miliseconds)
+          if (UNIX < miliseconds) {
+            return false; // <- token sudah exp
+          } else {
+            return true; // <- token belum exp
+          }
+        };
+        console.log(isExpiredJWT());
+        if (isExpiredJWT()) {
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      if (isAuth()) {
+        const timeout = () => {
+          const UnixTimestamp = new Date(UNIX).getTime(); // <- 18/05/2022 12:21:00
+          // 1652810400000
+          if (UnixTimestamp !== null) {
+            let temp;
+            const toISOString = new Date(UnixTimestamp);
+            const dateNow = new Date();
+            temp = toISOString - dateNow;
+            console.log(temp);
+            if (Math.sign(temp) !== -1) {
+              return temp;
+            } else {
+              return 0;
+            }
+          } else {
+            return 0;
+          }
+        };
+        console.log(timeout());
+        setTimeout(() => {
+          dispatch(logoutUser());
+        }, timeout() - 5000);
+      }
+    }
+
     // AuthService.runLogoutTimer(dispatch, Number(getTime));
 
     if (isLogout) {
