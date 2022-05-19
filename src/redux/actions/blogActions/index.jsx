@@ -1,7 +1,9 @@
 import axios from 'axios';
+
 export const GET_BLOGS_REQUEST = 'GET_BLOGS_REQUEST';
 export const GET_BLOGS_SUCCESS = 'GET_BLOGS_SUCCESS';
 export const GET_BLOGS_FAIL = 'GET_BLOGS_FAIL';
+export const GET_BLOGS_RESET = 'GET_BLOGS_RESET';
 
 export const GET_BLOGS_DETAILS_REQUEST = 'GET_BLOGS_DETAILS_REQUEST';
 export const GET_BLOGS_DETAILS_SUCCESS = 'GET_BLOGS_DETAILS_SUCCESS';
@@ -14,10 +16,17 @@ export const GET_BLOGS_RELATED_FAIL = 'GET_BLOGS_RELATED_FAIL';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const getArticles = (page) => async (dispatch) => {
+export const getArticles = (text, page) => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOGS_REQUEST });
-    const { data } = await axios.get(`${API_URL}/api/read-all-article-paginate?page=` + page);
+    let urlTitle = '';
+
+    if (text != '') {
+      urlTitle = '&q=' + text;
+    } else {
+      urlTitle = '';
+    }
+    const { data } = await axios.get(`${API_URL}/api/read-all-article-paginate?${urlTitle}&page=` + page);
     dispatch({
       type: GET_BLOGS_SUCCESS,
       payload: data,
@@ -28,6 +37,10 @@ export const getArticles = (page) => async (dispatch) => {
       payload: error.response && error.response.data.message ? error.response.data.message : error.message,
     });
   }
+};
+
+export const resetArticle = () => {
+  return { type: GET_BLOGS_RESET };
 };
 
 export const getArticleDetail = (id) => async (dispatch) => {

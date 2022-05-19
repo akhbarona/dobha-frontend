@@ -10,6 +10,10 @@ const Pages = ({ itemsCount, itemsPerPage, currentPage, setCurrentPage }) => {
   const changePage = (number) => {
     if (currentPage === number) return;
     setCurrentPage(number);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   const onPageNumberClick = (pageNumber) => {

@@ -31,14 +31,14 @@ import { getAddress as listAddress } from '../../redux/actions/addressActions';
 function compare(prevProps, nextProps) {
   return prevProps.value === nextProps.value;
 }
-const InputSearch = memo(() => {
-  // console.log('Render Search');
-  const [SearchText, setSearchText] = useState('');
-  const handleInput = (e) => {
-    setSearchText(e.target.value);
-  };
-  return <input value={SearchText} onChange={handleInput} type="text" className="navbar-input" placeholder="Ketik Pencarian..." />;
-}, compare);
+// const InputSearch = memo(() => {
+//   // console.log('Render Search');
+//   const [SearchText, setSearchText] = useState('');
+//   const handleInput = (e) => {
+//     setSearchText(e.target.value);
+//   };
+//   return <input value={SearchText} onChange={handleInput} type="text" className="navbar-input" placeholder="Ketik Pencarian..." />;
+// }, compare);
 
 const Header = memo(() => {
   // console.log('Render Header');

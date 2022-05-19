@@ -21,13 +21,14 @@ const CheckoutSUb = (props) => {
   const methodPayment = [
     { method: 'gopay', image: 'logo-gopay.png' },
     { method: 'dana', image: 'logo-dana.png' },
-    { method: 'bank bca', image: 'logo-bca.png' },
+    { method: 'bca', image: 'logo-bca.png' },
   ];
 
   const dispatch = useDispatch();
   const [modalShow, setModalShowGopay] = useState(false);
   const [modalShowBca, setModalShowBca] = useState(false);
   const [modalShowDana, setModalShowDana] = useState(false);
+  const [modalShowPembayaran, setModalShowPembayaran] = useState(false);
   const navigate = useNavigate();
   const [Payment, setPayment] = useState(methodPayment);
   const [GetPayment, setGetPayment] = useState('');
@@ -52,178 +53,96 @@ const CheckoutSUb = (props) => {
         title: 'Oops...',
         text: 'Silahkan pilih Metode Pengiriman!',
       });
-    } else if (GetPayment === 'gopay') {
+    } else if (GetPayment === 'gopay' || GetPayment === 'dana' || GetPayment === 'bca') {
       dispatch(resetCart());
-      setModalShowGopay(true);
-    } else if (GetPayment === 'dana') {
-      dispatch(resetCart());
-      setModalShowDana(true);
-    } else if (GetPayment === 'bank bca') {
-      dispatch(resetCart());
-      setModalShowBca(true);
+      setModalShowPembayaran(true);
+      getMetodeAPIPembayaran();
     }
   };
-
-  const metodePembayaranDana = () => {
-    return (
-      <Modal show={modalShowDana} onHide={() => setModalShowDana(false)} aria-labelledby="contained-modal-title-vcenter" centered>
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Using Grid in Modal</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="show-grid">
-          <Container>
-            <div className="payment-gateway-wrapper">
-              <Row className="payment-gateway-info">
-                <div className="payment-gateway-image">
-                  <img src="logo-dana.png" alt="" />
-                </div>
-                <h3>Dobha Parfume</h3>
-                <p>081234567890</p>
-              </Row>
-              <Row className="payment-gateway-price">
-                <Col>
-                  <p className="pg-price">Total bayar</p>
-                </Col>
-                <Col>
-                  <p className="pg-price">{location.state && formatRupiah(location.state.totalHarga + Number(hargaOngkir))}</p>
-                </Col>
-              </Row>
-              <div className="note-payment">
-                <p className="note-payment-sub">Note</p>
-                <p>Harap transfer sesuai dengan nominal yang tertera</p>
-              </div>
-              <div className="upload-confirm-wrapper">
-                <h6>Silahkan Upload Bukti Pembayaran Anda</h6>
-                <div className="confirm-wrapper">
-                  <Form controlId="formFileLg" className="mt-3 mb-3">
-                    <Form.Control onChange={(e) => setBuktiBayar(e)} type="file" size="md" name="bukti_bayar" />
-                    {loading ? (
-                      <button disabled type="button" className="mt-3 w-50 btn-buy">
-                        Loading ...
-                      </button>
-                    ) : (
-                      <button onClick={() => handleSubmit()} type="button" className="mt-3 w-50 btn-buy">
-                        Submit
-                      </button>
-                    )}
-                  </Form>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => setModalShowDana(false)}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
+  const [metodeBayar, setMetodeBayar] = useState([]);
+  const [loadingBayar, setLoadingBayar] = useState(false);
+  console.log('isi', metodeBayar);
+  const getMetodeAPIPembayaran = () => {
+    setLoadingBayar(true);
+    axios
+      .get(`https://dobha.herokuapp.com/api/payment?method=${GetPayment}`)
+      .then((response) => {
+        setLoadingBayar(false);
+        setMetodeBayar(response.data.data);
+      })
+      .catch((error) => {
+        setLoadingBayar(false);
+        if (error.response) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Oops...',
+            text: 'Sistem Metode Pembayaran Ada Kendala, Harap menunggu beberapa menit atau pilih metode lain',
+          });
+          setGetPayment('');
+        }
+      });
   };
 
-  const metodePembayaranGopay = () => {
+  const metodePembayaran = () => {
     return (
-      <Modal show={modalShow} onHide={() => setModalShowGopay(false)} aria-labelledby="contained-modal-title-vcenter" centered>
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Using Grid in Modal</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="show-grid">
-          <Container>
-            <div className="payment-gateway-wrapper">
-              <Row className="payment-gateway-info">
-                <div className="payment-gateway-image">
-                  <img src="logo-gopay.png" alt="" />
+      <Modal show={modalShowPembayaran} onHide={() => setModalShowPembayaran(false)} aria-labelledby="contained-modal-title-vcenter" centered>
+        <>
+          {console.log(metodeBayar)}
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">{GetPayment === 'dana' ? 'Metode Pembayaran Dana' : GetPayment === 'gopay' ? 'Metode Pembayaran Gopay' : GetPayment === 'bca' ? ' Metode Pembayaran Bank BCA' : null}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="show-grid">
+            {loadingBayar ? (
+              'Loading...'
+            ) : (
+              <Container>
+                <div className="payment-gateway-wrapper">
+                  <Row className="payment-gateway-info">
+                    <div className="payment-gateway-image">
+                      <img src={GetPayment === 'dana' ? 'logo-dana.png' : GetPayment === 'gopay' ? 'logo-gopay.png' : GetPayment === 'bca' ? 'logo-bca.png' : null} alt="" />
+                    </div>
+                    <h3>Dobha Parfume</h3>
+                    {metodeBayar.map((item, index) => (
+                      <p key={index}> {item.payment_number}</p>
+                    ))}
+                  </Row>
+                  <Row className="payment-gateway-price">
+                    <Col>
+                      <p className="pg-price">Total bayar</p>
+                    </Col>
+                    <Col>
+                      <p className="pg-price">{location.state && formatRupiah(location.state.totalHarga + Number(hargaOngkir))}</p>
+                    </Col>
+                  </Row>
+                  <div className="note-payment">
+                    <p className="note-payment-sub">Note</p>
+                    <p>Harap transfer sesuai dengan nominal yang tertera</p>
+                  </div>
+                  <div className="upload-confirm-wrapper">
+                    <h6>Silahkan Upload Bukti Pembayaran Anda</h6>
+                    <div className="confirm-wrapper">
+                      <Form controlId="formFileLg" className="mt-3 mb-3">
+                        <Form.Control onChange={(e) => setBuktiBayar(e)} type="file" size="md" name="bukti_bayar" />
+                        {loading ? (
+                          <button disabled type="button" className="mt-3 w-50 btn-buy">
+                            Loading ...
+                          </button>
+                        ) : (
+                          <button onClick={() => handleSubmit()} type="button" className="mt-3 w-50 btn-buy">
+                            Submit
+                          </button>
+                        )}
+                      </Form>
+                    </div>
+                  </div>
                 </div>
-                <h3>Dobha Parfume</h3>
-                <p>081234567890</p>
-              </Row>
-              <Row className="payment-gateway-price">
-                <Col>
-                  <p className="pg-price">Total bayar</p>
-                </Col>
-                <Col>
-                  <p className="pg-price">{location.state && formatRupiah(location.state.totalHarga + Number(hargaOngkir))}</p>
-                </Col>
-              </Row>
-              <div className="note-payment">
-                <p className="note-payment-sub">Note</p>
-                <p>Harap transfer sesuai dengan nominal yang tertera</p>
-              </div>
-              <div className="upload-confirm-wrapper">
-                <h6>Silahkan Upload Bukti Pembayaran Anda</h6>
-                <div className="confirm-wrapper">
-                  <Form controlId="formFileLg" className="mt-3 mb-3">
-                    <Form.Control onChange={(e) => setBuktiBayar(e)} type="file" size="md" name="bukti_bayar" />
-                    {loading ? (
-                      <button disabled type="button" className="mt-3 w-50 btn-buy">
-                        Loading ...
-                      </button>
-                    ) : (
-                      <button onClick={() => handleSubmit()} type="button" className="mt-3 w-50 btn-buy">
-                        Submit
-                      </button>
-                    )}
-                  </Form>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => setModalShowGopay(false)}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  };
+              </Container>
+            )}
+          </Modal.Body>
+        </>
 
-  const metodePembayaranBCA = () => {
-    return (
-      <Modal show={modalShowBca} onHide={() => setModalShowBca(false)} aria-labelledby="contained-modal-title-vcenter" centered>
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Using Grid in Modal</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="show-grid">
-          <Container>
-            <div className="payment-gateway-wrapper">
-              <Row className="payment-gateway-info">
-                <div className="payment-gateway-image">
-                  <img src="logo-bca.png" alt="" />
-                </div>
-                <h3>Dobha Parfume</h3>
-                <p>73674634735</p>
-              </Row>
-              <Row className="payment-gateway-price">
-                <Col>
-                  <p className="pg-price">Total bayar</p>
-                </Col>
-                <Col>
-                  <p className="pg-price">{location.state && formatRupiah(location.state.totalHarga + Number(hargaOngkir))}</p>
-                </Col>
-              </Row>
-              <div className="note-payment">
-                <p className="note-payment-sub">Note</p>
-                <p>Harap transfer sesuai dengan nominal yang tertera</p>
-              </div>
-              <div className="upload-confirm-wrapper">
-                <h6>Silahkan Upload Bukti Pembayaran Anda</h6>
-                <div className="confirm-wrapper">
-                  <Form controlId="formFileLg" className="mt-3 mb-3">
-                    <Form.Control onChange={(e) => setBuktiBayar(e)} type="file" size="md" name="bukti_bayar" />
-                    {loading ? (
-                      <button disabled type="button" className="mt-3 w-50 btn-buy">
-                        Loading ...
-                      </button>
-                    ) : (
-                      <button onClick={() => handleSubmit()} type="button" className="mt-3 w-50 btn-buy">
-                        Submit
-                      </button>
-                    )}
-                  </Form>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => setModalShowBca(false)}>Close</Button>
+          <Button onClick={() => setModalShowPembayaran(false)}>Close</Button>
         </Modal.Footer>
       </Modal>
     );
@@ -278,9 +197,10 @@ const CheckoutSUb = (props) => {
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     // console.log(user)
-    if (!user) {
+    if (!user || location.state === null) {
       navigate('/login');
     }
+
     setUser(user);
   }, []);
 
@@ -329,7 +249,7 @@ const CheckoutSUb = (props) => {
         // showCancelButton: true,
         confirmButtonText: 'Konfimasi',
         denyButtonText: `Cancel`,
-      }).then(async(result) => {
+      }).then(async (result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           formData.append('bukti_bayar', buktiBayar.target.files[0]);
@@ -348,7 +268,7 @@ const CheckoutSUb = (props) => {
           formData.set('nama_produk', location.state.name);
           formData.set('jumlah', location.state.qty);
           formData.set('metode_pembayaran', GetPayment);
-    
+
           try {
             const config = {
               headers: {
@@ -380,10 +300,10 @@ const CheckoutSUb = (props) => {
             setLoading(false);
           }
           // Swal.fire('Saved!', '', 'success')
-        }else{
+        } else {
           setLoading(false);
         }
-      })
+      });
     } else {
       setLoading(false);
       Swal.fire({
@@ -444,9 +364,8 @@ const CheckoutSUb = (props) => {
                 {/* <Confirm trigger={buttonPopup} setTrigger={setButtonPopup}>
                 {methodPayments()}
               </Confirm> */}
-                {metodePembayaranDana()}
-                {metodePembayaranBCA()}
-                {metodePembayaranGopay()}
+
+                {metodePembayaran()}
               </Col>
 
               <Col>

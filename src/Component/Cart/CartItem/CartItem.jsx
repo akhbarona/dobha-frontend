@@ -56,7 +56,7 @@ const CartItem = ({ index, item, qtyChangeHandler, removeHandler }) => {
       <div className="cartItem-image">
         <img src={item.imageUrl} alt="Product Item" />
       </div>
-      <Link to={`/products/${item.product}`} className="cartItem-name">
+      <Link to={`/products/${item.slug_produk}`} className="cartItem-name">
         <p>{item.name}</p>
       </Link>
 

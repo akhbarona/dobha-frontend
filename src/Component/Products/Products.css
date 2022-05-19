@@ -58,3 +58,21 @@
   text-decoration: none;
   color: #000;
 }
+
+/*  Searching */
+.navbar-search-container {
+  border: 0.5px solid lightgray;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background-color: #fff;
+}
+.navbar-search-container > textarea:focus,
+input:focus {
+  outline: none;
+}
+.navbar-input {
+  border: none;
+  width: 100%;
+  font-weight: 500;
+}

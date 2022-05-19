@@ -114,7 +114,7 @@ const Biodata = ({ address }) => {
           setLoading(false);
 
           Swal.fire({
-            title: `${error.response && error.response.data.errors.photo ? error.response.data.errors.photo[0] : error.response.data.message}`,
+            title: `${error}`,
             width: 600,
             padding: '3em',
             color: '#716add',

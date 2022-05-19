@@ -7,6 +7,7 @@ import {
   GET_PRODUCTS_POPULAR_REQUEST,
   GET_PRODUCTS_POPULAR_SUCCESS,
   GET_PRODUCTS_REQUEST,
+  GET_PRODUCTS_RESET,
   GET_PRODUCTS_SUCCESS,
   GET_PRODUCT_DETAILS_FAIL,
   GET_PRODUCT_DETAILS_REQUEST,
@@ -33,6 +34,10 @@ export const getProductsReducers = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+    case GET_PRODUCTS_RESET:
+      return {
+        products: [],
+      };
     default:
       return state;
   }
@@ -54,6 +59,10 @@ export const getProductsPopularReducers = (state = initialPopularState, action) 
       return {
         loadingPopular: false,
         error: action.payload,
+      };
+    case GET_PRODUCTS_RESET:
+      return {
+        productspopular: [],
       };
     default:
       return state;

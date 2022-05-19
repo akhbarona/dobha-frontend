@@ -3,6 +3,7 @@ import axios from 'axios';
 export const GET_PRODUCTS_REQUEST = 'GET_PRODUCTS_REQUEST';
 export const GET_PRODUCTS_SUCCESS = 'GET_PRODUCTS_SUCCESS';
 export const GET_PRODUCTS_FAIL = 'GET_PRODUCTS_FAIL';
+export const GET_PRODUCTS_RESET = 'GET_PRODUCTS_RESET';
 
 export const GET_PRODUCTS_POPULAR_REQUEST = 'GET_PRODUCTS_POPULAR_REQUEST';
 export const GET_PRODUCTS_POPULAR_SUCCESS = 'GET_PRODUCTS_POPULAR_SUCCESS';
@@ -19,10 +20,17 @@ export const GET_MORE_PRODUCT_FAIL = 'GET_MORE_PRODUCT_FAIL';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const getProducts = (page) => async (dispatch) => {
+export const getProducts = (text, page) => async (dispatch) => {
   try {
     dispatch({ type: GET_PRODUCTS_REQUEST });
-    const { data } = await axios.get(`${API_URL}/api/read-all-product-paginate?page=` + page);
+    let urlTitle = '';
+
+    if (text != '') {
+      urlTitle = '&q=' + text;
+    } else {
+      urlTitle = '';
+    }
+    const { data } = await axios.get(`${API_URL}/api/read-all-product-paginate?page=${page}${urlTitle}`);
     console.log(data);
     dispatch({
       type: GET_PRODUCTS_SUCCESS,
@@ -35,15 +43,17 @@ export const getProducts = (page) => async (dispatch) => {
     });
   }
 };
-
+export const resetPosts = () => {
+  return { type: GET_PRODUCTS_RESET };
+};
 export const getProdcutsPopular = (page) => async (dispatch) => {
   try {
     dispatch({ type: GET_PRODUCTS_POPULAR_REQUEST });
     const { data } = await axios.get(`${API_URL}/api/sort/popular-products?page=` + page);
-    console.log(data);
+    // console.log(data);
     dispatch({
       type: GET_PRODUCTS_POPULAR_SUCCESS,
-      payload: data.products,
+      payload: data,
     });
   } catch (error) {
     dispatch({

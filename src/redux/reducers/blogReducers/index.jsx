@@ -8,6 +8,7 @@ import {
   GET_BLOGS_RELATED_REQUEST,
   GET_BLOGS_RELATED_SUCCESS,
   GET_BLOGS_REQUEST,
+  GET_BLOGS_RESET,
   GET_BLOGS_SUCCESS,
 } from '../../actions/blogActions';
 
@@ -29,6 +30,10 @@ export const getBlogsReducers = (state = initialState, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+    case GET_BLOGS_RESET:
+      return {
+        blogs: [],
       };
     default:
       return state;
